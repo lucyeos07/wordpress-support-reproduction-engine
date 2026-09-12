@@ -4,7 +4,12 @@ Date of experiments: 2026-09-12. All statements below were produced by running
 code, not by reading documentation. Where something was not tested, this
 document says so rather than inferring it.
 
-Host used for every measurement: macOS (darwin 25.6.0), Node 26.8.2, npm 11.19.1.
+Hosts: macOS (darwin 25.6.0), Node 26.8.2, npm 11.19.1; and GitHub Actions
+`ubuntu-latest`, Node 22, in repo `lucyeos07/wordpress-support-reproduction-engine`.
+
+§2 contains a **correction**: a failure this document originally reported as a
+Blueprint v2 defect was shown by CI measurement to be a transient. The original
+claim is retained alongside the correction rather than deleted.
 
 ## Versions under test
 
@@ -124,7 +129,13 @@ Available commands: `start`, `server`, `run-blueprint`, `build-snapshot`, `php`.
 
 ### What did not work
 
-**1. Blueprint v2 with a `plugins` array fails in the CLI.**
+**1. A transient SQLite failure, initially misdiagnosed as a Blueprint v2 defect.**
+
+**Corrected 2026-09-12 after CI measurement. The original conclusion in this
+section was wrong and is retained below so the error is visible rather than
+quietly deleted.**
+
+*What was originally observed.* Four consecutive runs failed:
 
 ```
 $ npx wp-playground-cli run-blueprint --blueprint=spike/blueprints/minimal.v2.json
@@ -133,26 +144,45 @@ stdout: 0 bytes
 stderr: Error: Error connecting to the SQLite database.
 ```
 
-The Blueprint is schema-valid. `--verbosity=debug` adds nothing diagnostic; the
-last line before failure is `Resolved WordPress release URL:
-https://wordpress.org/wordpress-6.8.2.zip`, then `Error: caused by: Error
-connecting to the SQLite database.`
+`--verbosity=debug` added nothing diagnostic; the last line before failure was
+`Resolved WordPress release URL: https://wordpress.org/wordpress-6.8.2.zip`,
+then `Error: caused by: Error connecting to the SQLite database.` The matrix at
+the time looked clean and consistent:
 
-Narrowed experimentally:
-
-| Blueprint | Result |
+| Blueprint | Result then |
 | --- | --- |
-| v2, `wordpressVersion` + `phpVersion` + `plugins` | **exit 1**, SQLite error |
+| v2, `wordpressVersion` + `phpVersion` + `plugins` | exit 1, SQLite error (4/4) |
 | v2, `wordpressVersion` + `phpVersion`, no `plugins` | exit 0 |
 | v2, `phpVersion` only | exit 0 |
-| v2 + `--mode=create-new-site`, with `plugins` | **exit 1**, SQLite error |
-| v2, `wordpressVersion: "latest"`, with `plugins` | **exit 1**, SQLite error |
+| v2 + `--mode=create-new-site`, with `plugins` | exit 1, SQLite error |
+| v2, `wordpressVersion: "latest"`, with `plugins` | exit 1, SQLite error |
 | v1 with `installPlugin` step | exit 0 |
 
-So the failure is specific to the v2 top-level `plugins` array, is independent
-of WordPress version, and is not fixed by `--mode`. The same v2 Blueprint
-**succeeds in the browser** (§3). No workaround was applied; the CLI spike uses
-the v1 Blueprint and this limitation is reported as-is.
+*What is true.* The failure is **not reproducible** and is **not** a v2 defect:
+
+| Environment | Result now |
+| --- | --- |
+| ubuntu-latest, Node 22 (CI) | **exit 0**, 16 s |
+| macOS, Node 26 | **exit 0**, 3/3 consecutive runs |
+
+On both platforms, introspecting the booted site confirms the plugin really
+installed — `active_plugins: ["hello-dolly/hello.php"]`, `wp_version 6.8.2` —
+so this is not an exit code masking a silent no-op.
+
+*Why the original conclusion was wrong.* Four consecutive identical failures,
+with passing controls either side, looked like a deterministic defect. It was
+not. The most probable cause is a transient upstream fetch failure for the
+SQLite integration asset, which Playground downloads at boot (the browser API
+exposes `sqliteDriverVersion`, documented as defaulting to "the latest
+development version", so this asset is fetched rather than bundled). A brief
+upstream breakage would produce exactly this: consistent failure during one
+window, clean runs afterwards, on every platform.
+
+*Lesson for the project.* `"Error connecting to the SQLite database."` is a
+boot-infrastructure error, not a signal about the Blueprint. Treating it as a
+reproduction result would have been a false negative — the reproduction engine
+must distinguish *Playground failed to boot* from *the reported failure
+occurred*, which is precisely the separation SPEC §9.1 already mandates.
 
 **2. `run-blueprint` reports nothing at all.**
 
@@ -263,7 +293,7 @@ the other is empirically justified.
 
 | Behaviour | CLI 3.1.53 | Browser 3.1.53 |
 | --- | --- | --- |
-| Blueprint v2 with `plugins` | **fails** (SQLite error) | **works** |
+| Blueprint v2 with `plugins` | works (see §2 correction) | works |
 | Blueprint v1 `installPlugin` | works | works |
 | Step-completion events | not exposed by `run-blueprint` | `onBlueprintStepCompleted`, v1 only, outcome `undefined` |
 | HTTP status on a PHP fatal | `200` | `500` without `WP_DEBUG`; `200` with `WP_DEBUG_DISPLAY` |
@@ -372,18 +402,59 @@ by the throw plus a `debug.log` diff.
 
 ## 6. CI feasibility
 
-### Not verified on GitHub Actions
+### Verified on GitHub Actions — it works
 
-No workflow run was executed — this repository has no remote and no Actions run
-was triggered. Claiming CI works would be unfounded. What was verified is the
-local equivalent, on macOS with Node 26.
+Measured 2026-09-12 on `ubuntu-latest`, Node 22, repo
+`lucyeos07/wordpress-support-reproduction-engine` (private).
 
-`.github/workflows/ci.yml` was written with two jobs (`check`, `cli-spike`) on
-`ubuntu-latest` with Node 22, but it is **unproven** until it runs.
+| Job | Result | Time |
+| --- | --- | --- |
+| `check` (`npm ci` → typecheck → 6 tests) | ✅ pass | 20–23 s |
+| `cli-spike` (boots Playground, introspects plugins) | ✅ pass | 32–33 s |
+| `v2-plugins-probe` (v2 with/without plugins, v1 control) | ✅ pass | 54–64 s |
 
-### What was verified
+Whole-workflow wall clock: **36 s** for the two-job run, **~1 m 5 s** once the
+v2 probe job was added (jobs run in parallel).
 
-A clean tree (source copied without `node_modules`/`.git`) ran end to end:
+Step-level numbers from the Linux runs:
+
+- `npm ci` — 321 packages in **12 s**, no install-script prompts. The
+  `allowScripts` approvals committed in `package.json` carried over correctly;
+  esbuild and `fs-ext-extra-prebuilt` built without intervention.
+- Playground boot including the WordPress core download — **12 s** (cold; the
+  runner has no warm cache).
+- `run-blueprint` with a v2 Blueprint — **16 s**.
+- The spike asserted real state on Linux, not just an exit code:
+  `active_plugins: ["hello-dolly/hello.php"]`, `wp_version 6.8.2`,
+  `php_version 8.2.33` — **identical to macOS**.
+
+### Linux-specific differences
+
+**None observed.** Same WordPress version, same PHP version, same installed and
+active plugins, same silent `run-blueprint` behaviour. The one platform
+difference found — the v2 SQLite failure — turned out not to be a platform
+difference at all (§2).
+
+Node 26 (local) and Node 22 (CI) both worked, so the runtime spread that was
+flagged as untested is now covered at both ends.
+
+### Remaining CI caveats
+
+- **A deprecation annotation on every run:** `actions/checkout@v4` and
+  `actions/setup-node@v4` target Node 20 and are being force-run on Node 24.
+  Non-fatal today; worth bumping to `@v5` before it becomes an error. Left
+  unchanged here because Phase 0 is not the place to churn the workflow.
+- **Network dependence is real, and Phase 0 already got bitten by it.** Every
+  boot downloads WordPress core plus the SQLite integration asset. The transient
+  in §2 is exactly the failure mode to expect in CI. Before `cli-spike` becomes
+  a required check, either retry the boot or cache the downloaded assets — a
+  bare `npm run spike:cli` will occasionally fail for reasons unrelated to the
+  code under test.
+- **`node_modules` is 685 MB** (475 MB of it `@php-wasm`). Install was only 12 s
+  on the runner, so this is not currently a bottleneck, but it will dominate if
+  the dependency set grows.
+
+### Local comparison (macOS, Node 26)
 
 | Step | Result | Time |
 | --- | --- | --- |
@@ -410,15 +481,20 @@ A clean tree (source copied without `node_modules`/`.git`) ran end to end:
 
 ### Is it stable enough to become a real CI test later?
 
-The CLI spike is deterministic in what it asserts (a specific plugin installed
-and active) and ran identically across repeated invocations. The stability risk
-is not the assertion but the `wordpress.org` download on every boot, which makes
-the job network-dependent and therefore occasionally flaky. Before promoting it
-to a required check, pin the WordPress version (already done) and consider
-caching the downloaded core.
+Qualified yes. The assertion is deterministic — a named plugin installed and
+active — and it produced identical results on macOS and ubuntu-latest across
+every run. It is also fast: the whole workflow finishes in about a minute.
 
-Approximate cost per boot: **~10 s warm, ~87 s on the first run that downloads
-WordPress core.**
+The stability risk is not the assertion but the boot-time downloads, and Phase 0
+hit that risk for real (§2): a window of consistent `Error connecting to the
+SQLite database.` failures that later vanished. Promote `cli-spike` to a
+required check only after adding a bounded retry around boot, or caching the
+downloaded assets, and only if a boot-infrastructure failure is reported
+distinctly from a reproduction result.
+
+Measured cost per boot: **12 s cold on ubuntu-latest, ~10 s warm on macOS.** The
+~87 s figure recorded earlier was a first-ever run on a cold machine and is not
+representative of CI.
 
 ---
 
@@ -426,11 +502,12 @@ WordPress core.**
 
 `docs/SPEC.md` was not modified. These are reported for the owner to decide.
 
-1. **§11, Blueprint generation.** The spec assumes one Blueprint format. Phase 0
-   shows the two surfaces disagree: v2 `plugins` works in the browser and fails
-   in the CLI 3.1.53. Either the MVP emits v1 for both surfaces, or it emits a
-   different format per surface — which would weaken "the same Blueprint" as a
-   guarantee.
+1. **§11, Blueprint generation. Withdrawn.** This was raised on the strength of
+   the v2 CLI failure, which §2 now records as transient. Both surfaces run the
+   same v2 Blueprint and both install and activate the plugin, verified by
+   introspection on macOS and on ubuntu-latest. The MVP can emit one Blueprint
+   format for both surfaces. The remaining v1/v2 asymmetry is step events
+   (§3), not installation.
 
 2. **§11 `[UNVERIFIED]` on versioned packages.** Resolved: `slug@version`
    (`"akismet@6.4.3"`) is officially supported in the top-level `plugins` array
