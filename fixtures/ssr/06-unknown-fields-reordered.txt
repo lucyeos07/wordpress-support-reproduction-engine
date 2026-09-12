@@ -1,0 +1,47 @@
+### WordPress Environment ###
+
+WordPress address (URL): https://store.example.co
+Site address (URL): https://store.example.co
+WC Version: 9.1.2
+WP Version: 6.6.1
+WP Memory Limit: 512 MB
+Some Future Field: some future value
+Experimental Feature Flag: enabled
+HPOS Enabled: ✔
+
+### Server Environment ###
+
+Server Info: nginx/1.24.0
+PHP Version: 8.3.7
+MySQL Version: 8.0.36
+Brand New Server Metric: 42
+OPcache Enabled: ✔
+
+### Totally Unknown Section ###
+
+Some Label: Some Value
+Another Label: Another Value
+
+### Database ###
+
+WC Database Version: 9.1.2
+WC Database Prefix: wp_
+
+### Active Plugins (4) ###
+
+Wordfence Security: by Wordfence – 7.11.6
+Contact Form 7: by Takayuki Miyoshi – 5.9.3
+WooCommerce: by Automattic – 9.1.2
+Yoast SEO: by Team Yoast – 22.9
+
+### Theme ###
+
+Version: 2.1.0
+Child theme: –
+Name: Blocksy
+Author URL: https://creativethemes.com
+WooCommerce support: ✔
+
+### Templates ###
+
+Overrides: –

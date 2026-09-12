@@ -1,0 +1,44 @@
+### WordPress Environment ###
+
+WC Version: 8.4.0
+WP Version: 6.4.2
+WP Multisite: –
+WP Memory Limit: 768 MB
+
+### Server Environment ###
+
+Server Info: Apache
+PHP Version: 8.0.30
+MySQL Version: 10.4.32-MariaDB
+Max Upload Size: 128 MB
+
+### Database ###
+
+WC Database Version: 8.4.0
+WC Database Prefix: wp_
+
+### Active Plugins (6) ###
+
+WooCommerce: by Automattic – 8.4.0
+WooCommerce Subscriptions: by WooCommerce – 5.9.0
+WooCommerce Memberships: by SkyVerge – 1.25.1
+Custom Shipping Calculator: by Nordvik Digital – 2.1.0
+Warehouse Sync Bridge: by Interlink Systems – 4.0.7
+Gravity Forms: by Gravity Forms – 2.8.2
+
+### Inactive Plugins (2) ###
+
+WooCommerce Stripe Gateway: by WooCommerce – 7.8.1
+Legacy Import Helper: by Unknown – 0.9.0
+
+### Theme ###
+
+Name: Flatsome
+Version: 3.18.5
+Author URL: https://uxthemes.com
+Child theme: –
+WooCommerce support: ✔
+
+### Templates ###
+
+Overrides: –

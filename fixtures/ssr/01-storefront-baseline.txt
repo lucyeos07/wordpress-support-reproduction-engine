@@ -1,0 +1,69 @@
+### WordPress Environment ###
+
+WordPress address (URL): https://shop.example.com
+Site address (URL): https://shop.example.com
+WC Version: 8.5.2
+REST API Version: ✔ 8.5.2
+WC Blocks Version: ✔ 11.8.0
+Action Scheduler Version: ✔ 3.7.1
+Log Directory Writable: ✔
+WP Version: 6.4.3
+WP Multisite: –
+WP Memory Limit: 512 MB
+WP Debug Mode: –
+WP Cron: ✔
+Language: en_US
+External object cache: –
+
+### Server Environment ###
+
+Server Info: nginx/1.18.0
+PHP Version: 8.1.27
+PHP Post Max Size: 100 MB
+PHP Time Limit: 300
+PHP Max Input Vars: 5000
+cURL Version: 7.81.0, OpenSSL/3.0.2
+
+SUHOSIN Installed: –
+MySQL Version: 8.0.35
+Max Upload Size: 100 MB
+Default Timezone is UTC: ✔
+fsockopen/cURL: ✔
+SoapClient: ✔
+DOMDocument: ✔
+GZip: ✔
+Multibyte String: ✔
+Remote Post: ✔
+Remote Get: ✔
+
+### Database ###
+
+WC Database Version: 8.5.2
+WC Database Prefix: wp_
+Total Database Size: 84.52MB
+Database Data Size: 63.14MB
+Database Index Size: 21.38MB
+
+### Active Plugins (4) ###
+
+WooCommerce: by Automattic – 8.5.2
+Yoast SEO: by Team Yoast – 21.7
+Contact Form 7: by Takayuki Miyoshi – 5.8.6
+Wordfence Security: by Wordfence – 7.11.4
+
+### Inactive Plugins (2) ###
+
+Akismet Anti-Spam: by Automattic – 5.3
+Classic Editor: by WordPress Contributors – 1.6.3
+
+### Theme ###
+
+Name: Storefront
+Version: 4.5.3
+Author URL: https://woocommerce.com
+Child theme: –
+WooCommerce support: ✔
+
+### Templates ###
+
+Overrides: –

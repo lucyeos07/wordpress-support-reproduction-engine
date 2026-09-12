@@ -12,6 +12,7 @@ export type {
   ServerInfo,
   ThemeInfo,
   WooCommerceInfo,
+  TemplateOverride,
   DatabaseInfo,
   Environment,
 } from "./environment.js";

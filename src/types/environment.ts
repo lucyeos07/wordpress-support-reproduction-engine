@@ -1,6 +1,6 @@
 /** docs/SPEC.md §4.1, §4.4 */
 
-import type { Field, AdapterId } from "./evidence.js";
+import type { Field, AdapterId, Evidence } from "./evidence.js";
 import type { ErrorSignature } from "./signature.js";
 
 export type PluginSource = "wordpress.org" | "premium" | "unknown";
@@ -13,6 +13,8 @@ export interface Plugin {
   active?: boolean;
   source: PluginSource;
   testedUpTo?: string;
+  /** Where this plugin's row was read from. */
+  evidence?: Evidence;
 }
 
 /** Which artifacts this Environment was assembled from. */
@@ -29,25 +31,48 @@ export interface WordPressInfo {
 
 export interface ServerInfo {
   phpVersion: Field<string>;
-  /** Verbatim as reported (e.g. "256M"); not normalised to bytes here. */
+  /** Verbatim as reported (e.g. "512 MB"); not normalised to bytes here. */
   memoryLimit: Field<string>;
+  /** Verbatim server string (e.g. "nginx/1.18.0"). */
+  webServer: Field<string>;
 }
 
 export interface ThemeInfo {
   name: Field<string>;
   version: Field<string>;
+  isChildTheme: Field<boolean>;
+  parentName: Field<string>;
+  parentVersion: Field<string>;
+}
+
+/**
+ * A WooCommerce template the site overrides. `outdated` is true only when the
+ * report itself says the override is out of date; it is never inferred from a
+ * version comparison performed here.
+ */
+export interface TemplateOverride {
+  file: string;
+  version?: string;
+  coreVersion?: string;
+  outdated: boolean;
+  evidence: Evidence;
 }
 
 export interface WooCommerceInfo {
   version: Field<string>;
+  databaseVersion: Field<string>;
+  templateOverrides: TemplateOverride[];
 }
 
 /**
- * Shape deferred. docs/SPEC.md §4.1 requires a `database` section but does not
- * specify its contents, and no Phase 0 experiment justifies specific fields.
- * Phase 1 defines it from real System Status Report fixtures.
+ * WooCommerce reports the database under a single "MySQL Version" label
+ * regardless of engine, so `engine` is `inferred` rather than `known` and
+ * carries the basis for the derivation.
  */
-export type DatabaseInfo = Record<string, Field<string>>;
+export interface DatabaseInfo {
+  engine: Field<string>;
+  version: Field<string>;
+}
 
 export interface Environment {
   provenance: Provenance;

@@ -1,0 +1,297 @@
+{
+  "provenance": {
+    "artifacts": [
+      {
+        "artifactId": "01-storefront-baseline",
+        "adapter": "woo-ssr"
+      }
+    ]
+  },
+  "wordPress": {
+    "version": {
+      "status": "known",
+      "value": "6.4.3",
+      "evidence": [
+        {
+          "artifactId": "01-storefront-baseline",
+          "adapter": "woo-ssr",
+          "locator": {
+            "section": "WordPress Environment",
+            "line": 10
+          },
+          "excerpt": "WP Version: 6.4.3"
+        }
+      ]
+    }
+  },
+  "server": {
+    "phpVersion": {
+      "status": "known",
+      "value": "8.1.27",
+      "evidence": [
+        {
+          "artifactId": "01-storefront-baseline",
+          "adapter": "woo-ssr",
+          "locator": {
+            "section": "Server Environment",
+            "line": 21
+          },
+          "excerpt": "PHP Version: 8.1.27"
+        }
+      ]
+    },
+    "memoryLimit": {
+      "status": "known",
+      "value": "512 MB",
+      "evidence": [
+        {
+          "artifactId": "01-storefront-baseline",
+          "adapter": "woo-ssr",
+          "locator": {
+            "section": "WordPress Environment",
+            "line": 12
+          },
+          "excerpt": "WP Memory Limit: 512 MB"
+        }
+      ]
+    },
+    "webServer": {
+      "status": "known",
+      "value": "nginx/1.18.0",
+      "evidence": [
+        {
+          "artifactId": "01-storefront-baseline",
+          "adapter": "woo-ssr",
+          "locator": {
+            "section": "Server Environment",
+            "line": 20
+          },
+          "excerpt": "Server Info: nginx/1.18.0"
+        }
+      ]
+    }
+  },
+  "database": {
+    "engine": {
+      "status": "inferred",
+      "value": "MySQL",
+      "evidence": [
+        {
+          "artifactId": "01-storefront-baseline",
+          "adapter": "woo-ssr",
+          "locator": {
+            "section": "Server Environment",
+            "line": 28
+          },
+          "excerpt": "MySQL Version: 8.0.35"
+        }
+      ],
+      "inferenceBasis": "reported under the \"MySQL Version\" label with no MariaDB marker in the value"
+    },
+    "version": {
+      "status": "known",
+      "value": "8.0.35",
+      "evidence": [
+        {
+          "artifactId": "01-storefront-baseline",
+          "adapter": "woo-ssr",
+          "locator": {
+            "section": "Server Environment",
+            "line": 28
+          },
+          "excerpt": "MySQL Version: 8.0.35"
+        }
+      ]
+    }
+  },
+  "theme": {
+    "name": {
+      "status": "known",
+      "value": "Storefront",
+      "evidence": [
+        {
+          "artifactId": "01-storefront-baseline",
+          "adapter": "woo-ssr",
+          "locator": {
+            "section": "Theme",
+            "line": 61
+          },
+          "excerpt": "Name: Storefront"
+        }
+      ]
+    },
+    "version": {
+      "status": "known",
+      "value": "4.5.3",
+      "evidence": [
+        {
+          "artifactId": "01-storefront-baseline",
+          "adapter": "woo-ssr",
+          "locator": {
+            "section": "Theme",
+            "line": 62
+          },
+          "excerpt": "Version: 4.5.3"
+        }
+      ]
+    },
+    "isChildTheme": {
+      "status": "known",
+      "value": false,
+      "evidence": [
+        {
+          "artifactId": "01-storefront-baseline",
+          "adapter": "woo-ssr",
+          "locator": {
+            "section": "Theme",
+            "line": 64
+          },
+          "excerpt": "Child theme: –"
+        }
+      ]
+    },
+    "parentName": {
+      "status": "missing"
+    },
+    "parentVersion": {
+      "status": "missing"
+    }
+  },
+  "plugins": [
+    {
+      "name": "WooCommerce",
+      "source": "wordpress.org",
+      "active": true,
+      "evidence": {
+        "artifactId": "01-storefront-baseline",
+        "adapter": "woo-ssr",
+        "locator": {
+          "section": "Active Plugins (4)",
+          "line": 49
+        },
+        "excerpt": "WooCommerce: by Automattic – 8.5.2"
+      },
+      "slug": "woocommerce",
+      "author": "Automattic",
+      "version": "8.5.2"
+    },
+    {
+      "name": "Yoast SEO",
+      "source": "wordpress.org",
+      "active": true,
+      "evidence": {
+        "artifactId": "01-storefront-baseline",
+        "adapter": "woo-ssr",
+        "locator": {
+          "section": "Active Plugins (4)",
+          "line": 50
+        },
+        "excerpt": "Yoast SEO: by Team Yoast – 21.7"
+      },
+      "slug": "wordpress-seo",
+      "author": "Team Yoast",
+      "version": "21.7"
+    },
+    {
+      "name": "Contact Form 7",
+      "source": "wordpress.org",
+      "active": true,
+      "evidence": {
+        "artifactId": "01-storefront-baseline",
+        "adapter": "woo-ssr",
+        "locator": {
+          "section": "Active Plugins (4)",
+          "line": 51
+        },
+        "excerpt": "Contact Form 7: by Takayuki Miyoshi – 5.8.6"
+      },
+      "slug": "contact-form-7",
+      "author": "Takayuki Miyoshi",
+      "version": "5.8.6"
+    },
+    {
+      "name": "Wordfence Security",
+      "source": "wordpress.org",
+      "active": true,
+      "evidence": {
+        "artifactId": "01-storefront-baseline",
+        "adapter": "woo-ssr",
+        "locator": {
+          "section": "Active Plugins (4)",
+          "line": 52
+        },
+        "excerpt": "Wordfence Security: by Wordfence – 7.11.4"
+      },
+      "slug": "wordfence",
+      "author": "Wordfence",
+      "version": "7.11.4"
+    },
+    {
+      "name": "Akismet Anti-Spam",
+      "source": "wordpress.org",
+      "active": false,
+      "evidence": {
+        "artifactId": "01-storefront-baseline",
+        "adapter": "woo-ssr",
+        "locator": {
+          "section": "Inactive Plugins (2)",
+          "line": 56
+        },
+        "excerpt": "Akismet Anti-Spam: by Automattic – 5.3"
+      },
+      "slug": "akismet",
+      "author": "Automattic",
+      "version": "5.3"
+    },
+    {
+      "name": "Classic Editor",
+      "source": "wordpress.org",
+      "active": false,
+      "evidence": {
+        "artifactId": "01-storefront-baseline",
+        "adapter": "woo-ssr",
+        "locator": {
+          "section": "Inactive Plugins (2)",
+          "line": 57
+        },
+        "excerpt": "Classic Editor: by WordPress Contributors – 1.6.3"
+      },
+      "slug": "classic-editor",
+      "author": "WordPress Contributors",
+      "version": "1.6.3"
+    }
+  ],
+  "wooCommerce": {
+    "version": {
+      "status": "known",
+      "value": "8.5.2",
+      "evidence": [
+        {
+          "artifactId": "01-storefront-baseline",
+          "adapter": "woo-ssr",
+          "locator": {
+            "section": "WordPress Environment",
+            "line": 5
+          },
+          "excerpt": "WC Version: 8.5.2"
+        }
+      ]
+    },
+    "databaseVersion": {
+      "status": "known",
+      "value": "8.5.2",
+      "evidence": [
+        {
+          "artifactId": "01-storefront-baseline",
+          "adapter": "woo-ssr",
+          "locator": {
+            "section": "Database",
+            "line": 41
+          },
+          "excerpt": "WC Database Version: 8.5.2"
+        }
+      ]
+    },
+    "templateOverrides": []
+  }
+}

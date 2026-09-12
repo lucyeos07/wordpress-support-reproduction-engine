@@ -1,0 +1,325 @@
+{
+  "provenance": {
+    "artifacts": [
+      {
+        "artifactId": "05-unknown-and-premium-plugins",
+        "adapter": "woo-ssr"
+      }
+    ]
+  },
+  "wordPress": {
+    "version": {
+      "status": "known",
+      "value": "6.4.2",
+      "evidence": [
+        {
+          "artifactId": "05-unknown-and-premium-plugins",
+          "adapter": "woo-ssr",
+          "locator": {
+            "section": "WordPress Environment",
+            "line": 4
+          },
+          "excerpt": "WP Version: 6.4.2"
+        }
+      ]
+    }
+  },
+  "server": {
+    "phpVersion": {
+      "status": "known",
+      "value": "8.0.30",
+      "evidence": [
+        {
+          "artifactId": "05-unknown-and-premium-plugins",
+          "adapter": "woo-ssr",
+          "locator": {
+            "section": "Server Environment",
+            "line": 11
+          },
+          "excerpt": "PHP Version: 8.0.30"
+        }
+      ]
+    },
+    "memoryLimit": {
+      "status": "known",
+      "value": "768 MB",
+      "evidence": [
+        {
+          "artifactId": "05-unknown-and-premium-plugins",
+          "adapter": "woo-ssr",
+          "locator": {
+            "section": "WordPress Environment",
+            "line": 6
+          },
+          "excerpt": "WP Memory Limit: 768 MB"
+        }
+      ]
+    },
+    "webServer": {
+      "status": "known",
+      "value": "Apache",
+      "evidence": [
+        {
+          "artifactId": "05-unknown-and-premium-plugins",
+          "adapter": "woo-ssr",
+          "locator": {
+            "section": "Server Environment",
+            "line": 10
+          },
+          "excerpt": "Server Info: Apache"
+        }
+      ]
+    }
+  },
+  "database": {
+    "engine": {
+      "status": "inferred",
+      "value": "MariaDB",
+      "evidence": [
+        {
+          "artifactId": "05-unknown-and-premium-plugins",
+          "adapter": "woo-ssr",
+          "locator": {
+            "section": "Server Environment",
+            "line": 12
+          },
+          "excerpt": "MySQL Version: 10.4.32-MariaDB"
+        }
+      ],
+      "inferenceBasis": "reported MySQL Version value contains \"MariaDB\""
+    },
+    "version": {
+      "status": "known",
+      "value": "10.4.32-MariaDB",
+      "evidence": [
+        {
+          "artifactId": "05-unknown-and-premium-plugins",
+          "adapter": "woo-ssr",
+          "locator": {
+            "section": "Server Environment",
+            "line": 12
+          },
+          "excerpt": "MySQL Version: 10.4.32-MariaDB"
+        }
+      ]
+    }
+  },
+  "theme": {
+    "name": {
+      "status": "known",
+      "value": "Flatsome",
+      "evidence": [
+        {
+          "artifactId": "05-unknown-and-premium-plugins",
+          "adapter": "woo-ssr",
+          "locator": {
+            "section": "Theme",
+            "line": 36
+          },
+          "excerpt": "Name: Flatsome"
+        }
+      ]
+    },
+    "version": {
+      "status": "known",
+      "value": "3.18.5",
+      "evidence": [
+        {
+          "artifactId": "05-unknown-and-premium-plugins",
+          "adapter": "woo-ssr",
+          "locator": {
+            "section": "Theme",
+            "line": 37
+          },
+          "excerpt": "Version: 3.18.5"
+        }
+      ]
+    },
+    "isChildTheme": {
+      "status": "known",
+      "value": false,
+      "evidence": [
+        {
+          "artifactId": "05-unknown-and-premium-plugins",
+          "adapter": "woo-ssr",
+          "locator": {
+            "section": "Theme",
+            "line": 39
+          },
+          "excerpt": "Child theme: –"
+        }
+      ]
+    },
+    "parentName": {
+      "status": "missing"
+    },
+    "parentVersion": {
+      "status": "missing"
+    }
+  },
+  "plugins": [
+    {
+      "name": "WooCommerce",
+      "source": "wordpress.org",
+      "active": true,
+      "evidence": {
+        "artifactId": "05-unknown-and-premium-plugins",
+        "adapter": "woo-ssr",
+        "locator": {
+          "section": "Active Plugins (6)",
+          "line": 22
+        },
+        "excerpt": "WooCommerce: by Automattic – 8.4.0"
+      },
+      "slug": "woocommerce",
+      "author": "Automattic",
+      "version": "8.4.0"
+    },
+    {
+      "name": "WooCommerce Subscriptions",
+      "source": "premium",
+      "active": true,
+      "evidence": {
+        "artifactId": "05-unknown-and-premium-plugins",
+        "adapter": "woo-ssr",
+        "locator": {
+          "section": "Active Plugins (6)",
+          "line": 23
+        },
+        "excerpt": "WooCommerce Subscriptions: by WooCommerce – 5.9.0"
+      },
+      "author": "WooCommerce",
+      "version": "5.9.0"
+    },
+    {
+      "name": "WooCommerce Memberships",
+      "source": "premium",
+      "active": true,
+      "evidence": {
+        "artifactId": "05-unknown-and-premium-plugins",
+        "adapter": "woo-ssr",
+        "locator": {
+          "section": "Active Plugins (6)",
+          "line": 24
+        },
+        "excerpt": "WooCommerce Memberships: by SkyVerge – 1.25.1"
+      },
+      "author": "SkyVerge",
+      "version": "1.25.1"
+    },
+    {
+      "name": "Custom Shipping Calculator",
+      "source": "unknown",
+      "active": true,
+      "evidence": {
+        "artifactId": "05-unknown-and-premium-plugins",
+        "adapter": "woo-ssr",
+        "locator": {
+          "section": "Active Plugins (6)",
+          "line": 25
+        },
+        "excerpt": "Custom Shipping Calculator: by Nordvik Digital – 2.1.0"
+      },
+      "author": "Nordvik Digital",
+      "version": "2.1.0"
+    },
+    {
+      "name": "Warehouse Sync Bridge",
+      "source": "unknown",
+      "active": true,
+      "evidence": {
+        "artifactId": "05-unknown-and-premium-plugins",
+        "adapter": "woo-ssr",
+        "locator": {
+          "section": "Active Plugins (6)",
+          "line": 26
+        },
+        "excerpt": "Warehouse Sync Bridge: by Interlink Systems – 4.0.7"
+      },
+      "author": "Interlink Systems",
+      "version": "4.0.7"
+    },
+    {
+      "name": "Gravity Forms",
+      "source": "premium",
+      "active": true,
+      "evidence": {
+        "artifactId": "05-unknown-and-premium-plugins",
+        "adapter": "woo-ssr",
+        "locator": {
+          "section": "Active Plugins (6)",
+          "line": 27
+        },
+        "excerpt": "Gravity Forms: by Gravity Forms – 2.8.2"
+      },
+      "author": "Gravity Forms",
+      "version": "2.8.2"
+    },
+    {
+      "name": "WooCommerce Stripe Gateway",
+      "source": "wordpress.org",
+      "active": false,
+      "evidence": {
+        "artifactId": "05-unknown-and-premium-plugins",
+        "adapter": "woo-ssr",
+        "locator": {
+          "section": "Inactive Plugins (2)",
+          "line": 31
+        },
+        "excerpt": "WooCommerce Stripe Gateway: by WooCommerce – 7.8.1"
+      },
+      "slug": "woocommerce-gateway-stripe",
+      "author": "WooCommerce",
+      "version": "7.8.1"
+    },
+    {
+      "name": "Legacy Import Helper",
+      "source": "unknown",
+      "active": false,
+      "evidence": {
+        "artifactId": "05-unknown-and-premium-plugins",
+        "adapter": "woo-ssr",
+        "locator": {
+          "section": "Inactive Plugins (2)",
+          "line": 32
+        },
+        "excerpt": "Legacy Import Helper: by Unknown – 0.9.0"
+      },
+      "author": "Unknown",
+      "version": "0.9.0"
+    }
+  ],
+  "wooCommerce": {
+    "version": {
+      "status": "known",
+      "value": "8.4.0",
+      "evidence": [
+        {
+          "artifactId": "05-unknown-and-premium-plugins",
+          "adapter": "woo-ssr",
+          "locator": {
+            "section": "WordPress Environment",
+            "line": 3
+          },
+          "excerpt": "WC Version: 8.4.0"
+        }
+      ]
+    },
+    "databaseVersion": {
+      "status": "known",
+      "value": "8.4.0",
+      "evidence": [
+        {
+          "artifactId": "05-unknown-and-premium-plugins",
+          "adapter": "woo-ssr",
+          "locator": {
+            "section": "Database",
+            "line": 17
+          },
+          "excerpt": "WC Database Version: 8.4.0"
+        }
+      ]
+    },
+    "templateOverrides": []
+  }
+}

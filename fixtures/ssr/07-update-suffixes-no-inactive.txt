@@ -1,0 +1,40 @@
+### WordPress Environment ###
+
+WC Version: 7.2.3
+WP Version: 6.1.1
+WP Multisite: ✔
+WP Memory Limit: 128 MB
+WP Debug Mode: –
+
+### Server Environment ###
+
+Server Info: Apache/2.4.41 (Ubuntu)
+PHP Version: 7.4.3
+PHP Time Limit: 30
+MySQL Version: 5.7.42
+Max Upload Size: 8 MB
+
+### Database ###
+
+WC Database Version: 7.2.1
+WC Database Prefix: wp_
+
+### Active Plugins (5) ###
+
+WooCommerce: by Automattic – 7.2.3 (update to version 8.5.2 is available)
+Jetpack: by Automattic – 11.5 (update to version 13.1 is available)
+WPForms Lite: by WPForms – 1.8.1.2
+WooCommerce PayPal Payments: by WooCommerce – 2.0.4 (update to version 2.5.3 is available)
+WP Super Cache: by Automattic – 1.9.4
+
+### Theme ###
+
+Name: Twenty Twenty-One
+Version: 1.7
+Author URL: https://wordpress.org
+Child theme: –
+WooCommerce support: –
+
+### Templates ###
+
+Overrides: woocommerce/emails/plain/admin-new-order.php

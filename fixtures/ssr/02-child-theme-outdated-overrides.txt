@@ -1,0 +1,59 @@
+### WordPress Environment ###
+
+WordPress address (URL): https://boutique.example.org
+Site address (URL): https://boutique.example.org
+WC Version: 7.9.0
+REST API Version: ✔ 7.9.0
+WP Version: 6.2.2
+WP Multisite: –
+WP Memory Limit: 256 MB
+WP Debug Mode: ✔
+WP Cron: ✔
+Language: en_GB
+
+### Server Environment ###
+
+Server Info: Apache/2.4.54 (Unix)
+PHP Version: 7.4.33
+PHP Post Max Size: 64 MB
+PHP Time Limit: 120
+PHP Memory Limit: 384 MB
+MySQL Version: 8.0.28
+Max Upload Size: 64 MB
+Default Timezone is UTC: ✔
+
+### Database ###
+
+WC Database Version: 7.9.0
+WC Database Prefix: wp_
+Total Database Size: 412.77MB
+
+### Active Plugins (3) ###
+
+WooCommerce: by Automattic – 7.9.0
+WooCommerce Subscriptions: by WooCommerce – 5.4.0
+Advanced Custom Fields PRO: by WP Engine – 6.2.1
+
+### Inactive Plugins (1) ###
+
+WP Rocket: by WP Media – 3.15.2
+
+### Theme ###
+
+Name: Boutique Child
+Version: 1.0.4
+Author URL: https://boutique.example.org
+Child theme: ✔
+Parent theme name: Storefront
+Parent theme version: 4.3.1
+Parent theme author URL: https://woocommerce.com
+WooCommerce support: ✔
+
+### Templates ###
+
+Overrides: woocommerce/cart/cart.php version 3.8.0 is out of date. The core version is 7.9.0
+woocommerce/checkout/form-checkout.php version 3.5.0 is out of date. The core version is 7.9.0
+woocommerce/global/quantity-input.php
+woocommerce/single-product/add-to-cart/variable.php version 6.1.0 is out of date. The core version is 7.9.0
+
+Outdated templates: ❌

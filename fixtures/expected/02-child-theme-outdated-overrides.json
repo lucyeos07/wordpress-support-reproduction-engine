@@ -1,0 +1,343 @@
+{
+  "provenance": {
+    "artifacts": [
+      {
+        "artifactId": "02-child-theme-outdated-overrides",
+        "adapter": "woo-ssr"
+      }
+    ]
+  },
+  "wordPress": {
+    "version": {
+      "status": "known",
+      "value": "6.2.2",
+      "evidence": [
+        {
+          "artifactId": "02-child-theme-outdated-overrides",
+          "adapter": "woo-ssr",
+          "locator": {
+            "section": "WordPress Environment",
+            "line": 7
+          },
+          "excerpt": "WP Version: 6.2.2"
+        }
+      ]
+    }
+  },
+  "server": {
+    "phpVersion": {
+      "status": "known",
+      "value": "7.4.33",
+      "evidence": [
+        {
+          "artifactId": "02-child-theme-outdated-overrides",
+          "adapter": "woo-ssr",
+          "locator": {
+            "section": "Server Environment",
+            "line": 17
+          },
+          "excerpt": "PHP Version: 7.4.33"
+        }
+      ]
+    },
+    "memoryLimit": {
+      "status": "known",
+      "value": "384 MB",
+      "evidence": [
+        {
+          "artifactId": "02-child-theme-outdated-overrides",
+          "adapter": "woo-ssr",
+          "locator": {
+            "section": "Server Environment",
+            "line": 20
+          },
+          "excerpt": "PHP Memory Limit: 384 MB"
+        }
+      ]
+    },
+    "webServer": {
+      "status": "known",
+      "value": "Apache/2.4.54 (Unix)",
+      "evidence": [
+        {
+          "artifactId": "02-child-theme-outdated-overrides",
+          "adapter": "woo-ssr",
+          "locator": {
+            "section": "Server Environment",
+            "line": 16
+          },
+          "excerpt": "Server Info: Apache/2.4.54 (Unix)"
+        }
+      ]
+    }
+  },
+  "database": {
+    "engine": {
+      "status": "inferred",
+      "value": "MySQL",
+      "evidence": [
+        {
+          "artifactId": "02-child-theme-outdated-overrides",
+          "adapter": "woo-ssr",
+          "locator": {
+            "section": "Server Environment",
+            "line": 21
+          },
+          "excerpt": "MySQL Version: 8.0.28"
+        }
+      ],
+      "inferenceBasis": "reported under the \"MySQL Version\" label with no MariaDB marker in the value"
+    },
+    "version": {
+      "status": "known",
+      "value": "8.0.28",
+      "evidence": [
+        {
+          "artifactId": "02-child-theme-outdated-overrides",
+          "adapter": "woo-ssr",
+          "locator": {
+            "section": "Server Environment",
+            "line": 21
+          },
+          "excerpt": "MySQL Version: 8.0.28"
+        }
+      ]
+    }
+  },
+  "theme": {
+    "name": {
+      "status": "known",
+      "value": "Boutique Child",
+      "evidence": [
+        {
+          "artifactId": "02-child-theme-outdated-overrides",
+          "adapter": "woo-ssr",
+          "locator": {
+            "section": "Theme",
+            "line": 43
+          },
+          "excerpt": "Name: Boutique Child"
+        }
+      ]
+    },
+    "version": {
+      "status": "known",
+      "value": "1.0.4",
+      "evidence": [
+        {
+          "artifactId": "02-child-theme-outdated-overrides",
+          "adapter": "woo-ssr",
+          "locator": {
+            "section": "Theme",
+            "line": 44
+          },
+          "excerpt": "Version: 1.0.4"
+        }
+      ]
+    },
+    "isChildTheme": {
+      "status": "known",
+      "value": true,
+      "evidence": [
+        {
+          "artifactId": "02-child-theme-outdated-overrides",
+          "adapter": "woo-ssr",
+          "locator": {
+            "section": "Theme",
+            "line": 46
+          },
+          "excerpt": "Child theme: ✔"
+        }
+      ]
+    },
+    "parentName": {
+      "status": "known",
+      "value": "Storefront",
+      "evidence": [
+        {
+          "artifactId": "02-child-theme-outdated-overrides",
+          "adapter": "woo-ssr",
+          "locator": {
+            "section": "Theme",
+            "line": 47
+          },
+          "excerpt": "Parent theme name: Storefront"
+        }
+      ]
+    },
+    "parentVersion": {
+      "status": "known",
+      "value": "4.3.1",
+      "evidence": [
+        {
+          "artifactId": "02-child-theme-outdated-overrides",
+          "adapter": "woo-ssr",
+          "locator": {
+            "section": "Theme",
+            "line": 48
+          },
+          "excerpt": "Parent theme version: 4.3.1"
+        }
+      ]
+    }
+  },
+  "plugins": [
+    {
+      "name": "WooCommerce",
+      "source": "wordpress.org",
+      "active": true,
+      "evidence": {
+        "artifactId": "02-child-theme-outdated-overrides",
+        "adapter": "woo-ssr",
+        "locator": {
+          "section": "Active Plugins (3)",
+          "line": 33
+        },
+        "excerpt": "WooCommerce: by Automattic – 7.9.0"
+      },
+      "slug": "woocommerce",
+      "author": "Automattic",
+      "version": "7.9.0"
+    },
+    {
+      "name": "WooCommerce Subscriptions",
+      "source": "premium",
+      "active": true,
+      "evidence": {
+        "artifactId": "02-child-theme-outdated-overrides",
+        "adapter": "woo-ssr",
+        "locator": {
+          "section": "Active Plugins (3)",
+          "line": 34
+        },
+        "excerpt": "WooCommerce Subscriptions: by WooCommerce – 5.4.0"
+      },
+      "author": "WooCommerce",
+      "version": "5.4.0"
+    },
+    {
+      "name": "Advanced Custom Fields PRO",
+      "source": "premium",
+      "active": true,
+      "evidence": {
+        "artifactId": "02-child-theme-outdated-overrides",
+        "adapter": "woo-ssr",
+        "locator": {
+          "section": "Active Plugins (3)",
+          "line": 35
+        },
+        "excerpt": "Advanced Custom Fields PRO: by WP Engine – 6.2.1"
+      },
+      "author": "WP Engine",
+      "version": "6.2.1"
+    },
+    {
+      "name": "WP Rocket",
+      "source": "premium",
+      "active": false,
+      "evidence": {
+        "artifactId": "02-child-theme-outdated-overrides",
+        "adapter": "woo-ssr",
+        "locator": {
+          "section": "Inactive Plugins (1)",
+          "line": 39
+        },
+        "excerpt": "WP Rocket: by WP Media – 3.15.2"
+      },
+      "author": "WP Media",
+      "version": "3.15.2"
+    }
+  ],
+  "wooCommerce": {
+    "version": {
+      "status": "known",
+      "value": "7.9.0",
+      "evidence": [
+        {
+          "artifactId": "02-child-theme-outdated-overrides",
+          "adapter": "woo-ssr",
+          "locator": {
+            "section": "WordPress Environment",
+            "line": 5
+          },
+          "excerpt": "WC Version: 7.9.0"
+        }
+      ]
+    },
+    "databaseVersion": {
+      "status": "known",
+      "value": "7.9.0",
+      "evidence": [
+        {
+          "artifactId": "02-child-theme-outdated-overrides",
+          "adapter": "woo-ssr",
+          "locator": {
+            "section": "Database",
+            "line": 27
+          },
+          "excerpt": "WC Database Version: 7.9.0"
+        }
+      ]
+    },
+    "templateOverrides": [
+      {
+        "file": "woocommerce/cart/cart.php",
+        "outdated": true,
+        "evidence": {
+          "artifactId": "02-child-theme-outdated-overrides",
+          "adapter": "woo-ssr",
+          "locator": {
+            "section": "Templates",
+            "line": 54
+          },
+          "excerpt": "Overrides: woocommerce/cart/cart.php version 3.8.0 is out of date. The core version is 7.9.0"
+        },
+        "version": "3.8.0",
+        "coreVersion": "7.9.0"
+      },
+      {
+        "file": "woocommerce/checkout/form-checkout.php",
+        "outdated": true,
+        "evidence": {
+          "artifactId": "02-child-theme-outdated-overrides",
+          "adapter": "woo-ssr",
+          "locator": {
+            "section": "Templates",
+            "line": 55
+          },
+          "excerpt": "woocommerce/checkout/form-checkout.php version 3.5.0 is out of date. The core version is 7.9.0"
+        },
+        "version": "3.5.0",
+        "coreVersion": "7.9.0"
+      },
+      {
+        "file": "woocommerce/global/quantity-input.php",
+        "outdated": false,
+        "evidence": {
+          "artifactId": "02-child-theme-outdated-overrides",
+          "adapter": "woo-ssr",
+          "locator": {
+            "section": "Templates",
+            "line": 56
+          },
+          "excerpt": "woocommerce/global/quantity-input.php"
+        }
+      },
+      {
+        "file": "woocommerce/single-product/add-to-cart/variable.php",
+        "outdated": true,
+        "evidence": {
+          "artifactId": "02-child-theme-outdated-overrides",
+          "adapter": "woo-ssr",
+          "locator": {
+            "section": "Templates",
+            "line": 57
+          },
+          "excerpt": "woocommerce/single-product/add-to-cart/variable.php version 6.1.0 is out of date. The core version is 7.9.0"
+        },
+        "version": "6.1.0",
+        "coreVersion": "7.9.0"
+      }
+    ]
+  }
+}

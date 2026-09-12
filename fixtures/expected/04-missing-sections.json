@@ -1,0 +1,131 @@
+{
+  "provenance": {
+    "artifacts": [
+      {
+        "artifactId": "04-missing-sections",
+        "adapter": "woo-ssr"
+      }
+    ]
+  },
+  "wordPress": {
+    "version": {
+      "status": "known",
+      "value": "5.9.3",
+      "evidence": [
+        {
+          "artifactId": "04-missing-sections",
+          "adapter": "woo-ssr",
+          "locator": {
+            "section": "WordPress Environment",
+            "line": 4
+          },
+          "excerpt": "WP Version: 5.9.3"
+        }
+      ]
+    }
+  },
+  "server": {
+    "phpVersion": {
+      "status": "missing"
+    },
+    "memoryLimit": {
+      "status": "known",
+      "value": "40 MB",
+      "evidence": [
+        {
+          "artifactId": "04-missing-sections",
+          "adapter": "woo-ssr",
+          "locator": {
+            "section": "WordPress Environment",
+            "line": 5
+          },
+          "excerpt": "WP Memory Limit: 40 MB"
+        }
+      ]
+    },
+    "webServer": {
+      "status": "missing"
+    }
+  },
+  "database": {
+    "engine": {
+      "status": "missing"
+    },
+    "version": {
+      "status": "missing"
+    }
+  },
+  "theme": {
+    "name": {
+      "status": "missing"
+    },
+    "version": {
+      "status": "missing"
+    },
+    "isChildTheme": {
+      "status": "missing"
+    },
+    "parentName": {
+      "status": "missing"
+    },
+    "parentVersion": {
+      "status": "missing"
+    }
+  },
+  "plugins": [
+    {
+      "name": "WooCommerce",
+      "source": "wordpress.org",
+      "active": true,
+      "evidence": {
+        "artifactId": "04-missing-sections",
+        "adapter": "woo-ssr",
+        "locator": {
+          "section": "Active Plugins (2)",
+          "line": 9
+        },
+        "excerpt": "WooCommerce: by Automattic – 6.4.1"
+      },
+      "slug": "woocommerce",
+      "author": "Automattic",
+      "version": "6.4.1"
+    },
+    {
+      "name": "Some Internal Tooling",
+      "source": "unknown",
+      "active": true,
+      "evidence": {
+        "artifactId": "04-missing-sections",
+        "adapter": "woo-ssr",
+        "locator": {
+          "section": "Active Plugins (2)",
+          "line": 10
+        },
+        "excerpt": "Some Internal Tooling: by Acme Interne – 0.3.1"
+      },
+      "author": "Acme Interne",
+      "version": "0.3.1"
+    }
+  ],
+  "wooCommerce": {
+    "version": {
+      "status": "known",
+      "value": "6.4.1",
+      "evidence": [
+        {
+          "artifactId": "04-missing-sections",
+          "adapter": "woo-ssr",
+          "locator": {
+            "section": "WordPress Environment",
+            "line": 3
+          },
+          "excerpt": "WC Version: 6.4.1"
+        }
+      ]
+    },
+    "databaseVersion": {
+      "status": "missing"
+    },
+    "templateOverrides": []
+  }
+}

@@ -1,0 +1,10 @@
+### WordPress Environment ###
+
+WC Version: 6.4.1
+WP Version: 5.9.3
+WP Memory Limit: 40 MB
+
+### Active Plugins (2) ###
+
+WooCommerce: by Automattic – 6.4.1
+Some Internal Tooling: by Acme Interne – 0.3.1

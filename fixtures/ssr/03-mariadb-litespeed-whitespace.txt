@@ -1,0 +1,42 @@
+### WordPress Environment ###
+
+WordPress address (URL):    https://tienda.example.net
+Site address (URL):   https://tienda.example.net
+WC Version:   8.2.1
+WP Version:    6.3.2
+WP Multisite:   –
+WP Memory Limit:    1 GB
+WP Debug Mode:   –
+Language:   es_ES
+
+### Server Environment ###
+
+Server Info:   LiteSpeed
+PHP Version:    8.2.15
+PHP Post Max Size:   256 MB
+PHP Time Limit:   600
+MySQL Version:    5.5.5-10.6.16-MariaDB
+Max Upload Size:   256 MB
+
+### Database ###
+
+WC Database Version:   8.2.1
+WC Database Prefix:   wp_tienda_
+
+### Active Plugins (3) ###
+
+WooCommerce:   by Automattic – 8.2.1
+Elementor:   by Elementor.com – 3.18.3
+Really Simple SSL:   by Really Simple Plugins – 7.2.2
+
+### Theme ###
+
+Name:   Astra
+Version:   4.6.2
+Author URL:   https://wpastra.com
+Child theme:   –
+WooCommerce support:   ✔
+
+### Templates ###
+
+Overrides:   –

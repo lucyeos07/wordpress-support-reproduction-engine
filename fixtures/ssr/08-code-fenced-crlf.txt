@@ -1,0 +1,33 @@
+`
+### WordPress Environment ###
+
+WC Version: 8.0.3
+WP Version: 6.3.1
+WP Memory Limit: 256 MB
+
+### Server Environment ###
+
+Server Info: Microsoft-IIS/10.0
+PHP Version: 8.1.9
+MySQL Version: 8.0.31
+
+### Database ###
+
+WC Database Version: 8.0.3
+WC Database Prefix: wp_
+
+### Active Plugins (2) ###
+
+WooCommerce: by Automattic – 8.0.3
+Akismet Anti-spam: Spam Protection: by Automattic – 5.2
+
+### Theme ###
+
+Name: Hello Elementor
+Version: 2.9.0
+Child theme: –
+
+### Templates ###
+
+Overrides: –
+`

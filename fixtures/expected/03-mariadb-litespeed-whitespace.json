@@ -1,0 +1,246 @@
+{
+  "provenance": {
+    "artifacts": [
+      {
+        "artifactId": "03-mariadb-litespeed-whitespace",
+        "adapter": "woo-ssr"
+      }
+    ]
+  },
+  "wordPress": {
+    "version": {
+      "status": "known",
+      "value": "6.3.2",
+      "evidence": [
+        {
+          "artifactId": "03-mariadb-litespeed-whitespace",
+          "adapter": "woo-ssr",
+          "locator": {
+            "section": "WordPress Environment",
+            "line": 6
+          },
+          "excerpt": "WP Version:    6.3.2"
+        }
+      ]
+    }
+  },
+  "server": {
+    "phpVersion": {
+      "status": "known",
+      "value": "8.2.15",
+      "evidence": [
+        {
+          "artifactId": "03-mariadb-litespeed-whitespace",
+          "adapter": "woo-ssr",
+          "locator": {
+            "section": "Server Environment",
+            "line": 15
+          },
+          "excerpt": "PHP Version:    8.2.15"
+        }
+      ]
+    },
+    "memoryLimit": {
+      "status": "known",
+      "value": "1 GB",
+      "evidence": [
+        {
+          "artifactId": "03-mariadb-litespeed-whitespace",
+          "adapter": "woo-ssr",
+          "locator": {
+            "section": "WordPress Environment",
+            "line": 8
+          },
+          "excerpt": "WP Memory Limit:    1 GB"
+        }
+      ]
+    },
+    "webServer": {
+      "status": "known",
+      "value": "LiteSpeed",
+      "evidence": [
+        {
+          "artifactId": "03-mariadb-litespeed-whitespace",
+          "adapter": "woo-ssr",
+          "locator": {
+            "section": "Server Environment",
+            "line": 14
+          },
+          "excerpt": "Server Info:   LiteSpeed"
+        }
+      ]
+    }
+  },
+  "database": {
+    "engine": {
+      "status": "inferred",
+      "value": "MariaDB",
+      "evidence": [
+        {
+          "artifactId": "03-mariadb-litespeed-whitespace",
+          "adapter": "woo-ssr",
+          "locator": {
+            "section": "Server Environment",
+            "line": 18
+          },
+          "excerpt": "MySQL Version:    5.5.5-10.6.16-MariaDB"
+        }
+      ],
+      "inferenceBasis": "reported MySQL Version value contains \"MariaDB\""
+    },
+    "version": {
+      "status": "known",
+      "value": "5.5.5-10.6.16-MariaDB",
+      "evidence": [
+        {
+          "artifactId": "03-mariadb-litespeed-whitespace",
+          "adapter": "woo-ssr",
+          "locator": {
+            "section": "Server Environment",
+            "line": 18
+          },
+          "excerpt": "MySQL Version:    5.5.5-10.6.16-MariaDB"
+        }
+      ]
+    }
+  },
+  "theme": {
+    "name": {
+      "status": "known",
+      "value": "Astra",
+      "evidence": [
+        {
+          "artifactId": "03-mariadb-litespeed-whitespace",
+          "adapter": "woo-ssr",
+          "locator": {
+            "section": "Theme",
+            "line": 34
+          },
+          "excerpt": "Name:   Astra"
+        }
+      ]
+    },
+    "version": {
+      "status": "known",
+      "value": "4.6.2",
+      "evidence": [
+        {
+          "artifactId": "03-mariadb-litespeed-whitespace",
+          "adapter": "woo-ssr",
+          "locator": {
+            "section": "Theme",
+            "line": 35
+          },
+          "excerpt": "Version:   4.6.2"
+        }
+      ]
+    },
+    "isChildTheme": {
+      "status": "known",
+      "value": false,
+      "evidence": [
+        {
+          "artifactId": "03-mariadb-litespeed-whitespace",
+          "adapter": "woo-ssr",
+          "locator": {
+            "section": "Theme",
+            "line": 37
+          },
+          "excerpt": "Child theme:   –"
+        }
+      ]
+    },
+    "parentName": {
+      "status": "missing"
+    },
+    "parentVersion": {
+      "status": "missing"
+    }
+  },
+  "plugins": [
+    {
+      "name": "WooCommerce",
+      "source": "wordpress.org",
+      "active": true,
+      "evidence": {
+        "artifactId": "03-mariadb-litespeed-whitespace",
+        "adapter": "woo-ssr",
+        "locator": {
+          "section": "Active Plugins (3)",
+          "line": 28
+        },
+        "excerpt": "WooCommerce:   by Automattic – 8.2.1"
+      },
+      "slug": "woocommerce",
+      "author": "Automattic",
+      "version": "8.2.1"
+    },
+    {
+      "name": "Elementor",
+      "source": "wordpress.org",
+      "active": true,
+      "evidence": {
+        "artifactId": "03-mariadb-litespeed-whitespace",
+        "adapter": "woo-ssr",
+        "locator": {
+          "section": "Active Plugins (3)",
+          "line": 29
+        },
+        "excerpt": "Elementor:   by Elementor.com – 3.18.3"
+      },
+      "slug": "elementor",
+      "author": "Elementor.com",
+      "version": "3.18.3"
+    },
+    {
+      "name": "Really Simple SSL",
+      "source": "wordpress.org",
+      "active": true,
+      "evidence": {
+        "artifactId": "03-mariadb-litespeed-whitespace",
+        "adapter": "woo-ssr",
+        "locator": {
+          "section": "Active Plugins (3)",
+          "line": 30
+        },
+        "excerpt": "Really Simple SSL:   by Really Simple Plugins – 7.2.2"
+      },
+      "slug": "really-simple-ssl",
+      "author": "Really Simple Plugins",
+      "version": "7.2.2"
+    }
+  ],
+  "wooCommerce": {
+    "version": {
+      "status": "known",
+      "value": "8.2.1",
+      "evidence": [
+        {
+          "artifactId": "03-mariadb-litespeed-whitespace",
+          "adapter": "woo-ssr",
+          "locator": {
+            "section": "WordPress Environment",
+            "line": 5
+          },
+          "excerpt": "WC Version:   8.2.1"
+        }
+      ]
+    },
+    "databaseVersion": {
+      "status": "known",
+      "value": "8.2.1",
+      "evidence": [
+        {
+          "artifactId": "03-mariadb-litespeed-whitespace",
+          "adapter": "woo-ssr",
+          "locator": {
+            "section": "Database",
+            "line": 23
+          },
+          "excerpt": "WC Database Version:   8.2.1"
+        }
+      ]
+    },
+    "templateOverrides": []
+  }
+}
