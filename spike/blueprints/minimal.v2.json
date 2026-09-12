@@ -1,0 +1,7 @@
+{
+  "$schema": "https://playground.wordpress.net/blueprint-schema.json",
+  "version": 2,
+  "wordpressVersion": "6.8.2",
+  "phpVersion": "8.2",
+  "plugins": ["hello-dolly"]
+}
