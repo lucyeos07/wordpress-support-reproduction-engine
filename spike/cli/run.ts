@@ -37,9 +37,16 @@ function indent(s: string): string {
 
 const wantFatal = process.argv.includes("--fatal");
 
-const blueprint = JSON.parse(
-  readFileSync(resolve(repoRoot, "spike/blueprints/minimal.v1.json"), "utf8"),
-) as Record<string, unknown>;
+// --blueprint=<path> so the same introspection can be pointed at a v2
+// Blueprint. `run-blueprint` reports nothing, so an exit code alone never
+// proves a plugin installed; this spike checks the booted site instead.
+const blueprintArg = process.argv.find((a) => a.startsWith("--blueprint="));
+const blueprintPath = blueprintArg
+  ? resolve(process.cwd(), blueprintArg.slice("--blueprint=".length))
+  : resolve(repoRoot, "spike/blueprints/minimal.v1.json");
+
+console.log(`blueprint: ${blueprintPath}`);
+const blueprint = JSON.parse(readFileSync(blueprintPath, "utf8")) as Record<string, unknown>;
 
 const started = Date.now();
 

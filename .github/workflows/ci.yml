@@ -74,6 +74,13 @@ jobs:
           echo "--- stderr ---"; cat err.txt
           exit 0
 
+      - name: v2 with plugins, verified by introspection not exit code
+        run: |
+          set +e
+          npx tsx spike/cli/run.ts --blueprint=spike/blueprints/minimal.v2.json
+          echo "introspection exit=$?"
+          exit 0
+
       - name: v1 with installPlugin (control, succeeds on macOS)
         run: |
           set +e
