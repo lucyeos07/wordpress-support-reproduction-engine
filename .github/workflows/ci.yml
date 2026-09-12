@@ -32,3 +32,52 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run spike:cli
+
+  v2-plugins-probe:
+    # Measurement, not a gate. On macOS, `run-blueprint` with a Blueprint v2
+    # top-level `plugins` array fails with "Error connecting to the SQLite
+    # database." while the identical Blueprint works in the browser. This job
+    # establishes whether that is platform-specific or general. It reports the
+    # outcome and always exits 0 so a known failure does not redden CI.
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+
+      - name: v2 WITH plugins (expected to fail on macOS)
+        run: |
+          set +e
+          start=$(date +%s)
+          npx wp-playground-cli run-blueprint --blueprint=spike/blueprints/minimal.v2.json > out.txt 2> err.txt
+          code=$?
+          echo "exit=$code elapsed=$(( $(date +%s) - start ))s"
+          echo "--- stdout ---"; cat out.txt
+          echo "--- stderr ---"; cat err.txt
+          if [ $code -eq 0 ]; then
+            echo "VERDICT: v2+plugins SUCCEEDS on Linux -> macOS-specific"
+          else
+            echo "VERDICT: v2+plugins FAILS on Linux -> general, not platform-specific"
+          fi
+          exit 0
+
+      - name: v2 WITHOUT plugins (control, succeeds on macOS)
+        run: |
+          set +e
+          printf '{"version":2,"wordpressVersion":"6.8.2","phpVersion":"8.2"}' > /tmp/v2-bare.json
+          npx wp-playground-cli run-blueprint --blueprint=/tmp/v2-bare.json > out.txt 2> err.txt
+          echo "exit=$? (control)"
+          echo "--- stderr ---"; cat err.txt
+          exit 0
+
+      - name: v1 with installPlugin (control, succeeds on macOS)
+        run: |
+          set +e
+          npx wp-playground-cli run-blueprint --blueprint=spike/blueprints/minimal.v1.json > out.txt 2> err.txt
+          echo "exit=$? (control)"
+          echo "--- stderr ---"; cat err.txt
+          exit 0
