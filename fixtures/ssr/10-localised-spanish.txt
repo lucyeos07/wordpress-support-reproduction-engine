@@ -1,0 +1,26 @@
+### Entorno de WordPress ###
+
+Dirección de WordPress (URL): https://tienda.example.es
+Dirección del sitio (URL): https://tienda.example.es
+Versión de WC: 8.5.2
+Versión de WP: 6.4.3
+Multisitio de WP: –
+Límite de memoria de WP: 512 MB
+
+### Entorno del servidor ###
+
+Información del servidor: nginx/1.18.0
+Versión de PHP: 8.1.27
+Versión de MySQL: 8.0.35
+Tamaño máximo de subida: 100 MB
+
+### Plugins activos (2) ###
+
+WooCommerce: por Automattic – 8.5.2
+Yoast SEO: por Team Yoast – 21.7
+
+### Tema ###
+
+Nombre: Storefront
+Versión: 4.5.3
+Tema hijo: –

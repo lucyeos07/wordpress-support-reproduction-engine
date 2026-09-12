@@ -1,0 +1,19 @@
+### WordPress Environment ###
+
+WC Version: 9.0.0
+WP Version: 6.6.0
+WP Memory Limit: 256 MB
+
+### Server Environment ###
+
+Server Info: nginx
+PHP Version: 8.3.2
+MySQL Version: 8.0.36
+
+### Active Plugins (1) ###
+
+WooCommerce: by Automattic – 9.0.0
+
+### Templates ###
+
+Outdated templates: –

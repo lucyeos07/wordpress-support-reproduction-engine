@@ -1,7 +1,7 @@
 # WooCommerce System Status Report parser
 
-Phase 1. Implements the System Status adapter from `docs/SPEC.md` §2.2 and
-produces the canonical `Environment` IR from §4.
+Implements the System Status adapter from `docs/SPEC.md` §2.2 and produces the
+canonical `Environment` IR from §4. Phase 1 built it; Phase 2 hardened it.
 
 ```ts
 import { parseSystemStatusReport } from "./src/parsers/woo-ssr/parse.js";
@@ -13,8 +13,8 @@ const environment = parseSystemStatusReport({
 ```
 
 The parser is a pure function. No network, no filesystem, no clock, no
-randomness: the same input always produces the same `Environment`. This is
-asserted by a test that parses every fixture twice and compares.
+randomness: the same input always produces the same `Environment`. A test parses
+every fixture twice and compares.
 
 ---
 
@@ -22,7 +22,7 @@ asserted by a test that parses every fixture twice and compares.
 
 The plain-text **"Copy for support"** export from
 **WooCommerce → Status → Get system report**. The format is confirmed against
-WooCommerce's own report generator:
+WooCommerce's own report generator and status report view:
 
 - sections are emitted as `### Section Name ###`
 - rows are emitted as `Label: Value`
@@ -33,14 +33,15 @@ Tolerated variations, each covered by a fixture:
 
 | Variation | Handling |
 | --- | --- |
-| Wrapped in a Markdown code fence (`` ` ``) | Leading/trailing fence lines stripped; line numbers still refer to the original input |
+| Wrapped in a Markdown code fence | Leading and trailing fence lines stripped, including a fence followed by a trailing newline; line numbers still refer to the original input |
 | CRLF line endings | Normalised |
 | Irregular whitespace around the colon | Trimmed; internal runs collapsed |
 | Rows in any order within a section | Lookup is by label, not position |
 | Unknown labels and entire unknown sections | Ignored without error |
 | Missing sections | Corresponding fields become `missing` |
-| Label casing differences across WooCommerce versions (`Child theme` vs `Child Theme`) | Matched case-insensitively |
+| Label casing differences across WooCommerce versions | Matched case-insensitively |
 | Plugin names containing a colon (`Akismet Anti-spam: Spam Protection`) | Split on the last `: by `, so the name stays intact |
+| Must-use plugin with no author (`by  – 1.7.2`) | Version captured, author left undefined |
 | `(update to version X is available)` suffixes | Stripped from the version |
 | `✔` / `❌` / HTML entity equivalents | Stripped from values; read as booleans where the field is boolean |
 
@@ -56,39 +57,68 @@ plain-text export is parsed.
 | `wordPress.version` | `WP Version` | |
 | `wooCommerce.version` | `WC Version` | |
 | `wooCommerce.databaseVersion` | `WC Database Version` | May legitimately differ from `wooCommerce.version` |
-| `wooCommerce.templateOverrides` | `Overrides` | See below |
+| `wooCommerce.templateOverrides` | `Overrides` | `Field<TemplateOverride[]>` — see below |
 | `server.phpVersion` | `PHP Version` | |
 | `server.memoryLimit` | `PHP Memory Limit`, else `WP Memory Limit` | Verbatim string (`"512 MB"`), never converted to bytes |
 | `server.webServer` | `Server Info` | Verbatim (`"nginx/1.18.0"`) |
 | `database.version` | `MySQL Version` | Verbatim, including composite strings like `5.5.5-10.6.16-MariaDB` |
-| `database.engine` | derived | Always `inferred`, never `known` — see below |
+| `database.engine` | derived | Always `inferred`, never `known` |
 | `theme.name` / `theme.version` | Theme `Name` / `Version` | |
 | `theme.isChildTheme` | `Child theme` | Boolean |
 | `theme.parentName` / `theme.parentVersion` | `Parent theme name` / `Parent theme version` | `missing` when not a child theme |
-| `plugins[]` | Active/Inactive Plugins sections | `active: true` / `active: false` respectively |
-| `provenance.artifacts` | — | Records the `artifactId` and `"woo-ssr"` adapter |
+| `plugins[]` | four plugin sections | Each carries a `kind` — see below |
+| `provenance.artifacts` | — | The `artifactId` and `"woo-ssr"` adapter |
+| `provenance.warnings` | — | Parser quality signals — see below |
 
 Versions and sizes are preserved **verbatim**. The parser does not normalise
 `512 MB` to bytes, does not coerce `21.7` to `21.7.0`, and does not reorder
 plugins. Interpretation belongs to later phases; changing the value here would
 destroy the correspondence with the evidence excerpt.
 
-### Database engine
+### Plugin kinds
 
-WooCommerce labels the row `MySQL Version` whatever the engine actually is. The
-engine is therefore **derived, not read**, and is always marked `inferred` with
-its `inferenceBasis` recorded:
+WooCommerce reports four distinct categories, and they are **not** collapsed
+into one list of "plugins". Each entry carries `kind`:
 
-- value contains `MariaDB` → `MariaDB`
-- otherwise → `MySQL`, basis *"reported under the 'MySQL Version' label with no
-  MariaDB marker in the value"*
+| `kind` | Source section | Row shape | `active` |
+| --- | --- | --- | --- |
+| `active` | `Active Plugins (n)` | `Name: by Author – Version` | `true` |
+| `inactive` | `Inactive Plugins (n)` | `Name: by Author – Version` | `false` |
+| `must-use` | `Must Use Plugins (n)` | `Name: by Author – Version` | `undefined` |
+| `dropin` | `Dropin Plugins (n)` | `file.php: Description` | `undefined` |
 
-It is never `known`, because the report never states it directly.
+The distinction matters because must-use plugins and drop-ins are always loaded
+and cannot be deactivated from the admin. Calling them "active" would imply
+they could be switched off; calling them "inactive" would be false.
+
+`active` is set **only** for the two sections where the report actually states
+it. Must-use plugins and drop-ins leave it `undefined` rather than claiming a
+value the source never gave. Consumers that want "everything loaded at runtime"
+should select on `kind`, not on `active`.
+
+Drop-in rows are `file.php: Description`, where the left side is the drop-in
+file and the right is WordPress's description of it. They carry no author or
+version, so they deliberately do not go through the plugin row parser. `name` is
+the file (`object-cache.php`). The description is not modelled — it is preserved
+verbatim in the evidence excerpt.
 
 ### Template overrides
 
-Each entry under `Overrides` becomes a `TemplateOverride`. `outdated` is true
-**only** when the report itself says so:
+`wooCommerce.templateOverrides` is a `Field<TemplateOverride[]>`, not a bare
+array, so three different situations stay distinguishable:
+
+| Report | Result |
+| --- | --- |
+| No `### Templates ###` section | `status: "missing"` |
+| `Overrides: –` | `status: "known"`, `value: []`, evidenced by that line |
+| `Overrides: <paths>` | `status: "known"`, `value: [...]` |
+| Templates section with no `Overrides` row | `status: "missing"` + `section_incomplete` warning |
+
+Only the second case is evidence that the site overrides nothing. The first is
+evidence of nothing at all. Collapsing both to `[]` would let a later phase
+conclude "no template overrides" from a report that never mentioned templates.
+
+`outdated` is true **only** when the report itself says so:
 
 ```
 woocommerce/cart/cart.php version 3.8.0 is out of date. The core version is 7.9.0
@@ -96,8 +126,20 @@ woocommerce/cart/cart.php version 3.8.0 is out of date. The core version is 7.9.
 
 yields `{ file, version: "3.8.0", coreVersion: "7.9.0", outdated: true }`. A bare
 path yields `outdated: false` with no `version`. The parser never compares
-versions itself to decide staleness — that is a diagnostic judgment, and Phase 1
-does not make diagnostic judgments.
+versions itself to decide staleness — that is a diagnostic judgment, and this
+parser makes none.
+
+### Database engine
+
+WooCommerce labels the row `MySQL Version` whatever the engine actually is. The
+engine is therefore **derived, not read**, and is always marked `inferred` with
+its `inferenceBasis` recorded. The basis states explicitly that the value was
+not given by the report and names the version string it came from:
+
+> not stated by the report; derived from the reported "MySQL Version" value
+> "5.5.5-10.6.16-MariaDB", which contains "MariaDB"
+
+It is never `known`. A test asserts that across every fixture.
 
 ---
 
@@ -114,18 +156,12 @@ Every scalar is a `Field<T>` with exactly one of three states (`docs/SPEC.md`
 
 A value is `missing` when the section is absent, the row is absent, or the value
 is one of WooCommerce's placeholders for "nothing" (`–`, `—`, `-`, `&#8211;`,
-`❌`). This matters: `Overrides: –` means *no overrides*, and is parsed as an
-empty list rather than as an override named `–`.
+`❌`).
 
 There is no fourth state. The parser has no defaults table, and there is no
 constructor that accepts a fallback value. If a report omits the PHP version,
-`server.phpVersion.status` is `"missing"` and `.value` is `undefined` —
-it never becomes `"unknown"`, `"8.0"`, or `""`.
-
-Absent list-valued fields become `[]`, which means *the report showed none*. A
-report that omits the Templates section entirely and one that says
-`Overrides: –` are not currently distinguishable at the list level; see
-limitations.
+`server.phpVersion.status` is `"missing"` and `.value` is `undefined` — it never
+becomes `"unknown"`, `"8.0"`, or `""`.
 
 ---
 
@@ -146,12 +182,48 @@ Every `known` and `inferred` field carries `Evidence`:
   fence that was stripped.
 - `excerpt` is the verbatim source line. It is never normalised or summarised,
   so a later `Finding` can quote the customer's own text back.
-- Each entry in `plugins[]` and `templateOverrides[]` carries its own evidence
+- Each entry in `plugins[]` and each `TemplateOverride` carries its own evidence
   pointing at its specific row.
 
-A test enforces this across every fixture: for each evidence record, the line at
-`locator.line` in the source file must equal the `excerpt`. A citation that does
-not point at what it claims fails the suite.
+A test enforces this across every fixture, warnings included: for each evidence
+record, the line at `locator.line` in the source must equal the `excerpt`. A
+citation that does not point at what it claims fails the suite.
+
+---
+
+## Parser warnings
+
+`provenance.warnings` carries `ParserWarning[]`. These are **quality signals
+about the parse, not diagnostics about the site**. A `Finding` says something
+about the reported environment; a `ParserWarning` says how well this tool
+managed to read the artifact. They carry no severity, no citation and no fix,
+specifically so the two cannot be mistaken for one another — and a test asserts
+they never grow Finding-shaped fields.
+
+| Code | Meaning |
+| --- | --- |
+| `no_recognised_sections` | Input has `### … ###` headings but none were recognised. Usually a localised report. |
+| `section_labels_unrecognised` | A recognised section contained none of its expected labels. |
+| `plugin_count_mismatch` | A section header declared `(n)` but a different number of rows parsed. |
+| `malformed_plugin_row` | A row in a plugin section matched neither `Name: by Author – Version` nor a leading version. |
+| `malformed_override_row` | An entry under `Overrides` does not begin with a `.php` path. |
+| `missing_continuation` | An `Overrides` row had an empty value and no continuation lines. |
+| `section_incomplete` | A recognised section was present but could not be read completely. |
+
+### Localised reports
+
+This is the case Phase 2 was most concerned with. A Spanish report has
+translated section headings (`### Entorno de WordPress ###`), so every section
+lookup fails and every field comes back `missing`. Without a warning that is
+indistinguishable from a valid English report describing a site with almost
+nothing configured — a silently wrong answer.
+
+The parser now emits `no_recognised_sections`, listing the headings it did find.
+It still does **not** parse the report: warnings mark the input as unreadable,
+they do not recover it.
+
+Parsing continues after a warning. A malformed row is skipped and recorded; the
+rows either side of it are still parsed.
 
 ---
 
@@ -177,32 +249,40 @@ An unresolved plugin keeps its name, version, and author. It is not dropped: a
 later phase needs it in order to record an explicit omission rather than
 silently pretending the environment had one fewer plugin.
 
-The catalog is a hand-curated seed (20 entries). It is deliberately small and is
-extended by hand.
+Drop-ins never go through resolution — a drop-in is a file in `wp-content`, not
+a repository plugin. Must-use plugins do go through it, and in the fixture
+corpus none of them match, which is the correct outcome: host platform
+mu-plugins are not repository plugins.
+
+The catalog holds 31 hand-curated entries and is extended by hand. Tests enforce
+unique `(name, author)` keys, a repository-shaped slug on every `wordpress.org`
+entry, and no slug on any `premium` entry.
 
 ---
 
 ## Known limitations
 
-1. **Must Use and Dropin plugins are not parsed.** Real reports contain
-   `### Must Use Plugins ###` and `### Dropin Plugins ###`. These plugins *are*
-   loaded at runtime, so omitting them understates the environment. Not in the
-   Phase 1 field list; needs its own fixture before it is added.
-2. **An absent Templates section and an explicit "no overrides" both produce
-   `[]`.** The distinction is representable — the list could become a `Field` —
-   but is not currently made.
-3. **Localised reports are not handled.** Labels are matched in English. A
-   report generated in another admin language will parse as mostly `missing`,
-   silently. There is no fixture for this yet and no warning is emitted.
-4. **A plugin row with no `: by ` and no leading version yields a name only.**
-   Version and author become `undefined` rather than producing a wrong value.
-5. **The catalog covers 20 plugins.** Realistic reports will resolve only
+1. **Localised reports are detected, not parsed.** `no_recognised_sections`
+   tells you the file could not be read. It does not read it. A partially
+   translated report — English headings with translated labels — is only caught
+   by `section_labels_unrecognised`, which fires per section and may not fire at
+   all if one expected label happens to survive translation.
+2. **The catalog covers 31 plugins.** Realistic reports will resolve only
    partially. This is by design — an unresolved plugin is a correct answer, not
-   a failure — but it means slug coverage is low until the catalog grows.
-6. **No cross-field validation.** If a report declares `Active Plugins (6)` but
-   lists five rows, the parser records five and says nothing. The test suite
-   checks header counts against parsed counts for the fixtures, but the parser
-   itself does not surface the discrepancy.
-7. **Section detection is positional by name.** A future WooCommerce release
-   that renames a section heading will cause those fields to become `missing`
-   rather than raising an error.
+   a failure — but slug coverage is low until the catalog grows.
+3. **Count mismatches are reported, not reconciled.** If a header says `(6)` and
+   four rows parse, you get four plugins and a warning. The parser does not
+   attempt to recover the missing two or guess what they were.
+4. **A must-use plugin that matches the catalog would receive a WordPress.org
+   slug.** No fixture currently does. If one did, a later Blueprint generator
+   must not install it as an ordinary plugin — mu-plugins load earlier and
+   unconditionally, so the load order would differ from the reported site. The
+   `kind` field exists so that phase can tell the difference; nothing enforces
+   it yet.
+5. **Section detection is by English name.** A future WooCommerce release that
+   renames a heading degrades those fields to `missing`, with
+   `no_recognised_sections` firing only if *every* heading changed.
+6. **Drop-in descriptions are not modelled**, only preserved in evidence.
+7. **No cross-field validation beyond section counts.** Nothing checks that
+   `wooCommerce.databaseVersion` is consistent with `wooCommerce.version`, for
+   example — that is a diagnostic judgment and belongs to Phase 3.

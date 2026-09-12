@@ -5,7 +5,8 @@
         "artifactId": "04-missing-sections",
         "adapter": "woo-ssr"
       }
-    ]
+    ],
+    "warnings": []
   },
   "wordPress": {
     "version": {
@@ -75,8 +76,8 @@
   "plugins": [
     {
       "name": "WooCommerce",
+      "kind": "active",
       "source": "wordpress.org",
-      "active": true,
       "evidence": {
         "artifactId": "04-missing-sections",
         "adapter": "woo-ssr",
@@ -86,14 +87,15 @@
         },
         "excerpt": "WooCommerce: by Automattic – 6.4.1"
       },
+      "active": true,
       "slug": "woocommerce",
       "author": "Automattic",
       "version": "6.4.1"
     },
     {
       "name": "Some Internal Tooling",
+      "kind": "active",
       "source": "unknown",
-      "active": true,
       "evidence": {
         "artifactId": "04-missing-sections",
         "adapter": "woo-ssr",
@@ -103,6 +105,7 @@
         },
         "excerpt": "Some Internal Tooling: by Acme Interne – 0.3.1"
       },
+      "active": true,
       "author": "Acme Interne",
       "version": "0.3.1"
     }
@@ -126,6 +129,8 @@
     "databaseVersion": {
       "status": "missing"
     },
-    "templateOverrides": []
+    "templateOverrides": {
+      "status": "missing"
+    }
   }
 }

@@ -1,0 +1,69 @@
+{
+  "provenance": {
+    "artifacts": [
+      {
+        "artifactId": "10-localised-spanish",
+        "adapter": "woo-ssr"
+      }
+    ],
+    "warnings": [
+      {
+        "code": "no_recognised_sections",
+        "detail": "input contains 4 section heading(s) but none were recognised (found: Entorno de WordPress, Entorno del servidor, Plugins activos (2), Tema); labels are matched in English, so this may be a localised report"
+      }
+    ]
+  },
+  "wordPress": {
+    "version": {
+      "status": "missing"
+    }
+  },
+  "server": {
+    "phpVersion": {
+      "status": "missing"
+    },
+    "memoryLimit": {
+      "status": "missing"
+    },
+    "webServer": {
+      "status": "missing"
+    }
+  },
+  "database": {
+    "engine": {
+      "status": "missing"
+    },
+    "version": {
+      "status": "missing"
+    }
+  },
+  "theme": {
+    "name": {
+      "status": "missing"
+    },
+    "version": {
+      "status": "missing"
+    },
+    "isChildTheme": {
+      "status": "missing"
+    },
+    "parentName": {
+      "status": "missing"
+    },
+    "parentVersion": {
+      "status": "missing"
+    }
+  },
+  "plugins": [],
+  "wooCommerce": {
+    "version": {
+      "status": "missing"
+    },
+    "databaseVersion": {
+      "status": "missing"
+    },
+    "templateOverrides": {
+      "status": "missing"
+    }
+  }
+}

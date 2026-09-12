@@ -5,7 +5,8 @@
         "artifactId": "06-unknown-fields-reordered",
         "adapter": "woo-ssr"
       }
-    ]
+    ],
+    "warnings": []
   },
   "wordPress": {
     "version": {
@@ -86,7 +87,7 @@
           "excerpt": "MySQL Version: 8.0.36"
         }
       ],
-      "inferenceBasis": "reported under the \"MySQL Version\" label with no MariaDB marker in the value"
+      "inferenceBasis": "not stated by the report; derived from the value being reported under the \"MySQL Version\" label with no MariaDB marker in the value"
     },
     "version": {
       "status": "known",
@@ -160,8 +161,8 @@
   "plugins": [
     {
       "name": "Wordfence Security",
+      "kind": "active",
       "source": "wordpress.org",
-      "active": true,
       "evidence": {
         "artifactId": "06-unknown-fields-reordered",
         "adapter": "woo-ssr",
@@ -171,14 +172,15 @@
         },
         "excerpt": "Wordfence Security: by Wordfence – 7.11.6"
       },
+      "active": true,
       "slug": "wordfence",
       "author": "Wordfence",
       "version": "7.11.6"
     },
     {
       "name": "Contact Form 7",
+      "kind": "active",
       "source": "wordpress.org",
-      "active": true,
       "evidence": {
         "artifactId": "06-unknown-fields-reordered",
         "adapter": "woo-ssr",
@@ -188,14 +190,15 @@
         },
         "excerpt": "Contact Form 7: by Takayuki Miyoshi – 5.9.3"
       },
+      "active": true,
       "slug": "contact-form-7",
       "author": "Takayuki Miyoshi",
       "version": "5.9.3"
     },
     {
       "name": "WooCommerce",
+      "kind": "active",
       "source": "wordpress.org",
-      "active": true,
       "evidence": {
         "artifactId": "06-unknown-fields-reordered",
         "adapter": "woo-ssr",
@@ -205,14 +208,15 @@
         },
         "excerpt": "WooCommerce: by Automattic – 9.1.2"
       },
+      "active": true,
       "slug": "woocommerce",
       "author": "Automattic",
       "version": "9.1.2"
     },
     {
       "name": "Yoast SEO",
+      "kind": "active",
       "source": "wordpress.org",
-      "active": true,
       "evidence": {
         "artifactId": "06-unknown-fields-reordered",
         "adapter": "woo-ssr",
@@ -222,6 +226,7 @@
         },
         "excerpt": "Yoast SEO: by Team Yoast – 22.9"
       },
+      "active": true,
       "slug": "wordpress-seo",
       "author": "Team Yoast",
       "version": "22.9"
@@ -258,6 +263,20 @@
         }
       ]
     },
-    "templateOverrides": []
+    "templateOverrides": {
+      "status": "known",
+      "value": [],
+      "evidence": [
+        {
+          "artifactId": "06-unknown-fields-reordered",
+          "adapter": "woo-ssr",
+          "locator": {
+            "section": "Templates",
+            "line": 47
+          },
+          "excerpt": "Overrides: –"
+        }
+      ]
+    }
   }
 }

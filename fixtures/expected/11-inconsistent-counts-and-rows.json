@@ -1,0 +1,317 @@
+{
+  "provenance": {
+    "artifacts": [
+      {
+        "artifactId": "11-inconsistent-counts-and-rows",
+        "adapter": "woo-ssr"
+      }
+    ],
+    "warnings": [
+      {
+        "code": "malformed_plugin_row",
+        "section": "Active Plugins (6)",
+        "evidence": {
+          "artifactId": "11-inconsistent-counts-and-rows",
+          "adapter": "woo-ssr",
+          "locator": {
+            "section": "Active Plugins (6)",
+            "line": 17
+          },
+          "excerpt": "Mystery Plugin: installed"
+        },
+        "detail": "row does not match \"Name: by Author – Version\" and carries no leading version"
+      },
+      {
+        "code": "plugin_count_mismatch",
+        "section": "Active Plugins (6)",
+        "detail": "section header declares 6 entries but 4 row(s) parsed"
+      },
+      {
+        "code": "malformed_override_row",
+        "section": "Templates",
+        "evidence": {
+          "artifactId": "11-inconsistent-counts-and-rows",
+          "adapter": "woo-ssr",
+          "locator": {
+            "section": "Templates",
+            "line": 28
+          },
+          "excerpt": "Overrides: not-a-php-path-entry"
+        },
+        "detail": "override entry does not begin with a .php path"
+      }
+    ]
+  },
+  "wordPress": {
+    "version": {
+      "status": "known",
+      "value": "6.3.0",
+      "evidence": [
+        {
+          "artifactId": "11-inconsistent-counts-and-rows",
+          "adapter": "woo-ssr",
+          "locator": {
+            "section": "WordPress Environment",
+            "line": 4
+          },
+          "excerpt": "WP Version: 6.3.0"
+        }
+      ]
+    }
+  },
+  "server": {
+    "phpVersion": {
+      "status": "known",
+      "value": "8.0.28",
+      "evidence": [
+        {
+          "artifactId": "11-inconsistent-counts-and-rows",
+          "adapter": "woo-ssr",
+          "locator": {
+            "section": "Server Environment",
+            "line": 10
+          },
+          "excerpt": "PHP Version: 8.0.28"
+        }
+      ]
+    },
+    "memoryLimit": {
+      "status": "known",
+      "value": "256 MB",
+      "evidence": [
+        {
+          "artifactId": "11-inconsistent-counts-and-rows",
+          "adapter": "woo-ssr",
+          "locator": {
+            "section": "WordPress Environment",
+            "line": 5
+          },
+          "excerpt": "WP Memory Limit: 256 MB"
+        }
+      ]
+    },
+    "webServer": {
+      "status": "known",
+      "value": "Apache",
+      "evidence": [
+        {
+          "artifactId": "11-inconsistent-counts-and-rows",
+          "adapter": "woo-ssr",
+          "locator": {
+            "section": "Server Environment",
+            "line": 9
+          },
+          "excerpt": "Server Info: Apache"
+        }
+      ]
+    }
+  },
+  "database": {
+    "engine": {
+      "status": "inferred",
+      "value": "MySQL",
+      "evidence": [
+        {
+          "artifactId": "11-inconsistent-counts-and-rows",
+          "adapter": "woo-ssr",
+          "locator": {
+            "section": "Server Environment",
+            "line": 11
+          },
+          "excerpt": "MySQL Version: 8.0.30"
+        }
+      ],
+      "inferenceBasis": "not stated by the report; derived from the value being reported under the \"MySQL Version\" label with no MariaDB marker in the value"
+    },
+    "version": {
+      "status": "known",
+      "value": "8.0.30",
+      "evidence": [
+        {
+          "artifactId": "11-inconsistent-counts-and-rows",
+          "adapter": "woo-ssr",
+          "locator": {
+            "section": "Server Environment",
+            "line": 11
+          },
+          "excerpt": "MySQL Version: 8.0.30"
+        }
+      ]
+    }
+  },
+  "theme": {
+    "name": {
+      "status": "known",
+      "value": "Storefront",
+      "evidence": [
+        {
+          "artifactId": "11-inconsistent-counts-and-rows",
+          "adapter": "woo-ssr",
+          "locator": {
+            "section": "Theme",
+            "line": 22
+          },
+          "excerpt": "Name: Storefront"
+        }
+      ]
+    },
+    "version": {
+      "status": "known",
+      "value": "4.5.0",
+      "evidence": [
+        {
+          "artifactId": "11-inconsistent-counts-and-rows",
+          "adapter": "woo-ssr",
+          "locator": {
+            "section": "Theme",
+            "line": 23
+          },
+          "excerpt": "Version: 4.5.0"
+        }
+      ]
+    },
+    "isChildTheme": {
+      "status": "known",
+      "value": false,
+      "evidence": [
+        {
+          "artifactId": "11-inconsistent-counts-and-rows",
+          "adapter": "woo-ssr",
+          "locator": {
+            "section": "Theme",
+            "line": 24
+          },
+          "excerpt": "Child theme: –"
+        }
+      ]
+    },
+    "parentName": {
+      "status": "missing"
+    },
+    "parentVersion": {
+      "status": "missing"
+    }
+  },
+  "plugins": [
+    {
+      "name": "WooCommerce",
+      "kind": "active",
+      "source": "wordpress.org",
+      "evidence": {
+        "artifactId": "11-inconsistent-counts-and-rows",
+        "adapter": "woo-ssr",
+        "locator": {
+          "section": "Active Plugins (6)",
+          "line": 15
+        },
+        "excerpt": "WooCommerce: by Automattic – 8.1.0"
+      },
+      "active": true,
+      "slug": "woocommerce",
+      "author": "Automattic",
+      "version": "8.1.0"
+    },
+    {
+      "name": "Yoast SEO",
+      "kind": "active",
+      "source": "wordpress.org",
+      "evidence": {
+        "artifactId": "11-inconsistent-counts-and-rows",
+        "adapter": "woo-ssr",
+        "locator": {
+          "section": "Active Plugins (6)",
+          "line": 16
+        },
+        "excerpt": "Yoast SEO: by Team Yoast – 21.0"
+      },
+      "active": true,
+      "slug": "wordpress-seo",
+      "author": "Team Yoast",
+      "version": "21.0"
+    },
+    {
+      "name": "Mystery Plugin",
+      "kind": "active",
+      "source": "unknown",
+      "evidence": {
+        "artifactId": "11-inconsistent-counts-and-rows",
+        "adapter": "woo-ssr",
+        "locator": {
+          "section": "Active Plugins (6)",
+          "line": 17
+        },
+        "excerpt": "Mystery Plugin: installed"
+      },
+      "active": true
+    },
+    {
+      "name": "Contact Form 7",
+      "kind": "active",
+      "source": "wordpress.org",
+      "evidence": {
+        "artifactId": "11-inconsistent-counts-and-rows",
+        "adapter": "woo-ssr",
+        "locator": {
+          "section": "Active Plugins (6)",
+          "line": 18
+        },
+        "excerpt": "Contact Form 7: by Takayuki Miyoshi – 5.8"
+      },
+      "active": true,
+      "slug": "contact-form-7",
+      "author": "Takayuki Miyoshi",
+      "version": "5.8"
+    }
+  ],
+  "wooCommerce": {
+    "version": {
+      "status": "known",
+      "value": "8.1.0",
+      "evidence": [
+        {
+          "artifactId": "11-inconsistent-counts-and-rows",
+          "adapter": "woo-ssr",
+          "locator": {
+            "section": "WordPress Environment",
+            "line": 3
+          },
+          "excerpt": "WC Version: 8.1.0"
+        }
+      ]
+    },
+    "databaseVersion": {
+      "status": "missing"
+    },
+    "templateOverrides": {
+      "status": "known",
+      "value": [
+        {
+          "file": "woocommerce/cart/cart.php",
+          "outdated": true,
+          "evidence": {
+            "artifactId": "11-inconsistent-counts-and-rows",
+            "adapter": "woo-ssr",
+            "locator": {
+              "section": "Templates",
+              "line": 29
+            },
+            "excerpt": "woocommerce/cart/cart.php version 3.0.0 is out of date. The core version is 8.1.0"
+          },
+          "version": "3.0.0",
+          "coreVersion": "8.1.0"
+        }
+      ],
+      "evidence": [
+        {
+          "artifactId": "11-inconsistent-counts-and-rows",
+          "adapter": "woo-ssr",
+          "locator": {
+            "section": "Templates",
+            "line": 28
+          },
+          "excerpt": "Overrides: not-a-php-path-entry"
+        }
+      ]
+    }
+  }
+}

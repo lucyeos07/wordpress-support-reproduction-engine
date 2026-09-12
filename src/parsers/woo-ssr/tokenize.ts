@@ -46,7 +46,16 @@ function stripCodeFence(lines: string[]): { lines: string[]; offset: number } {
     out.shift();
     offset += 1;
   }
-  while (out.length > 0 && /^`{1,3}\s*$/.test(out[out.length - 1] ?? "")) out.pop();
+  // Files normally end with a newline, so the closing fence is not the last
+  // array element — trailing blanks have to go too, or the fence survives and
+  // is read as a continuation line.
+  const isFence = (l: string): boolean => /^`{1,3}\s*$/.test(l);
+  const isBlank = (l: string): boolean => l.trim() === "";
+  while (out.length > 0) {
+    const last = out[out.length - 1] ?? "";
+    if (!isFence(last) && !isBlank(last)) break;
+    out.pop();
+  }
   return { lines: out, offset };
 }
 

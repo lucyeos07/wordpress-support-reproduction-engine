@@ -1,0 +1,55 @@
+### WordPress Environment ###
+
+WordPress address (URL): https://managed.example.com
+Site address (URL): https://managed.example.com
+WC Version: 8.6.1
+WP Version: 6.5.2
+WP Multisite: –
+WP Memory Limit: 512 MB
+External object cache: ✔
+
+### Server Environment ###
+
+Server Info: nginx/1.25.3
+PHP Version: 8.2.18
+PHP Time Limit: 300
+MySQL Version: 8.0.36
+Max Upload Size: 512 MB
+
+### Database ###
+
+WC Database Version: 8.6.1
+WC Database Prefix: wp_
+
+### Active Plugins (2) ###
+
+WooCommerce: by Automattic – 8.6.1
+Jetpack: by Automattic – 13.2
+
+### Inactive Plugins (1) ###
+
+Classic Editor: by WordPress Contributors – 1.6.3
+
+### Must Use Plugins (3) ###
+
+Health Check Troubleshooting Mode: by  – 1.7.2
+Platform Guardrails: by Managed Host Platform – 2.4.0
+WP Engine System: by WP Engine – 6.0.4
+
+### Dropin Plugins (3) ###
+
+advanced-cache.php: Advanced caching plugin.
+object-cache.php: External object cache.
+db.php: Custom database class.
+
+### Theme ###
+
+Name: Storefront
+Version: 4.6.0
+Author URL: https://woocommerce.com
+Child theme: –
+WooCommerce support: ✔
+
+### Templates ###
+
+Overrides: –

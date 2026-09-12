@@ -5,7 +5,8 @@
         "artifactId": "02-child-theme-outdated-overrides",
         "adapter": "woo-ssr"
       }
-    ]
+    ],
+    "warnings": []
   },
   "wordPress": {
     "version": {
@@ -86,7 +87,7 @@
           "excerpt": "MySQL Version: 8.0.28"
         }
       ],
-      "inferenceBasis": "reported under the \"MySQL Version\" label with no MariaDB marker in the value"
+      "inferenceBasis": "not stated by the report; derived from the value being reported under the \"MySQL Version\" label with no MariaDB marker in the value"
     },
     "version": {
       "status": "known",
@@ -184,8 +185,8 @@
   "plugins": [
     {
       "name": "WooCommerce",
+      "kind": "active",
       "source": "wordpress.org",
-      "active": true,
       "evidence": {
         "artifactId": "02-child-theme-outdated-overrides",
         "adapter": "woo-ssr",
@@ -195,14 +196,15 @@
         },
         "excerpt": "WooCommerce: by Automattic – 7.9.0"
       },
+      "active": true,
       "slug": "woocommerce",
       "author": "Automattic",
       "version": "7.9.0"
     },
     {
       "name": "WooCommerce Subscriptions",
+      "kind": "active",
       "source": "premium",
-      "active": true,
       "evidence": {
         "artifactId": "02-child-theme-outdated-overrides",
         "adapter": "woo-ssr",
@@ -212,13 +214,14 @@
         },
         "excerpt": "WooCommerce Subscriptions: by WooCommerce – 5.4.0"
       },
+      "active": true,
       "author": "WooCommerce",
       "version": "5.4.0"
     },
     {
       "name": "Advanced Custom Fields PRO",
+      "kind": "active",
       "source": "premium",
-      "active": true,
       "evidence": {
         "artifactId": "02-child-theme-outdated-overrides",
         "adapter": "woo-ssr",
@@ -228,13 +231,14 @@
         },
         "excerpt": "Advanced Custom Fields PRO: by WP Engine – 6.2.1"
       },
+      "active": true,
       "author": "WP Engine",
       "version": "6.2.1"
     },
     {
       "name": "WP Rocket",
+      "kind": "inactive",
       "source": "premium",
-      "active": false,
       "evidence": {
         "artifactId": "02-child-theme-outdated-overrides",
         "adapter": "woo-ssr",
@@ -244,6 +248,7 @@
         },
         "excerpt": "WP Rocket: by WP Media – 3.15.2"
       },
+      "active": false,
       "author": "WP Media",
       "version": "3.15.2"
     }
@@ -279,11 +284,70 @@
         }
       ]
     },
-    "templateOverrides": [
-      {
-        "file": "woocommerce/cart/cart.php",
-        "outdated": true,
-        "evidence": {
+    "templateOverrides": {
+      "status": "known",
+      "value": [
+        {
+          "file": "woocommerce/cart/cart.php",
+          "outdated": true,
+          "evidence": {
+            "artifactId": "02-child-theme-outdated-overrides",
+            "adapter": "woo-ssr",
+            "locator": {
+              "section": "Templates",
+              "line": 54
+            },
+            "excerpt": "Overrides: woocommerce/cart/cart.php version 3.8.0 is out of date. The core version is 7.9.0"
+          },
+          "version": "3.8.0",
+          "coreVersion": "7.9.0"
+        },
+        {
+          "file": "woocommerce/checkout/form-checkout.php",
+          "outdated": true,
+          "evidence": {
+            "artifactId": "02-child-theme-outdated-overrides",
+            "adapter": "woo-ssr",
+            "locator": {
+              "section": "Templates",
+              "line": 55
+            },
+            "excerpt": "woocommerce/checkout/form-checkout.php version 3.5.0 is out of date. The core version is 7.9.0"
+          },
+          "version": "3.5.0",
+          "coreVersion": "7.9.0"
+        },
+        {
+          "file": "woocommerce/global/quantity-input.php",
+          "outdated": false,
+          "evidence": {
+            "artifactId": "02-child-theme-outdated-overrides",
+            "adapter": "woo-ssr",
+            "locator": {
+              "section": "Templates",
+              "line": 56
+            },
+            "excerpt": "woocommerce/global/quantity-input.php"
+          }
+        },
+        {
+          "file": "woocommerce/single-product/add-to-cart/variable.php",
+          "outdated": true,
+          "evidence": {
+            "artifactId": "02-child-theme-outdated-overrides",
+            "adapter": "woo-ssr",
+            "locator": {
+              "section": "Templates",
+              "line": 57
+            },
+            "excerpt": "woocommerce/single-product/add-to-cart/variable.php version 6.1.0 is out of date. The core version is 7.9.0"
+          },
+          "version": "6.1.0",
+          "coreVersion": "7.9.0"
+        }
+      ],
+      "evidence": [
+        {
           "artifactId": "02-child-theme-outdated-overrides",
           "adapter": "woo-ssr",
           "locator": {
@@ -291,53 +355,8 @@
             "line": 54
           },
           "excerpt": "Overrides: woocommerce/cart/cart.php version 3.8.0 is out of date. The core version is 7.9.0"
-        },
-        "version": "3.8.0",
-        "coreVersion": "7.9.0"
-      },
-      {
-        "file": "woocommerce/checkout/form-checkout.php",
-        "outdated": true,
-        "evidence": {
-          "artifactId": "02-child-theme-outdated-overrides",
-          "adapter": "woo-ssr",
-          "locator": {
-            "section": "Templates",
-            "line": 55
-          },
-          "excerpt": "woocommerce/checkout/form-checkout.php version 3.5.0 is out of date. The core version is 7.9.0"
-        },
-        "version": "3.5.0",
-        "coreVersion": "7.9.0"
-      },
-      {
-        "file": "woocommerce/global/quantity-input.php",
-        "outdated": false,
-        "evidence": {
-          "artifactId": "02-child-theme-outdated-overrides",
-          "adapter": "woo-ssr",
-          "locator": {
-            "section": "Templates",
-            "line": 56
-          },
-          "excerpt": "woocommerce/global/quantity-input.php"
         }
-      },
-      {
-        "file": "woocommerce/single-product/add-to-cart/variable.php",
-        "outdated": true,
-        "evidence": {
-          "artifactId": "02-child-theme-outdated-overrides",
-          "adapter": "woo-ssr",
-          "locator": {
-            "section": "Templates",
-            "line": 57
-          },
-          "excerpt": "woocommerce/single-product/add-to-cart/variable.php version 6.1.0 is out of date. The core version is 7.9.0"
-        },
-        "version": "6.1.0",
-        "coreVersion": "7.9.0"
-      }
-    ]
+      ]
+    }
   }
 }

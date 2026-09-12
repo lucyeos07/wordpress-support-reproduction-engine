@@ -1,0 +1,29 @@
+### WordPress Environment ###
+
+WC Version: 8.1.0
+WP Version: 6.3.0
+WP Memory Limit: 256 MB
+
+### Server Environment ###
+
+Server Info: Apache
+PHP Version: 8.0.28
+MySQL Version: 8.0.30
+
+### Active Plugins (6) ###
+
+WooCommerce: by Automattic – 8.1.0
+Yoast SEO: by Team Yoast – 21.0
+Mystery Plugin: installed
+Contact Form 7: by Takayuki Miyoshi – 5.8
+
+### Theme ###
+
+Name: Storefront
+Version: 4.5.0
+Child theme: –
+
+### Templates ###
+
+Overrides: not-a-php-path-entry
+woocommerce/cart/cart.php version 3.0.0 is out of date. The core version is 8.1.0

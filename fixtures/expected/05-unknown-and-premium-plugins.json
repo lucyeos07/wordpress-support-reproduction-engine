@@ -5,7 +5,8 @@
         "artifactId": "05-unknown-and-premium-plugins",
         "adapter": "woo-ssr"
       }
-    ]
+    ],
+    "warnings": []
   },
   "wordPress": {
     "version": {
@@ -86,7 +87,7 @@
           "excerpt": "MySQL Version: 10.4.32-MariaDB"
         }
       ],
-      "inferenceBasis": "reported MySQL Version value contains \"MariaDB\""
+      "inferenceBasis": "not stated by the report; derived from the reported \"MySQL Version\" value \"10.4.32-MariaDB\", which contains \"MariaDB\""
     },
     "version": {
       "status": "known",
@@ -160,8 +161,8 @@
   "plugins": [
     {
       "name": "WooCommerce",
+      "kind": "active",
       "source": "wordpress.org",
-      "active": true,
       "evidence": {
         "artifactId": "05-unknown-and-premium-plugins",
         "adapter": "woo-ssr",
@@ -171,14 +172,15 @@
         },
         "excerpt": "WooCommerce: by Automattic – 8.4.0"
       },
+      "active": true,
       "slug": "woocommerce",
       "author": "Automattic",
       "version": "8.4.0"
     },
     {
       "name": "WooCommerce Subscriptions",
+      "kind": "active",
       "source": "premium",
-      "active": true,
       "evidence": {
         "artifactId": "05-unknown-and-premium-plugins",
         "adapter": "woo-ssr",
@@ -188,13 +190,14 @@
         },
         "excerpt": "WooCommerce Subscriptions: by WooCommerce – 5.9.0"
       },
+      "active": true,
       "author": "WooCommerce",
       "version": "5.9.0"
     },
     {
       "name": "WooCommerce Memberships",
+      "kind": "active",
       "source": "premium",
-      "active": true,
       "evidence": {
         "artifactId": "05-unknown-and-premium-plugins",
         "adapter": "woo-ssr",
@@ -204,13 +207,14 @@
         },
         "excerpt": "WooCommerce Memberships: by SkyVerge – 1.25.1"
       },
+      "active": true,
       "author": "SkyVerge",
       "version": "1.25.1"
     },
     {
       "name": "Custom Shipping Calculator",
+      "kind": "active",
       "source": "unknown",
-      "active": true,
       "evidence": {
         "artifactId": "05-unknown-and-premium-plugins",
         "adapter": "woo-ssr",
@@ -220,13 +224,14 @@
         },
         "excerpt": "Custom Shipping Calculator: by Nordvik Digital – 2.1.0"
       },
+      "active": true,
       "author": "Nordvik Digital",
       "version": "2.1.0"
     },
     {
       "name": "Warehouse Sync Bridge",
+      "kind": "active",
       "source": "unknown",
-      "active": true,
       "evidence": {
         "artifactId": "05-unknown-and-premium-plugins",
         "adapter": "woo-ssr",
@@ -236,13 +241,14 @@
         },
         "excerpt": "Warehouse Sync Bridge: by Interlink Systems – 4.0.7"
       },
+      "active": true,
       "author": "Interlink Systems",
       "version": "4.0.7"
     },
     {
       "name": "Gravity Forms",
+      "kind": "active",
       "source": "premium",
-      "active": true,
       "evidence": {
         "artifactId": "05-unknown-and-premium-plugins",
         "adapter": "woo-ssr",
@@ -252,13 +258,14 @@
         },
         "excerpt": "Gravity Forms: by Gravity Forms – 2.8.2"
       },
+      "active": true,
       "author": "Gravity Forms",
       "version": "2.8.2"
     },
     {
       "name": "WooCommerce Stripe Gateway",
+      "kind": "inactive",
       "source": "wordpress.org",
-      "active": false,
       "evidence": {
         "artifactId": "05-unknown-and-premium-plugins",
         "adapter": "woo-ssr",
@@ -268,14 +275,15 @@
         },
         "excerpt": "WooCommerce Stripe Gateway: by WooCommerce – 7.8.1"
       },
+      "active": false,
       "slug": "woocommerce-gateway-stripe",
       "author": "WooCommerce",
       "version": "7.8.1"
     },
     {
       "name": "Legacy Import Helper",
+      "kind": "inactive",
       "source": "unknown",
-      "active": false,
       "evidence": {
         "artifactId": "05-unknown-and-premium-plugins",
         "adapter": "woo-ssr",
@@ -285,6 +293,7 @@
         },
         "excerpt": "Legacy Import Helper: by Unknown – 0.9.0"
       },
+      "active": false,
       "author": "Unknown",
       "version": "0.9.0"
     }
@@ -320,6 +329,20 @@
         }
       ]
     },
-    "templateOverrides": []
+    "templateOverrides": {
+      "status": "known",
+      "value": [],
+      "evidence": [
+        {
+          "artifactId": "05-unknown-and-premium-plugins",
+          "adapter": "woo-ssr",
+          "locator": {
+            "section": "Templates",
+            "line": 44
+          },
+          "excerpt": "Overrides: –"
+        }
+      ]
+    }
   }
 }

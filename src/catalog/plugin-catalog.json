@@ -1,26 +1,183 @@
 {
-  "$comment": "Curated seed catalog (docs/SPEC.md §3, §4.4). Keyed by (display name, author) because display names collide across authors. Entries with kind 'wordpress.org' carry the slug; 'premium' entries are known non-repository plugins and deliberately carry no slug. Extended by hand only — never by a network lookup.",
+  "$comment": "Curated seed catalog (docs/SPEC.md §3, §4.4). Keyed by (display name, author) because display names collide across authors. Entries with kind 'wordpress.org' carry the slug; 'premium' entries are known non-repository plugins and deliberately carry no slug. Extended by hand only — never by a network lookup. Reviewed against the Phase 2 fixture corpus: must-use plugins and drop-ins are generally NOT repository plugins, and resolution correctly abstains on them.",
   "entries": [
-    { "name": "WooCommerce", "author": "Automattic", "kind": "wordpress.org", "slug": "woocommerce" },
-    { "name": "Jetpack", "author": "Automattic", "kind": "wordpress.org", "slug": "jetpack" },
-    { "name": "Akismet Anti-Spam", "author": "Automattic", "kind": "wordpress.org", "slug": "akismet" },
-    { "name": "Akismet Anti-spam: Spam Protection", "author": "Automattic", "kind": "wordpress.org", "slug": "akismet" },
-    { "name": "WP Super Cache", "author": "Automattic", "kind": "wordpress.org", "slug": "wp-super-cache" },
-    { "name": "Yoast SEO", "author": "Team Yoast", "kind": "wordpress.org", "slug": "wordpress-seo" },
-    { "name": "Contact Form 7", "author": "Takayuki Miyoshi", "kind": "wordpress.org", "slug": "contact-form-7" },
-    { "name": "Elementor", "author": "Elementor.com", "kind": "wordpress.org", "slug": "elementor" },
-    { "name": "Wordfence Security", "author": "Wordfence", "kind": "wordpress.org", "slug": "wordfence" },
-    { "name": "Classic Editor", "author": "WordPress Contributors", "kind": "wordpress.org", "slug": "classic-editor" },
-    { "name": "Really Simple SSL", "author": "Really Simple Plugins", "kind": "wordpress.org", "slug": "really-simple-ssl" },
-    { "name": "WPForms Lite", "author": "WPForms", "kind": "wordpress.org", "slug": "wpforms-lite" },
-    { "name": "WooCommerce Stripe Gateway", "author": "WooCommerce", "kind": "wordpress.org", "slug": "woocommerce-gateway-stripe" },
-    { "name": "WooCommerce PayPal Payments", "author": "WooCommerce", "kind": "wordpress.org", "slug": "woocommerce-paypal-payments" },
-
-    { "name": "WooCommerce Subscriptions", "author": "WooCommerce", "kind": "premium" },
-    { "name": "WooCommerce Bookings", "author": "WooCommerce", "kind": "premium" },
-    { "name": "WooCommerce Memberships", "author": "SkyVerge", "kind": "premium" },
-    { "name": "Advanced Custom Fields PRO", "author": "WP Engine", "kind": "premium" },
-    { "name": "WP Rocket", "author": "WP Media", "kind": "premium" },
-    { "name": "Gravity Forms", "author": "Gravity Forms", "kind": "premium" }
+    {
+      "name": "WooCommerce",
+      "author": "Automattic",
+      "kind": "wordpress.org",
+      "slug": "woocommerce"
+    },
+    {
+      "name": "Jetpack",
+      "author": "Automattic",
+      "kind": "wordpress.org",
+      "slug": "jetpack"
+    },
+    {
+      "name": "Akismet Anti-Spam",
+      "author": "Automattic",
+      "kind": "wordpress.org",
+      "slug": "akismet"
+    },
+    {
+      "name": "Akismet Anti-spam: Spam Protection",
+      "author": "Automattic",
+      "kind": "wordpress.org",
+      "slug": "akismet"
+    },
+    {
+      "name": "WP Super Cache",
+      "author": "Automattic",
+      "kind": "wordpress.org",
+      "slug": "wp-super-cache"
+    },
+    {
+      "name": "Yoast SEO",
+      "author": "Team Yoast",
+      "kind": "wordpress.org",
+      "slug": "wordpress-seo"
+    },
+    {
+      "name": "Contact Form 7",
+      "author": "Takayuki Miyoshi",
+      "kind": "wordpress.org",
+      "slug": "contact-form-7"
+    },
+    {
+      "name": "Elementor",
+      "author": "Elementor.com",
+      "kind": "wordpress.org",
+      "slug": "elementor"
+    },
+    {
+      "name": "Wordfence Security",
+      "author": "Wordfence",
+      "kind": "wordpress.org",
+      "slug": "wordfence"
+    },
+    {
+      "name": "Classic Editor",
+      "author": "WordPress Contributors",
+      "kind": "wordpress.org",
+      "slug": "classic-editor"
+    },
+    {
+      "name": "Really Simple SSL",
+      "author": "Really Simple Plugins",
+      "kind": "wordpress.org",
+      "slug": "really-simple-ssl"
+    },
+    {
+      "name": "WPForms Lite",
+      "author": "WPForms",
+      "kind": "wordpress.org",
+      "slug": "wpforms-lite"
+    },
+    {
+      "name": "WooCommerce Stripe Gateway",
+      "author": "WooCommerce",
+      "kind": "wordpress.org",
+      "slug": "woocommerce-gateway-stripe"
+    },
+    {
+      "name": "WooCommerce PayPal Payments",
+      "author": "WooCommerce",
+      "kind": "wordpress.org",
+      "slug": "woocommerce-paypal-payments"
+    },
+    {
+      "name": "WooCommerce Subscriptions",
+      "author": "WooCommerce",
+      "kind": "premium"
+    },
+    {
+      "name": "WooCommerce Bookings",
+      "author": "WooCommerce",
+      "kind": "premium"
+    },
+    {
+      "name": "WooCommerce Memberships",
+      "author": "SkyVerge",
+      "kind": "premium"
+    },
+    {
+      "name": "Advanced Custom Fields PRO",
+      "author": "WP Engine",
+      "kind": "premium"
+    },
+    {
+      "name": "WP Rocket",
+      "author": "WP Media",
+      "kind": "premium"
+    },
+    {
+      "name": "Gravity Forms",
+      "author": "Gravity Forms",
+      "kind": "premium"
+    },
+    {
+      "name": "WooPayments",
+      "author": "Automattic",
+      "kind": "wordpress.org",
+      "slug": "woocommerce-payments"
+    },
+    {
+      "name": "WooCommerce Payments",
+      "author": "Automattic",
+      "kind": "wordpress.org",
+      "slug": "woocommerce-payments"
+    },
+    {
+      "name": "WooCommerce Google Analytics Integration",
+      "author": "WooCommerce",
+      "kind": "wordpress.org",
+      "slug": "woocommerce-google-analytics-integration"
+    },
+    {
+      "name": "Google Listings & Ads",
+      "author": "WooCommerce",
+      "kind": "wordpress.org",
+      "slug": "google-listings-and-ads"
+    },
+    {
+      "name": "Mailchimp for WooCommerce",
+      "author": "Mailchimp",
+      "kind": "wordpress.org",
+      "slug": "mailchimp-for-woocommerce"
+    },
+    {
+      "name": "Health Check & Troubleshooting",
+      "author": "The WordPress.org community",
+      "kind": "wordpress.org",
+      "slug": "health-check"
+    },
+    {
+      "name": "Redis Object Cache",
+      "author": "Till Krüss",
+      "kind": "wordpress.org",
+      "slug": "redis-cache"
+    },
+    {
+      "name": "WP Mail SMTP",
+      "author": "WP Mail SMTP",
+      "kind": "wordpress.org",
+      "slug": "wp-mail-smtp"
+    },
+    {
+      "name": "LiteSpeed Cache",
+      "author": "LiteSpeed Technologies",
+      "kind": "wordpress.org",
+      "slug": "litespeed-cache"
+    },
+    {
+      "name": "WooCommerce Product Add-ons",
+      "author": "WooCommerce",
+      "kind": "premium"
+    },
+    {
+      "name": "WooCommerce Table Rate Shipping",
+      "author": "WooCommerce",
+      "kind": "premium"
+    }
   ]
 }

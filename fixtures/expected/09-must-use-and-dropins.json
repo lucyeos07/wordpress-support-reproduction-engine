@@ -1,0 +1,353 @@
+{
+  "provenance": {
+    "artifacts": [
+      {
+        "artifactId": "09-must-use-and-dropins",
+        "adapter": "woo-ssr"
+      }
+    ],
+    "warnings": []
+  },
+  "wordPress": {
+    "version": {
+      "status": "known",
+      "value": "6.5.2",
+      "evidence": [
+        {
+          "artifactId": "09-must-use-and-dropins",
+          "adapter": "woo-ssr",
+          "locator": {
+            "section": "WordPress Environment",
+            "line": 6
+          },
+          "excerpt": "WP Version: 6.5.2"
+        }
+      ]
+    }
+  },
+  "server": {
+    "phpVersion": {
+      "status": "known",
+      "value": "8.2.18",
+      "evidence": [
+        {
+          "artifactId": "09-must-use-and-dropins",
+          "adapter": "woo-ssr",
+          "locator": {
+            "section": "Server Environment",
+            "line": 14
+          },
+          "excerpt": "PHP Version: 8.2.18"
+        }
+      ]
+    },
+    "memoryLimit": {
+      "status": "known",
+      "value": "512 MB",
+      "evidence": [
+        {
+          "artifactId": "09-must-use-and-dropins",
+          "adapter": "woo-ssr",
+          "locator": {
+            "section": "WordPress Environment",
+            "line": 8
+          },
+          "excerpt": "WP Memory Limit: 512 MB"
+        }
+      ]
+    },
+    "webServer": {
+      "status": "known",
+      "value": "nginx/1.25.3",
+      "evidence": [
+        {
+          "artifactId": "09-must-use-and-dropins",
+          "adapter": "woo-ssr",
+          "locator": {
+            "section": "Server Environment",
+            "line": 13
+          },
+          "excerpt": "Server Info: nginx/1.25.3"
+        }
+      ]
+    }
+  },
+  "database": {
+    "engine": {
+      "status": "inferred",
+      "value": "MySQL",
+      "evidence": [
+        {
+          "artifactId": "09-must-use-and-dropins",
+          "adapter": "woo-ssr",
+          "locator": {
+            "section": "Server Environment",
+            "line": 16
+          },
+          "excerpt": "MySQL Version: 8.0.36"
+        }
+      ],
+      "inferenceBasis": "not stated by the report; derived from the value being reported under the \"MySQL Version\" label with no MariaDB marker in the value"
+    },
+    "version": {
+      "status": "known",
+      "value": "8.0.36",
+      "evidence": [
+        {
+          "artifactId": "09-must-use-and-dropins",
+          "adapter": "woo-ssr",
+          "locator": {
+            "section": "Server Environment",
+            "line": 16
+          },
+          "excerpt": "MySQL Version: 8.0.36"
+        }
+      ]
+    }
+  },
+  "theme": {
+    "name": {
+      "status": "known",
+      "value": "Storefront",
+      "evidence": [
+        {
+          "artifactId": "09-must-use-and-dropins",
+          "adapter": "woo-ssr",
+          "locator": {
+            "section": "Theme",
+            "line": 47
+          },
+          "excerpt": "Name: Storefront"
+        }
+      ]
+    },
+    "version": {
+      "status": "known",
+      "value": "4.6.0",
+      "evidence": [
+        {
+          "artifactId": "09-must-use-and-dropins",
+          "adapter": "woo-ssr",
+          "locator": {
+            "section": "Theme",
+            "line": 48
+          },
+          "excerpt": "Version: 4.6.0"
+        }
+      ]
+    },
+    "isChildTheme": {
+      "status": "known",
+      "value": false,
+      "evidence": [
+        {
+          "artifactId": "09-must-use-and-dropins",
+          "adapter": "woo-ssr",
+          "locator": {
+            "section": "Theme",
+            "line": 50
+          },
+          "excerpt": "Child theme: –"
+        }
+      ]
+    },
+    "parentName": {
+      "status": "missing"
+    },
+    "parentVersion": {
+      "status": "missing"
+    }
+  },
+  "plugins": [
+    {
+      "name": "WooCommerce",
+      "kind": "active",
+      "source": "wordpress.org",
+      "evidence": {
+        "artifactId": "09-must-use-and-dropins",
+        "adapter": "woo-ssr",
+        "locator": {
+          "section": "Active Plugins (2)",
+          "line": 26
+        },
+        "excerpt": "WooCommerce: by Automattic – 8.6.1"
+      },
+      "active": true,
+      "slug": "woocommerce",
+      "author": "Automattic",
+      "version": "8.6.1"
+    },
+    {
+      "name": "Jetpack",
+      "kind": "active",
+      "source": "wordpress.org",
+      "evidence": {
+        "artifactId": "09-must-use-and-dropins",
+        "adapter": "woo-ssr",
+        "locator": {
+          "section": "Active Plugins (2)",
+          "line": 27
+        },
+        "excerpt": "Jetpack: by Automattic – 13.2"
+      },
+      "active": true,
+      "slug": "jetpack",
+      "author": "Automattic",
+      "version": "13.2"
+    },
+    {
+      "name": "Classic Editor",
+      "kind": "inactive",
+      "source": "wordpress.org",
+      "evidence": {
+        "artifactId": "09-must-use-and-dropins",
+        "adapter": "woo-ssr",
+        "locator": {
+          "section": "Inactive Plugins (1)",
+          "line": 31
+        },
+        "excerpt": "Classic Editor: by WordPress Contributors – 1.6.3"
+      },
+      "active": false,
+      "slug": "classic-editor",
+      "author": "WordPress Contributors",
+      "version": "1.6.3"
+    },
+    {
+      "name": "Health Check Troubleshooting Mode",
+      "kind": "must-use",
+      "source": "unknown",
+      "evidence": {
+        "artifactId": "09-must-use-and-dropins",
+        "adapter": "woo-ssr",
+        "locator": {
+          "section": "Must Use Plugins (3)",
+          "line": 35
+        },
+        "excerpt": "Health Check Troubleshooting Mode: by  – 1.7.2"
+      },
+      "version": "1.7.2"
+    },
+    {
+      "name": "Platform Guardrails",
+      "kind": "must-use",
+      "source": "unknown",
+      "evidence": {
+        "artifactId": "09-must-use-and-dropins",
+        "adapter": "woo-ssr",
+        "locator": {
+          "section": "Must Use Plugins (3)",
+          "line": 36
+        },
+        "excerpt": "Platform Guardrails: by Managed Host Platform – 2.4.0"
+      },
+      "author": "Managed Host Platform",
+      "version": "2.4.0"
+    },
+    {
+      "name": "WP Engine System",
+      "kind": "must-use",
+      "source": "unknown",
+      "evidence": {
+        "artifactId": "09-must-use-and-dropins",
+        "adapter": "woo-ssr",
+        "locator": {
+          "section": "Must Use Plugins (3)",
+          "line": 37
+        },
+        "excerpt": "WP Engine System: by WP Engine – 6.0.4"
+      },
+      "author": "WP Engine",
+      "version": "6.0.4"
+    },
+    {
+      "name": "advanced-cache.php",
+      "kind": "dropin",
+      "source": "unknown",
+      "evidence": {
+        "artifactId": "09-must-use-and-dropins",
+        "adapter": "woo-ssr",
+        "locator": {
+          "section": "Dropin Plugins (3)",
+          "line": 41
+        },
+        "excerpt": "advanced-cache.php: Advanced caching plugin."
+      }
+    },
+    {
+      "name": "object-cache.php",
+      "kind": "dropin",
+      "source": "unknown",
+      "evidence": {
+        "artifactId": "09-must-use-and-dropins",
+        "adapter": "woo-ssr",
+        "locator": {
+          "section": "Dropin Plugins (3)",
+          "line": 42
+        },
+        "excerpt": "object-cache.php: External object cache."
+      }
+    },
+    {
+      "name": "db.php",
+      "kind": "dropin",
+      "source": "unknown",
+      "evidence": {
+        "artifactId": "09-must-use-and-dropins",
+        "adapter": "woo-ssr",
+        "locator": {
+          "section": "Dropin Plugins (3)",
+          "line": 43
+        },
+        "excerpt": "db.php: Custom database class."
+      }
+    }
+  ],
+  "wooCommerce": {
+    "version": {
+      "status": "known",
+      "value": "8.6.1",
+      "evidence": [
+        {
+          "artifactId": "09-must-use-and-dropins",
+          "adapter": "woo-ssr",
+          "locator": {
+            "section": "WordPress Environment",
+            "line": 5
+          },
+          "excerpt": "WC Version: 8.6.1"
+        }
+      ]
+    },
+    "databaseVersion": {
+      "status": "known",
+      "value": "8.6.1",
+      "evidence": [
+        {
+          "artifactId": "09-must-use-and-dropins",
+          "adapter": "woo-ssr",
+          "locator": {
+            "section": "Database",
+            "line": 21
+          },
+          "excerpt": "WC Database Version: 8.6.1"
+        }
+      ]
+    },
+    "templateOverrides": {
+      "status": "known",
+      "value": [],
+      "evidence": [
+        {
+          "artifactId": "09-must-use-and-dropins",
+          "adapter": "woo-ssr",
+          "locator": {
+            "section": "Templates",
+            "line": 55
+          },
+          "excerpt": "Overrides: –"
+        }
+      ]
+    }
+  }
+}

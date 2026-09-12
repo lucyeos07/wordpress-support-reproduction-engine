@@ -5,7 +5,8 @@
         "artifactId": "03-mariadb-litespeed-whitespace",
         "adapter": "woo-ssr"
       }
-    ]
+    ],
+    "warnings": []
   },
   "wordPress": {
     "version": {
@@ -86,7 +87,7 @@
           "excerpt": "MySQL Version:    5.5.5-10.6.16-MariaDB"
         }
       ],
-      "inferenceBasis": "reported MySQL Version value contains \"MariaDB\""
+      "inferenceBasis": "not stated by the report; derived from the reported \"MySQL Version\" value \"5.5.5-10.6.16-MariaDB\", which contains \"MariaDB\""
     },
     "version": {
       "status": "known",
@@ -160,8 +161,8 @@
   "plugins": [
     {
       "name": "WooCommerce",
+      "kind": "active",
       "source": "wordpress.org",
-      "active": true,
       "evidence": {
         "artifactId": "03-mariadb-litespeed-whitespace",
         "adapter": "woo-ssr",
@@ -171,14 +172,15 @@
         },
         "excerpt": "WooCommerce:   by Automattic – 8.2.1"
       },
+      "active": true,
       "slug": "woocommerce",
       "author": "Automattic",
       "version": "8.2.1"
     },
     {
       "name": "Elementor",
+      "kind": "active",
       "source": "wordpress.org",
-      "active": true,
       "evidence": {
         "artifactId": "03-mariadb-litespeed-whitespace",
         "adapter": "woo-ssr",
@@ -188,14 +190,15 @@
         },
         "excerpt": "Elementor:   by Elementor.com – 3.18.3"
       },
+      "active": true,
       "slug": "elementor",
       "author": "Elementor.com",
       "version": "3.18.3"
     },
     {
       "name": "Really Simple SSL",
+      "kind": "active",
       "source": "wordpress.org",
-      "active": true,
       "evidence": {
         "artifactId": "03-mariadb-litespeed-whitespace",
         "adapter": "woo-ssr",
@@ -205,6 +208,7 @@
         },
         "excerpt": "Really Simple SSL:   by Really Simple Plugins – 7.2.2"
       },
+      "active": true,
       "slug": "really-simple-ssl",
       "author": "Really Simple Plugins",
       "version": "7.2.2"
@@ -241,6 +245,20 @@
         }
       ]
     },
-    "templateOverrides": []
+    "templateOverrides": {
+      "status": "known",
+      "value": [],
+      "evidence": [
+        {
+          "artifactId": "03-mariadb-litespeed-whitespace",
+          "adapter": "woo-ssr",
+          "locator": {
+            "section": "Templates",
+            "line": 42
+          },
+          "excerpt": "Overrides:   –"
+        }
+      ]
+    }
   }
 }

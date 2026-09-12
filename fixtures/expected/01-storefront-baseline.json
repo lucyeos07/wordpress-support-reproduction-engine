@@ -5,7 +5,8 @@
         "artifactId": "01-storefront-baseline",
         "adapter": "woo-ssr"
       }
-    ]
+    ],
+    "warnings": []
   },
   "wordPress": {
     "version": {
@@ -86,7 +87,7 @@
           "excerpt": "MySQL Version: 8.0.35"
         }
       ],
-      "inferenceBasis": "reported under the \"MySQL Version\" label with no MariaDB marker in the value"
+      "inferenceBasis": "not stated by the report; derived from the value being reported under the \"MySQL Version\" label with no MariaDB marker in the value"
     },
     "version": {
       "status": "known",
@@ -160,8 +161,8 @@
   "plugins": [
     {
       "name": "WooCommerce",
+      "kind": "active",
       "source": "wordpress.org",
-      "active": true,
       "evidence": {
         "artifactId": "01-storefront-baseline",
         "adapter": "woo-ssr",
@@ -171,14 +172,15 @@
         },
         "excerpt": "WooCommerce: by Automattic – 8.5.2"
       },
+      "active": true,
       "slug": "woocommerce",
       "author": "Automattic",
       "version": "8.5.2"
     },
     {
       "name": "Yoast SEO",
+      "kind": "active",
       "source": "wordpress.org",
-      "active": true,
       "evidence": {
         "artifactId": "01-storefront-baseline",
         "adapter": "woo-ssr",
@@ -188,14 +190,15 @@
         },
         "excerpt": "Yoast SEO: by Team Yoast – 21.7"
       },
+      "active": true,
       "slug": "wordpress-seo",
       "author": "Team Yoast",
       "version": "21.7"
     },
     {
       "name": "Contact Form 7",
+      "kind": "active",
       "source": "wordpress.org",
-      "active": true,
       "evidence": {
         "artifactId": "01-storefront-baseline",
         "adapter": "woo-ssr",
@@ -205,14 +208,15 @@
         },
         "excerpt": "Contact Form 7: by Takayuki Miyoshi – 5.8.6"
       },
+      "active": true,
       "slug": "contact-form-7",
       "author": "Takayuki Miyoshi",
       "version": "5.8.6"
     },
     {
       "name": "Wordfence Security",
+      "kind": "active",
       "source": "wordpress.org",
-      "active": true,
       "evidence": {
         "artifactId": "01-storefront-baseline",
         "adapter": "woo-ssr",
@@ -222,14 +226,15 @@
         },
         "excerpt": "Wordfence Security: by Wordfence – 7.11.4"
       },
+      "active": true,
       "slug": "wordfence",
       "author": "Wordfence",
       "version": "7.11.4"
     },
     {
       "name": "Akismet Anti-Spam",
+      "kind": "inactive",
       "source": "wordpress.org",
-      "active": false,
       "evidence": {
         "artifactId": "01-storefront-baseline",
         "adapter": "woo-ssr",
@@ -239,14 +244,15 @@
         },
         "excerpt": "Akismet Anti-Spam: by Automattic – 5.3"
       },
+      "active": false,
       "slug": "akismet",
       "author": "Automattic",
       "version": "5.3"
     },
     {
       "name": "Classic Editor",
+      "kind": "inactive",
       "source": "wordpress.org",
-      "active": false,
       "evidence": {
         "artifactId": "01-storefront-baseline",
         "adapter": "woo-ssr",
@@ -256,6 +262,7 @@
         },
         "excerpt": "Classic Editor: by WordPress Contributors – 1.6.3"
       },
+      "active": false,
       "slug": "classic-editor",
       "author": "WordPress Contributors",
       "version": "1.6.3"
@@ -292,6 +299,20 @@
         }
       ]
     },
-    "templateOverrides": []
+    "templateOverrides": {
+      "status": "known",
+      "value": [],
+      "evidence": [
+        {
+          "artifactId": "01-storefront-baseline",
+          "adapter": "woo-ssr",
+          "locator": {
+            "section": "Templates",
+            "line": 69
+          },
+          "excerpt": "Overrides: –"
+        }
+      ]
+    }
   }
 }

@@ -1,0 +1,174 @@
+{
+  "provenance": {
+    "artifacts": [
+      {
+        "artifactId": "12-templates-without-overrides-row",
+        "adapter": "woo-ssr"
+      }
+    ],
+    "warnings": [
+      {
+        "code": "section_incomplete",
+        "section": "Templates",
+        "detail": "Templates section present but no \"Overrides\" row was found"
+      }
+    ]
+  },
+  "wordPress": {
+    "version": {
+      "status": "known",
+      "value": "6.6.0",
+      "evidence": [
+        {
+          "artifactId": "12-templates-without-overrides-row",
+          "adapter": "woo-ssr",
+          "locator": {
+            "section": "WordPress Environment",
+            "line": 4
+          },
+          "excerpt": "WP Version: 6.6.0"
+        }
+      ]
+    }
+  },
+  "server": {
+    "phpVersion": {
+      "status": "known",
+      "value": "8.3.2",
+      "evidence": [
+        {
+          "artifactId": "12-templates-without-overrides-row",
+          "adapter": "woo-ssr",
+          "locator": {
+            "section": "Server Environment",
+            "line": 10
+          },
+          "excerpt": "PHP Version: 8.3.2"
+        }
+      ]
+    },
+    "memoryLimit": {
+      "status": "known",
+      "value": "256 MB",
+      "evidence": [
+        {
+          "artifactId": "12-templates-without-overrides-row",
+          "adapter": "woo-ssr",
+          "locator": {
+            "section": "WordPress Environment",
+            "line": 5
+          },
+          "excerpt": "WP Memory Limit: 256 MB"
+        }
+      ]
+    },
+    "webServer": {
+      "status": "known",
+      "value": "nginx",
+      "evidence": [
+        {
+          "artifactId": "12-templates-without-overrides-row",
+          "adapter": "woo-ssr",
+          "locator": {
+            "section": "Server Environment",
+            "line": 9
+          },
+          "excerpt": "Server Info: nginx"
+        }
+      ]
+    }
+  },
+  "database": {
+    "engine": {
+      "status": "inferred",
+      "value": "MySQL",
+      "evidence": [
+        {
+          "artifactId": "12-templates-without-overrides-row",
+          "adapter": "woo-ssr",
+          "locator": {
+            "section": "Server Environment",
+            "line": 11
+          },
+          "excerpt": "MySQL Version: 8.0.36"
+        }
+      ],
+      "inferenceBasis": "not stated by the report; derived from the value being reported under the \"MySQL Version\" label with no MariaDB marker in the value"
+    },
+    "version": {
+      "status": "known",
+      "value": "8.0.36",
+      "evidence": [
+        {
+          "artifactId": "12-templates-without-overrides-row",
+          "adapter": "woo-ssr",
+          "locator": {
+            "section": "Server Environment",
+            "line": 11
+          },
+          "excerpt": "MySQL Version: 8.0.36"
+        }
+      ]
+    }
+  },
+  "theme": {
+    "name": {
+      "status": "missing"
+    },
+    "version": {
+      "status": "missing"
+    },
+    "isChildTheme": {
+      "status": "missing"
+    },
+    "parentName": {
+      "status": "missing"
+    },
+    "parentVersion": {
+      "status": "missing"
+    }
+  },
+  "plugins": [
+    {
+      "name": "WooCommerce",
+      "kind": "active",
+      "source": "wordpress.org",
+      "evidence": {
+        "artifactId": "12-templates-without-overrides-row",
+        "adapter": "woo-ssr",
+        "locator": {
+          "section": "Active Plugins (1)",
+          "line": 15
+        },
+        "excerpt": "WooCommerce: by Automattic – 9.0.0"
+      },
+      "active": true,
+      "slug": "woocommerce",
+      "author": "Automattic",
+      "version": "9.0.0"
+    }
+  ],
+  "wooCommerce": {
+    "version": {
+      "status": "known",
+      "value": "9.0.0",
+      "evidence": [
+        {
+          "artifactId": "12-templates-without-overrides-row",
+          "adapter": "woo-ssr",
+          "locator": {
+            "section": "WordPress Environment",
+            "line": 3
+          },
+          "excerpt": "WC Version: 9.0.0"
+        }
+      ]
+    },
+    "databaseVersion": {
+      "status": "missing"
+    },
+    "templateOverrides": {
+      "status": "missing"
+    }
+  }
+}

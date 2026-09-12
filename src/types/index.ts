@@ -6,6 +6,7 @@ export type { FieldStatus, Field, AdapterId, Evidence, Citation } from "./eviden
 export type { StackFrame, OwnerType, Confidence, ErrorSignature } from "./signature.js";
 export type {
   PluginSource,
+  PluginKind,
   Plugin,
   Provenance,
   WordPressInfo,
@@ -28,3 +29,4 @@ export type {
   ReproPlan,
 } from "./repro.js";
 export type { LogExtraction, Verification } from "./verification.js";
+export type { ParserWarning, ParserWarningCode } from "./warning.js";
