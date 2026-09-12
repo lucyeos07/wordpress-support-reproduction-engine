@@ -1,0 +1,35 @@
+{
+  "signature": {
+    "owner": {
+      "type": "plugin",
+      "confidence": "low"
+    },
+    "evidence": [
+      {
+        "artifactId": "log-04-unmediated-plugin",
+        "adapter": "debug-log",
+        "locator": {
+          "line": 1
+        },
+        "excerpt": "[11-Sep-2026 11:19:36 UTC] PHP Fatal error:  Uncaught Error: Class \"Acme\\Warehouse\\Client\" not found in /var/www/html/wp-content/plugins/warehouse-sync-bridge/src/bootstrap.php:57"
+      }
+    ],
+    "errorClass": "Error",
+    "message": "Class \"Acme\\Warehouse\\Client\" not found",
+    "file": "/var/www/html/wp-content/plugins/warehouse-sync-bridge/src/bootstrap.php",
+    "line": 57,
+    "frames": [
+      {
+        "raw": "#0 /var/www/html/wp-content/plugins/warehouse-sync-bridge/warehouse-sync-bridge.php(120): Acme\\Warehouse\\Bootstrap->init()",
+        "file": "/var/www/html/wp-content/plugins/warehouse-sync-bridge/warehouse-sync-bridge.php",
+        "line": 120,
+        "function": "Acme\\Warehouse\\Bootstrap->init()"
+      },
+      {
+        "raw": "#1 {main}",
+        "function": "{main}"
+      }
+    ]
+  },
+  "warnings": []
+}

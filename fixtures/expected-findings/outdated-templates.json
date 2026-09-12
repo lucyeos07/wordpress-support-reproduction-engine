@@ -1,0 +1,158 @@
+{
+  "findings": [
+    {
+      "ruleId": "OUTDATED_TEMPLATE_OVERRIDE",
+      "title": "WooCommerce template override is out of date: woocommerce/cart/cart.php",
+      "severity": "medium",
+      "confidence": "high",
+      "evidence": [
+        {
+          "artifactId": "02-child-theme-outdated-overrides",
+          "adapter": "woo-ssr",
+          "locator": {
+            "section": "Templates",
+            "line": 54
+          },
+          "excerpt": "Overrides: woocommerce/cart/cart.php version 3.8.0 is out of date. The core version is 7.9.0"
+        }
+      ],
+      "cause": "The System Status Report itself marks this template override as out of date: the theme's copy of the template was written against an older WooCommerce version than the one installed. Outdated overrides miss markup and hooks added since they were copied, which commonly breaks cart, checkout and product pages.\n\nTemplate: woocommerce/cart/cart.php\nOverride version: 3.8.0\nCore template version: 7.9.0",
+      "fix": "Compare the theme's copy against the current core template, port the customisations onto the current version, and update the @version header. The Fixing Outdated WooCommerce Templates guide gives the procedure.",
+      "citations": [
+        {
+          "title": "Template structure & Overriding templates via a theme",
+          "url": "https://developer.woocommerce.com/docs/theming/theme-development/template-structure",
+          "publisher": "WooCommerce Developer Documentation",
+          "retrievedAt": "2026-09-12"
+        },
+        {
+          "title": "Fixing Outdated WooCommerce Templates",
+          "url": "https://developer.woocommerce.com/docs/theming/theme-development/fixing-outdated-woocommerce-templates",
+          "publisher": "WooCommerce Developer Documentation",
+          "retrievedAt": "2026-09-12"
+        }
+      ],
+      "reproducibilityImpact": "Not reproducible from the report alone. The override's contents live in the site's theme, which the report does not include, so Playground can recreate the versions but not the modified template."
+    },
+    {
+      "ruleId": "OUTDATED_TEMPLATE_OVERRIDE",
+      "title": "WooCommerce template override is out of date: woocommerce/checkout/form-checkout.php",
+      "severity": "medium",
+      "confidence": "high",
+      "evidence": [
+        {
+          "artifactId": "02-child-theme-outdated-overrides",
+          "adapter": "woo-ssr",
+          "locator": {
+            "section": "Templates",
+            "line": 55
+          },
+          "excerpt": "woocommerce/checkout/form-checkout.php version 3.5.0 is out of date. The core version is 7.9.0"
+        }
+      ],
+      "cause": "The System Status Report itself marks this template override as out of date: the theme's copy of the template was written against an older WooCommerce version than the one installed. Outdated overrides miss markup and hooks added since they were copied, which commonly breaks cart, checkout and product pages.\n\nTemplate: woocommerce/checkout/form-checkout.php\nOverride version: 3.5.0\nCore template version: 7.9.0",
+      "fix": "Compare the theme's copy against the current core template, port the customisations onto the current version, and update the @version header. The Fixing Outdated WooCommerce Templates guide gives the procedure.",
+      "citations": [
+        {
+          "title": "Template structure & Overriding templates via a theme",
+          "url": "https://developer.woocommerce.com/docs/theming/theme-development/template-structure",
+          "publisher": "WooCommerce Developer Documentation",
+          "retrievedAt": "2026-09-12"
+        },
+        {
+          "title": "Fixing Outdated WooCommerce Templates",
+          "url": "https://developer.woocommerce.com/docs/theming/theme-development/fixing-outdated-woocommerce-templates",
+          "publisher": "WooCommerce Developer Documentation",
+          "retrievedAt": "2026-09-12"
+        }
+      ],
+      "reproducibilityImpact": "Not reproducible from the report alone. The override's contents live in the site's theme, which the report does not include, so Playground can recreate the versions but not the modified template."
+    },
+    {
+      "ruleId": "OUTDATED_TEMPLATE_OVERRIDE",
+      "title": "WooCommerce template override is out of date: woocommerce/single-product/add-to-cart/variable.php",
+      "severity": "medium",
+      "confidence": "high",
+      "evidence": [
+        {
+          "artifactId": "02-child-theme-outdated-overrides",
+          "adapter": "woo-ssr",
+          "locator": {
+            "section": "Templates",
+            "line": 57
+          },
+          "excerpt": "woocommerce/single-product/add-to-cart/variable.php version 6.1.0 is out of date. The core version is 7.9.0"
+        }
+      ],
+      "cause": "The System Status Report itself marks this template override as out of date: the theme's copy of the template was written against an older WooCommerce version than the one installed. Outdated overrides miss markup and hooks added since they were copied, which commonly breaks cart, checkout and product pages.\n\nTemplate: woocommerce/single-product/add-to-cart/variable.php\nOverride version: 6.1.0\nCore template version: 7.9.0",
+      "fix": "Compare the theme's copy against the current core template, port the customisations onto the current version, and update the @version header. The Fixing Outdated WooCommerce Templates guide gives the procedure.",
+      "citations": [
+        {
+          "title": "Template structure & Overriding templates via a theme",
+          "url": "https://developer.woocommerce.com/docs/theming/theme-development/template-structure",
+          "publisher": "WooCommerce Developer Documentation",
+          "retrievedAt": "2026-09-12"
+        },
+        {
+          "title": "Fixing Outdated WooCommerce Templates",
+          "url": "https://developer.woocommerce.com/docs/theming/theme-development/fixing-outdated-woocommerce-templates",
+          "publisher": "WooCommerce Developer Documentation",
+          "retrievedAt": "2026-09-12"
+        }
+      ],
+      "reproducibilityImpact": "Not reproducible from the report alone. The override's contents live in the site's theme, which the report does not include, so Playground can recreate the versions but not the modified template."
+    }
+  ],
+  "evaluations": [
+    {
+      "ruleId": "FATAL_PLUGIN_OWNER",
+      "outcome": "insufficient_evidence",
+      "missingFields": [
+        "signature.owner.type",
+        "signature.evidence"
+      ],
+      "findingCount": 0
+    },
+    {
+      "ruleId": "FATAL_THEME_OWNER",
+      "outcome": "insufficient_evidence",
+      "missingFields": [
+        "signature.owner.type",
+        "signature.evidence"
+      ],
+      "findingCount": 0
+    },
+    {
+      "ruleId": "OUTDATED_TEMPLATE_OVERRIDE",
+      "outcome": "finding",
+      "findingCount": 3
+    },
+    {
+      "ruleId": "PHP_BELOW_PLUGIN_REQUIREMENT",
+      "outcome": "no_match",
+      "findingCount": 0
+    }
+  ],
+  "informationRequest": {
+    "missingFields": [
+      "signature.evidence",
+      "signature.owner.type"
+    ],
+    "requestedBy": [
+      {
+        "ruleId": "FATAL_PLUGIN_OWNER",
+        "missing": [
+          "signature.owner.type",
+          "signature.evidence"
+        ]
+      },
+      {
+        "ruleId": "FATAL_THEME_OWNER",
+        "missing": [
+          "signature.owner.type",
+          "signature.evidence"
+        ]
+      }
+    ]
+  }
+}

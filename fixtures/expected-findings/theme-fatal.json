@@ -1,0 +1,57 @@
+{
+  "findings": [
+    {
+      "ruleId": "FATAL_THEME_OWNER",
+      "title": "Fatal error originates in a theme",
+      "severity": "critical",
+      "confidence": "medium",
+      "evidence": [
+        {
+          "artifactId": "log-02-theme-fatal",
+          "adapter": "debug-log",
+          "locator": {
+            "line": 1
+          },
+          "excerpt": "[11-Sep-2026 09:02:51 UTC] PHP Fatal error:  Uncaught TypeError: storefront_post_meta(): Argument #1 ($post) must be of type WP_Post, null given in /var/www/html/wp-content/themes/storefront/inc/storefront-template-functions.php:288"
+        }
+      ],
+      "cause": "The reported fatal error was raised from a file inside wp-content/themes, so the active theme is the immediate source of the failure. Ownership is taken from the parsed error signature; this rule does not attribute ownership itself.\n\nError class: TypeError\nMessage: storefront_post_meta(): Argument #1 ($post) must be of type WP_Post, null given\nFile: /var/www/html/wp-content/themes/storefront/inc/storefront-template-functions.php\nLine: 288\nOwnership confidence: directory name not in the catalog, so the owner is identified by path only",
+      "fix": "Switch temporarily to a default theme such as Storefront or Twenty Twenty-Four. If the error stops, the fault is in the theme and should go to its author, or to whoever maintains the child theme if the file lives there.",
+      "citations": [
+        {
+          "title": "Debugging – Theme Handbook",
+          "url": "https://developer.wordpress.org/themes/advanced-topics/debugging/",
+          "publisher": "WordPress.org Developer Resources",
+          "retrievedAt": "2026-09-12"
+        }
+      ],
+      "reproducibilityImpact": "Theme-owned failures reproduce only if the exact theme and version are obtainable. A custom or child theme is usually not available, which limits reproduction."
+    }
+  ],
+  "evaluations": [
+    {
+      "ruleId": "FATAL_PLUGIN_OWNER",
+      "outcome": "no_match",
+      "findingCount": 0
+    },
+    {
+      "ruleId": "FATAL_THEME_OWNER",
+      "outcome": "finding",
+      "findingCount": 1
+    },
+    {
+      "ruleId": "OUTDATED_TEMPLATE_OVERRIDE",
+      "outcome": "no_match",
+      "findingCount": 0
+    },
+    {
+      "ruleId": "PHP_BELOW_PLUGIN_REQUIREMENT",
+      "outcome": "no_match",
+      "findingCount": 0
+    }
+  ],
+  "informationRequest": {
+    "missingFields": [],
+    "requestedBy": []
+  }
+}

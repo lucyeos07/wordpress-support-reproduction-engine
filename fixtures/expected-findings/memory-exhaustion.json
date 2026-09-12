@@ -1,0 +1,57 @@
+{
+  "findings": [
+    {
+      "ruleId": "FATAL_PLUGIN_OWNER",
+      "title": "Fatal error originates in a plugin: woocommerce",
+      "severity": "critical",
+      "confidence": "high",
+      "evidence": [
+        {
+          "artifactId": "log-05-memory-exhaustion",
+          "adapter": "debug-log",
+          "locator": {
+            "line": 1
+          },
+          "excerpt": "[11-Sep-2026 12:07:15 UTC] PHP Fatal error:  Allowed memory size of 268435456 bytes exhausted (tried to allocate 20480 bytes) in /var/www/html/wp-content/plugins/woocommerce/includes/class-wc-product-csv-exporter.php on line 208"
+        }
+      ],
+      "cause": "The reported fatal error was raised from a file inside wp-content/plugins, so a plugin is the immediate source of the failure. Ownership is taken from the parsed error signature; this rule does not attribute ownership itself.\n\nMessage: Allowed memory size of 268435456 bytes exhausted (tried to allocate 20480 bytes)\nFile: /var/www/html/wp-content/plugins/woocommerce/includes/class-wc-product-csv-exporter.php\nLine: 208\nIdentified plugin slug: woocommerce\nOwnership confidence: resolved through the bundled catalog",
+      "fix": "Reproduce with only this plugin and WooCommerce active. If the error persists, report it to the plugin's author with the stack trace. If it disappears, reintroduce the other plugins one at a time to find the conflicting pair.",
+      "citations": [
+        {
+          "title": "Debugging in WordPress – Advanced Administration Handbook",
+          "url": "https://developer.wordpress.org/advanced-administration/debug/debug-wordpress/",
+          "publisher": "WordPress.org Developer Resources",
+          "retrievedAt": "2026-09-12"
+        }
+      ],
+      "reproducibilityImpact": "A plugin-owned fatal is a strong reproduction candidate: if the owning plugin is resolvable and installable, the failure can be triggered by activating it."
+    }
+  ],
+  "evaluations": [
+    {
+      "ruleId": "FATAL_PLUGIN_OWNER",
+      "outcome": "finding",
+      "findingCount": 1
+    },
+    {
+      "ruleId": "FATAL_THEME_OWNER",
+      "outcome": "no_match",
+      "findingCount": 0
+    },
+    {
+      "ruleId": "OUTDATED_TEMPLATE_OVERRIDE",
+      "outcome": "no_match",
+      "findingCount": 0
+    },
+    {
+      "ruleId": "PHP_BELOW_PLUGIN_REQUIREMENT",
+      "outcome": "no_match",
+      "findingCount": 0
+    }
+  ],
+  "informationRequest": {
+    "missingFields": [],
+    "requestedBy": []
+  }
+}

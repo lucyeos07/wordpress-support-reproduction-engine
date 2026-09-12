@@ -1,9 +1,12 @@
 /**
- * Regenerates fixtures/expected/*.json from fixtures/ssr/*.txt.
+ * Regenerates committed expectations:
+ *   fixtures/expected/*.json          parsed Environment per SSR fixture
+ *   fixtures/expected-signatures/*.json  parsed signature per log fixture
+ *   fixtures/expected-findings/*.json    diagnosis per named case
  *
- * The generated files are committed and asserted against in tests, so a parser
- * change shows up as a reviewable diff. Regenerating is not a substitute for
- * reading the diff: an expectation nobody looked at proves nothing.
+ * The generated files are committed and asserted against in tests, so a change
+ * in behaviour shows up as a reviewable diff. Regenerating is not a substitute
+ * for reading the diff.
  *
  * Run: npx tsx scripts/generate-expected.ts
  */
@@ -11,22 +14,55 @@ import { readFileSync, writeFileSync, readdirSync, mkdirSync } from "node:fs";
 import { resolve, dirname, basename } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parseSystemStatusReport } from "../src/parsers/woo-ssr/parse.js";
+import { parseDebugLog } from "../src/parsers/debug-log/parse.js";
+import { attachSignature } from "../src/ir/attach-signature.js";
+import { diagnose } from "../src/rules/engine.js";
+import { DIAGNOSIS_CASES } from "../src/rules/cases.js";
 
 const here = dirname(fileURLToPath(import.meta.url));
-const ssrDir = resolve(here, "../fixtures/ssr");
-const expectedDir = resolve(here, "../fixtures/expected");
+const root = resolve(here, "..");
+const ssrDir = resolve(root, "fixtures/ssr");
+const logDir = resolve(root, "fixtures/logs");
+const expectedDir = resolve(root, "fixtures/expected");
+const expectedSigDir = resolve(root, "fixtures/expected-signatures");
+const expectedFindingsDir = resolve(root, "fixtures/expected-findings");
 
-mkdirSync(expectedDir, { recursive: true });
+for (const dir of [expectedDir, expectedSigDir, expectedFindingsDir]) {
+  mkdirSync(dir, { recursive: true });
+}
 
-const files = readdirSync(ssrDir)
-  .filter((f) => f.endsWith(".txt"))
-  .sort();
+function write(path: string, value: unknown): void {
+  writeFileSync(path, JSON.stringify(value, null, 2) + "\n", "utf8");
+  console.log(`wrote ${basename(path)}`);
+}
 
-for (const file of files) {
+for (const file of readdirSync(ssrDir).filter((f) => f.endsWith(".txt")).sort()) {
   const artifactId = basename(file, ".txt");
   const text = readFileSync(resolve(ssrDir, file), "utf8");
-  const environment = parseSystemStatusReport({ artifactId, text });
-  const out = resolve(expectedDir, `${artifactId}.json`);
-  writeFileSync(out, JSON.stringify(environment, null, 2) + "\n", "utf8");
-  console.log(`wrote ${basename(out)}`);
+  write(resolve(expectedDir, `${artifactId}.json`), parseSystemStatusReport({ artifactId, text }));
+}
+
+for (const file of readdirSync(logDir).filter((f) => f.endsWith(".txt")).sort()) {
+  const artifactId = basename(file, ".txt");
+  const text = readFileSync(resolve(logDir, file), "utf8");
+  write(resolve(expectedSigDir, `${artifactId}.json`), parseDebugLog({ artifactId, text }));
+}
+
+for (const testCase of DIAGNOSIS_CASES) {
+  const ssrId = basename(testCase.ssr, ".txt");
+  let environment = parseSystemStatusReport({
+    artifactId: ssrId,
+    text: readFileSync(resolve(ssrDir, testCase.ssr), "utf8"),
+  });
+
+  if (testCase.log !== undefined) {
+    const logId = basename(testCase.log, ".txt");
+    const logResult = parseDebugLog({
+      artifactId: logId,
+      text: readFileSync(resolve(logDir, testCase.log), "utf8"),
+    });
+    environment = attachSignature(environment, logId, logResult);
+  }
+
+  write(resolve(expectedFindingsDir, `${testCase.name}.json`), diagnose(environment));
 }

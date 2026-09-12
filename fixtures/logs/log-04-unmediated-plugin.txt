@@ -1,0 +1,5 @@
+[11-Sep-2026 11:19:36 UTC] PHP Fatal error:  Uncaught Error: Class "Acme\Warehouse\Client" not found in /var/www/html/wp-content/plugins/warehouse-sync-bridge/src/bootstrap.php:57
+Stack trace:
+#0 /var/www/html/wp-content/plugins/warehouse-sync-bridge/warehouse-sync-bridge.php(120): Acme\Warehouse\Bootstrap->init()
+#1 {main}
+  thrown in /var/www/html/wp-content/plugins/warehouse-sync-bridge/src/bootstrap.php on line 57

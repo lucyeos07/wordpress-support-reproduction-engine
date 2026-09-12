@@ -1,0 +1,126 @@
+{
+  "$comment": "Authoritative PHP requirements, keyed by EXACT plugin version. Each value is the 'Requires PHP' header read from that version's own readme.txt in the WordPress.org plugin repository, which is the plugin's own declaration of its minimum PHP version. Keyed exactly on purpose: a requirement recorded for one version is never extrapolated to another, because requirements change between releases. A version absent from this table makes the rule not_applicable, never a guess. NOTE: WooCommerce's 'Server Recommendations' page states PHP 8.3+, but those are RECOMMENDATIONS, not minimums, and must not be used to claim an incompatibility.",
+  "phpRequirements": [
+    {
+      "slug": "woocommerce",
+      "pluginVersion": "6.4.1",
+      "requiresPhp": "7.0",
+      "citation": {
+        "title": "WooCommerce 6.4.1 readme.txt \u2014 \"Requires PHP\" header",
+        "url": "https://plugins.svn.wordpress.org/woocommerce/tags/6.4.1/readme.txt",
+        "publisher": "WordPress.org Plugin Directory",
+        "retrievedAt": "2026-09-12"
+      }
+    },
+    {
+      "slug": "woocommerce",
+      "pluginVersion": "7.2.3",
+      "requiresPhp": "7.2",
+      "citation": {
+        "title": "WooCommerce 7.2.3 readme.txt \u2014 \"Requires PHP\" header",
+        "url": "https://plugins.svn.wordpress.org/woocommerce/tags/7.2.3/readme.txt",
+        "publisher": "WordPress.org Plugin Directory",
+        "retrievedAt": "2026-09-12"
+      }
+    },
+    {
+      "slug": "woocommerce",
+      "pluginVersion": "7.9.0",
+      "requiresPhp": "7.3",
+      "citation": {
+        "title": "WooCommerce 7.9.0 readme.txt \u2014 \"Requires PHP\" header",
+        "url": "https://plugins.svn.wordpress.org/woocommerce/tags/7.9.0/readme.txt",
+        "publisher": "WordPress.org Plugin Directory",
+        "retrievedAt": "2026-09-12"
+      }
+    },
+    {
+      "slug": "woocommerce",
+      "pluginVersion": "8.0.3",
+      "requiresPhp": "7.3",
+      "citation": {
+        "title": "WooCommerce 8.0.3 readme.txt \u2014 \"Requires PHP\" header",
+        "url": "https://plugins.svn.wordpress.org/woocommerce/tags/8.0.3/readme.txt",
+        "publisher": "WordPress.org Plugin Directory",
+        "retrievedAt": "2026-09-12"
+      }
+    },
+    {
+      "slug": "woocommerce",
+      "pluginVersion": "8.1.0",
+      "requiresPhp": "7.3",
+      "citation": {
+        "title": "WooCommerce 8.1.0 readme.txt \u2014 \"Requires PHP\" header",
+        "url": "https://plugins.svn.wordpress.org/woocommerce/tags/8.1.0/readme.txt",
+        "publisher": "WordPress.org Plugin Directory",
+        "retrievedAt": "2026-09-12"
+      }
+    },
+    {
+      "slug": "woocommerce",
+      "pluginVersion": "8.2.1",
+      "requiresPhp": "7.4",
+      "citation": {
+        "title": "WooCommerce 8.2.1 readme.txt \u2014 \"Requires PHP\" header",
+        "url": "https://plugins.svn.wordpress.org/woocommerce/tags/8.2.1/readme.txt",
+        "publisher": "WordPress.org Plugin Directory",
+        "retrievedAt": "2026-09-12"
+      }
+    },
+    {
+      "slug": "woocommerce",
+      "pluginVersion": "8.4.0",
+      "requiresPhp": "7.4",
+      "citation": {
+        "title": "WooCommerce 8.4.0 readme.txt \u2014 \"Requires PHP\" header",
+        "url": "https://plugins.svn.wordpress.org/woocommerce/tags/8.4.0/readme.txt",
+        "publisher": "WordPress.org Plugin Directory",
+        "retrievedAt": "2026-09-12"
+      }
+    },
+    {
+      "slug": "woocommerce",
+      "pluginVersion": "8.5.2",
+      "requiresPhp": "7.4",
+      "citation": {
+        "title": "WooCommerce 8.5.2 readme.txt \u2014 \"Requires PHP\" header",
+        "url": "https://plugins.svn.wordpress.org/woocommerce/tags/8.5.2/readme.txt",
+        "publisher": "WordPress.org Plugin Directory",
+        "retrievedAt": "2026-09-12"
+      }
+    },
+    {
+      "slug": "woocommerce",
+      "pluginVersion": "8.6.1",
+      "requiresPhp": "7.4",
+      "citation": {
+        "title": "WooCommerce 8.6.1 readme.txt \u2014 \"Requires PHP\" header",
+        "url": "https://plugins.svn.wordpress.org/woocommerce/tags/8.6.1/readme.txt",
+        "publisher": "WordPress.org Plugin Directory",
+        "retrievedAt": "2026-09-12"
+      }
+    },
+    {
+      "slug": "woocommerce",
+      "pluginVersion": "9.0.0",
+      "requiresPhp": "7.4",
+      "citation": {
+        "title": "WooCommerce 9.0.0 readme.txt \u2014 \"Requires PHP\" header",
+        "url": "https://plugins.svn.wordpress.org/woocommerce/tags/9.0.0/readme.txt",
+        "publisher": "WordPress.org Plugin Directory",
+        "retrievedAt": "2026-09-12"
+      }
+    },
+    {
+      "slug": "woocommerce",
+      "pluginVersion": "9.1.2",
+      "requiresPhp": "7.4",
+      "citation": {
+        "title": "WooCommerce 9.1.2 readme.txt \u2014 \"Requires PHP\" header",
+        "url": "https://plugins.svn.wordpress.org/woocommerce/tags/9.1.2/readme.txt",
+        "publisher": "WordPress.org Plugin Directory",
+        "retrievedAt": "2026-09-12"
+      }
+    }
+  ]
+}

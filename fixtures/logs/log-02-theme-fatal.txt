@@ -1,0 +1,6 @@
+[11-Sep-2026 09:02:51 UTC] PHP Fatal error:  Uncaught TypeError: storefront_post_meta(): Argument #1 ($post) must be of type WP_Post, null given in /var/www/html/wp-content/themes/storefront/inc/storefront-template-functions.php:288
+Stack trace:
+#0 /var/www/html/wp-includes/class-wp-hook.php(324): storefront_post_meta(NULL)
+#1 /var/www/html/wp-includes/class-wp-hook.php(348): WP_Hook->apply_filters('', Array)
+#2 {main}
+  thrown in /var/www/html/wp-content/themes/storefront/inc/storefront-template-functions.php on line 288

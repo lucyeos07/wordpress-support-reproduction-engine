@@ -1,0 +1,55 @@
+{
+  "findings": [],
+  "evaluations": [
+    {
+      "ruleId": "FATAL_PLUGIN_OWNER",
+      "outcome": "insufficient_evidence",
+      "missingFields": [
+        "signature.owner.type",
+        "signature.evidence"
+      ],
+      "findingCount": 0
+    },
+    {
+      "ruleId": "FATAL_THEME_OWNER",
+      "outcome": "insufficient_evidence",
+      "missingFields": [
+        "signature.owner.type",
+        "signature.evidence"
+      ],
+      "findingCount": 0
+    },
+    {
+      "ruleId": "OUTDATED_TEMPLATE_OVERRIDE",
+      "outcome": "no_match",
+      "findingCount": 0
+    },
+    {
+      "ruleId": "PHP_BELOW_PLUGIN_REQUIREMENT",
+      "outcome": "no_match",
+      "findingCount": 0
+    }
+  ],
+  "informationRequest": {
+    "missingFields": [
+      "signature.evidence",
+      "signature.owner.type"
+    ],
+    "requestedBy": [
+      {
+        "ruleId": "FATAL_PLUGIN_OWNER",
+        "missing": [
+          "signature.owner.type",
+          "signature.evidence"
+        ]
+      },
+      {
+        "ruleId": "FATAL_THEME_OWNER",
+        "missing": [
+          "signature.owner.type",
+          "signature.evidence"
+        ]
+      }
+    ]
+  }
+}

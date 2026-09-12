@@ -1,0 +1,1 @@
+[11-Sep-2026 12:07:15 UTC] PHP Fatal error:  Allowed memory size of 268435456 bytes exhausted (tried to allocate 20480 bytes) in /var/www/html/wp-content/plugins/woocommerce/includes/class-wc-product-csv-exporter.php on line 208

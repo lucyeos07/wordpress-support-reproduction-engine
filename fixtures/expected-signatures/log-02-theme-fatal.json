@@ -1,0 +1,41 @@
+{
+  "signature": {
+    "owner": {
+      "type": "theme",
+      "confidence": "medium"
+    },
+    "evidence": [
+      {
+        "artifactId": "log-02-theme-fatal",
+        "adapter": "debug-log",
+        "locator": {
+          "line": 1
+        },
+        "excerpt": "[11-Sep-2026 09:02:51 UTC] PHP Fatal error:  Uncaught TypeError: storefront_post_meta(): Argument #1 ($post) must be of type WP_Post, null given in /var/www/html/wp-content/themes/storefront/inc/storefront-template-functions.php:288"
+      }
+    ],
+    "errorClass": "TypeError",
+    "message": "storefront_post_meta(): Argument #1 ($post) must be of type WP_Post, null given",
+    "file": "/var/www/html/wp-content/themes/storefront/inc/storefront-template-functions.php",
+    "line": 288,
+    "frames": [
+      {
+        "raw": "#0 /var/www/html/wp-includes/class-wp-hook.php(324): storefront_post_meta(NULL)",
+        "file": "/var/www/html/wp-includes/class-wp-hook.php",
+        "line": 324,
+        "function": "storefront_post_meta(NULL)"
+      },
+      {
+        "raw": "#1 /var/www/html/wp-includes/class-wp-hook.php(348): WP_Hook->apply_filters('', Array)",
+        "file": "/var/www/html/wp-includes/class-wp-hook.php",
+        "line": 348,
+        "function": "WP_Hook->apply_filters('', Array)"
+      },
+      {
+        "raw": "#2 {main}",
+        "function": "{main}"
+      }
+    ]
+  },
+  "warnings": []
+}

@@ -1,0 +1,48 @@
+{
+  "signature": {
+    "owner": {
+      "type": "plugin",
+      "slug": "woocommerce",
+      "confidence": "high"
+    },
+    "evidence": [
+      {
+        "artifactId": "log-01-plugin-fatal",
+        "adapter": "debug-log",
+        "locator": {
+          "line": 1
+        },
+        "excerpt": "[11-Sep-2026 08:14:22 UTC] PHP Fatal error:  Uncaught Error: Call to undefined method WC_Cart::get_totals_for_display() in /var/www/html/wp-content/plugins/woocommerce/includes/wc-cart-functions.php:412"
+      }
+    ],
+    "errorClass": "Error",
+    "message": "Call to undefined method WC_Cart::get_totals_for_display()",
+    "file": "/var/www/html/wp-content/plugins/woocommerce/includes/wc-cart-functions.php",
+    "line": 412,
+    "frames": [
+      {
+        "raw": "#0 /var/www/html/wp-content/plugins/woocommerce/templates/cart/cart-totals.php(38): wc_cart_totals_order_total_html()",
+        "file": "/var/www/html/wp-content/plugins/woocommerce/templates/cart/cart-totals.php",
+        "line": 38,
+        "function": "wc_cart_totals_order_total_html()"
+      },
+      {
+        "raw": "#1 /var/www/html/wp-includes/template.php(812): require('/var/www/html/w...')",
+        "file": "/var/www/html/wp-includes/template.php",
+        "line": 812,
+        "function": "require('/var/www/html/w...')"
+      },
+      {
+        "raw": "#2 /var/www/html/wp-content/plugins/woocommerce/includes/wc-core-functions.php(346): load_template('/var/www/html/w...', false, Array)",
+        "file": "/var/www/html/wp-content/plugins/woocommerce/includes/wc-core-functions.php",
+        "line": 346,
+        "function": "load_template('/var/www/html/w...', false, Array)"
+      },
+      {
+        "raw": "#3 {main}",
+        "function": "{main}"
+      }
+    ]
+  },
+  "warnings": []
+}

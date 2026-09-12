@@ -1,0 +1,6 @@
+Hi support team,
+
+The shop just shows a white screen when customers try to check out.
+I don't have access to the logs, but my host said something about PHP.
+
+Thanks!

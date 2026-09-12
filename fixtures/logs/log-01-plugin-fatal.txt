@@ -1,0 +1,7 @@
+[11-Sep-2026 08:14:22 UTC] PHP Fatal error:  Uncaught Error: Call to undefined method WC_Cart::get_totals_for_display() in /var/www/html/wp-content/plugins/woocommerce/includes/wc-cart-functions.php:412
+Stack trace:
+#0 /var/www/html/wp-content/plugins/woocommerce/templates/cart/cart-totals.php(38): wc_cart_totals_order_total_html()
+#1 /var/www/html/wp-includes/template.php(812): require('/var/www/html/w...')
+#2 /var/www/html/wp-content/plugins/woocommerce/includes/wc-core-functions.php(346): load_template('/var/www/html/w...', false, Array)
+#3 {main}
+  thrown in /var/www/html/wp-content/plugins/woocommerce/includes/wc-cart-functions.php on line 412

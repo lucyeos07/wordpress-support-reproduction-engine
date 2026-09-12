@@ -1,0 +1,29 @@
+{
+  "findings": [],
+  "evaluations": [
+    {
+      "ruleId": "FATAL_PLUGIN_OWNER",
+      "outcome": "no_match",
+      "findingCount": 0
+    },
+    {
+      "ruleId": "FATAL_THEME_OWNER",
+      "outcome": "no_match",
+      "findingCount": 0
+    },
+    {
+      "ruleId": "OUTDATED_TEMPLATE_OVERRIDE",
+      "outcome": "no_match",
+      "findingCount": 0
+    },
+    {
+      "ruleId": "PHP_BELOW_PLUGIN_REQUIREMENT",
+      "outcome": "no_match",
+      "findingCount": 0
+    }
+  ],
+  "informationRequest": {
+    "missingFields": [],
+    "requestedBy": []
+  }
+}

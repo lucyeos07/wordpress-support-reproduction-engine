@@ -1,0 +1,8 @@
+{
+  "warnings": [
+    {
+      "code": "no_recognised_sections",
+      "detail": "input contains no recognisable PHP fatal/parse error line (expected a line containing \"PHP Fatal error:\")"
+    }
+  ]
+}

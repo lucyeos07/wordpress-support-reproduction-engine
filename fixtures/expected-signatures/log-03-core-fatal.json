@@ -1,0 +1,35 @@
+{
+  "signature": {
+    "owner": {
+      "type": "core",
+      "confidence": "high"
+    },
+    "evidence": [
+      {
+        "artifactId": "log-03-core-fatal",
+        "adapter": "debug-log",
+        "locator": {
+          "line": 1
+        },
+        "excerpt": "[11-Sep-2026 10:44:07 UTC] PHP Fatal error:  Uncaught Error: Call to a member function get_error_message() on null in /var/www/html/wp-includes/class-wp-query.php:1904"
+      }
+    ],
+    "errorClass": "Error",
+    "message": "Call to a member function get_error_message() on null",
+    "file": "/var/www/html/wp-includes/class-wp-query.php",
+    "line": 1904,
+    "frames": [
+      {
+        "raw": "#0 /var/www/html/wp-includes/class-wp-query.php(3320): WP_Query->get_posts()",
+        "file": "/var/www/html/wp-includes/class-wp-query.php",
+        "line": 3320,
+        "function": "WP_Query->get_posts()"
+      },
+      {
+        "raw": "#1 {main}",
+        "function": "{main}"
+      }
+    ]
+  },
+  "warnings": []
+}

@@ -1,0 +1,57 @@
+{
+  "findings": [
+    {
+      "ruleId": "FATAL_PLUGIN_OWNER",
+      "title": "Fatal error originates in a plugin",
+      "severity": "critical",
+      "confidence": "low",
+      "evidence": [
+        {
+          "artifactId": "log-04-unmediated-plugin",
+          "adapter": "debug-log",
+          "locator": {
+            "line": 1
+          },
+          "excerpt": "[11-Sep-2026 11:19:36 UTC] PHP Fatal error:  Uncaught Error: Class \"Acme\\Warehouse\\Client\" not found in /var/www/html/wp-content/plugins/warehouse-sync-bridge/src/bootstrap.php:57"
+        }
+      ],
+      "cause": "The reported fatal error was raised from a file inside wp-content/plugins, so a plugin is the immediate source of the failure. Ownership is taken from the parsed error signature; this rule does not attribute ownership itself.\n\nError class: Error\nMessage: Class \"Acme\\Warehouse\\Client\" not found\nFile: /var/www/html/wp-content/plugins/warehouse-sync-bridge/src/bootstrap.php\nLine: 57\nOwnership confidence: directory name not in the catalog, so the owner is identified by path only",
+      "fix": "Reproduce with only this plugin and WooCommerce active. If the error persists, report it to the plugin's author with the stack trace. If it disappears, reintroduce the other plugins one at a time to find the conflicting pair.",
+      "citations": [
+        {
+          "title": "Debugging in WordPress – Advanced Administration Handbook",
+          "url": "https://developer.wordpress.org/advanced-administration/debug/debug-wordpress/",
+          "publisher": "WordPress.org Developer Resources",
+          "retrievedAt": "2026-09-12"
+        }
+      ],
+      "reproducibilityImpact": "A plugin-owned fatal is a strong reproduction candidate: if the owning plugin is resolvable and installable, the failure can be triggered by activating it."
+    }
+  ],
+  "evaluations": [
+    {
+      "ruleId": "FATAL_PLUGIN_OWNER",
+      "outcome": "finding",
+      "findingCount": 1
+    },
+    {
+      "ruleId": "FATAL_THEME_OWNER",
+      "outcome": "no_match",
+      "findingCount": 0
+    },
+    {
+      "ruleId": "OUTDATED_TEMPLATE_OVERRIDE",
+      "outcome": "no_match",
+      "findingCount": 0
+    },
+    {
+      "ruleId": "PHP_BELOW_PLUGIN_REQUIREMENT",
+      "outcome": "no_match",
+      "findingCount": 0
+    }
+  ],
+  "informationRequest": {
+    "missingFields": [],
+    "requestedBy": []
+  }
+}

@@ -1,0 +1,87 @@
+{
+  "$comment": "Declarative diagnostic rules (docs/SPEC.md §5). Severity, confidence, required fields, remediation and citations are data so they can be audited without reading code. The matching predicate is named by `matcher` and implemented in matchers.ts. Every citation URL here was retrieved and verified on the stated date; none are generated.",
+  "rules": [
+    {
+      "ruleId": "FATAL_PLUGIN_OWNER",
+      "title": "Fatal error originates in a plugin",
+      "severity": "critical",
+      "confidence": "high",
+      "requires": ["signature.owner.type", "signature.evidence"],
+      "matcher": "fatal_owned_by_plugin",
+      "cause": "The reported fatal error was raised from a file inside wp-content/plugins, so a plugin is the immediate source of the failure. Ownership is taken from the parsed error signature; this rule does not attribute ownership itself.",
+      "fix": "Reproduce with only this plugin and WooCommerce active. If the error persists, report it to the plugin's author with the stack trace. If it disappears, reintroduce the other plugins one at a time to find the conflicting pair.",
+      "citations": [
+        {
+          "title": "Debugging in WordPress – Advanced Administration Handbook",
+          "url": "https://developer.wordpress.org/advanced-administration/debug/debug-wordpress/",
+          "publisher": "WordPress.org Developer Resources",
+          "retrievedAt": "2026-09-12"
+        }
+      ],
+      "reproducibilityImpact": "A plugin-owned fatal is a strong reproduction candidate: if the owning plugin is resolvable and installable, the failure can be triggered by activating it."
+    },
+    {
+      "ruleId": "FATAL_THEME_OWNER",
+      "title": "Fatal error originates in a theme",
+      "severity": "critical",
+      "confidence": "medium",
+      "requires": ["signature.owner.type", "signature.evidence"],
+      "matcher": "fatal_owned_by_theme",
+      "cause": "The reported fatal error was raised from a file inside wp-content/themes, so the active theme is the immediate source of the failure. Ownership is taken from the parsed error signature; this rule does not attribute ownership itself.",
+      "fix": "Switch temporarily to a default theme such as Storefront or Twenty Twenty-Four. If the error stops, the fault is in the theme and should go to its author, or to whoever maintains the child theme if the file lives there.",
+      "citations": [
+        {
+          "title": "Debugging – Theme Handbook",
+          "url": "https://developer.wordpress.org/themes/advanced-topics/debugging/",
+          "publisher": "WordPress.org Developer Resources",
+          "retrievedAt": "2026-09-12"
+        }
+      ],
+      "reproducibilityImpact": "Theme-owned failures reproduce only if the exact theme and version are obtainable. A custom or child theme is usually not available, which limits reproduction."
+    },
+    {
+      "ruleId": "PHP_BELOW_PLUGIN_REQUIREMENT",
+      "title": "PHP version is below the plugin's declared minimum",
+      "severity": "high",
+      "confidence": "high",
+      "requires": ["server.phpVersion", "wooCommerce.version"],
+      "matcher": "php_below_plugin_requirement",
+      "cause": "The PHP version reported by the site is lower than the minimum the installed plugin version declares in its own readme. The plugin is running outside the range its author supports, which can cause fatal errors on code paths that use newer PHP syntax or functions.",
+      "fix": "Raise the site's PHP version to at least the declared minimum, or downgrade the plugin to a version whose declared minimum the server already meets. Take a backup and test on staging before changing PHP versions.",
+      "citations": [
+        {
+          "title": "WooCommerce Server Recommendations",
+          "url": "https://woocommerce.com/document/server-requirements/",
+          "publisher": "WooCommerce Documentation",
+          "retrievedAt": "2026-09-12"
+        }
+      ],
+      "reproducibilityImpact": "Reproducible in Playground when the reported PHP version is one Playground offers. Playground pins PHP per Blueprint, so the mismatch can be recreated exactly."
+    },
+    {
+      "ruleId": "OUTDATED_TEMPLATE_OVERRIDE",
+      "title": "WooCommerce template override is out of date",
+      "severity": "medium",
+      "confidence": "high",
+      "requires": ["wooCommerce.templateOverrides"],
+      "matcher": "outdated_template_override",
+      "cause": "The System Status Report itself marks this template override as out of date: the theme's copy of the template was written against an older WooCommerce version than the one installed. Outdated overrides miss markup and hooks added since they were copied, which commonly breaks cart, checkout and product pages.",
+      "fix": "Compare the theme's copy against the current core template, port the customisations onto the current version, and update the @version header. The Fixing Outdated WooCommerce Templates guide gives the procedure.",
+      "citations": [
+        {
+          "title": "Template structure & Overriding templates via a theme",
+          "url": "https://developer.woocommerce.com/docs/theming/theme-development/template-structure",
+          "publisher": "WooCommerce Developer Documentation",
+          "retrievedAt": "2026-09-12"
+        },
+        {
+          "title": "Fixing Outdated WooCommerce Templates",
+          "url": "https://developer.woocommerce.com/docs/theming/theme-development/fixing-outdated-woocommerce-templates",
+          "publisher": "WooCommerce Developer Documentation",
+          "retrievedAt": "2026-09-12"
+        }
+      ],
+      "reproducibilityImpact": "Not reproducible from the report alone. The override's contents live in the site's theme, which the report does not include, so Playground can recreate the versions but not the modified template."
+    }
+  ]
+}

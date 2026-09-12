@@ -1,5 +1,7 @@
 /** docs/SPEC.md §4.5 */
 
+import type { Evidence } from "./evidence.js";
+
 export interface StackFrame {
   file?: string;
   line?: number;
@@ -23,4 +25,14 @@ export interface ErrorSignature {
     slug?: string;
     confidence: Confidence;
   };
+
+  /**
+   * Where this signature was read from.
+   *
+   * docs/SPEC.md §4.5 does not list this field, but §4.3 requires every
+   * important parsed value to be traceable to source evidence, and a Finding
+   * derived from a signature cannot cite the artifact without it. See
+   * docs/phase-3-findings.md.
+   */
+  evidence?: Evidence[];
 }
