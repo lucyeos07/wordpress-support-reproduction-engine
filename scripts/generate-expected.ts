@@ -18,6 +18,8 @@ import { parseDebugLog } from "../src/parsers/debug-log/parse.js";
 import { attachSignature } from "../src/ir/attach-signature.js";
 import { diagnose } from "../src/rules/engine.js";
 import { DIAGNOSIS_CASES } from "../src/rules/cases.js";
+import { PLAN_CASES } from "../src/repro/cases.js";
+import { planReproduction } from "../src/repro/plan.js";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const root = resolve(here, "..");
@@ -26,8 +28,9 @@ const logDir = resolve(root, "fixtures/logs");
 const expectedDir = resolve(root, "fixtures/expected");
 const expectedSigDir = resolve(root, "fixtures/expected-signatures");
 const expectedFindingsDir = resolve(root, "fixtures/expected-findings");
+const expectedPlansDir = resolve(root, "fixtures/expected-plans");
 
-for (const dir of [expectedDir, expectedSigDir, expectedFindingsDir]) {
+for (const dir of [expectedDir, expectedSigDir, expectedFindingsDir, expectedPlansDir]) {
   mkdirSync(dir, { recursive: true });
 }
 
@@ -65,4 +68,23 @@ for (const testCase of DIAGNOSIS_CASES) {
   }
 
   write(resolve(expectedFindingsDir, `${testCase.name}.json`), diagnose(environment));
+}
+
+for (const planCase of PLAN_CASES) {
+  const ssrId = basename(planCase.ssr, ".txt");
+  let environment = parseSystemStatusReport({
+    artifactId: ssrId,
+    text: readFileSync(resolve(ssrDir, planCase.ssr), "utf8"),
+  });
+
+  for (const log of planCase.logs ?? []) {
+    const logId = basename(log, ".txt");
+    environment = attachSignature(
+      environment,
+      logId,
+      parseDebugLog({ artifactId: logId, text: readFileSync(resolve(logDir, log), "utf8") }),
+    );
+  }
+
+  write(resolve(expectedPlansDir, `${planCase.name}.json`), planReproduction(environment));
 }

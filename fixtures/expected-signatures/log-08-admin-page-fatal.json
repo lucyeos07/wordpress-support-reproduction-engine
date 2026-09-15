@@ -1,0 +1,36 @@
+{
+  "signature": {
+    "owner": {
+      "type": "plugin",
+      "slug": "woocommerce",
+      "confidence": "high"
+    },
+    "evidence": [
+      {
+        "artifactId": "log-08-admin-page-fatal",
+        "adapter": "debug-log",
+        "locator": {
+          "line": 1
+        },
+        "excerpt": "[11-Sep-2026 14:22:09 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function wc_get_screen_ids() in /var/www/html/wp-content/plugins/woocommerce/includes/admin/class-wc-admin-menus.php:88"
+      }
+    ],
+    "errorClass": "Error",
+    "message": "Call to undefined function wc_get_screen_ids()",
+    "file": "/var/www/html/wp-content/plugins/woocommerce/includes/admin/class-wc-admin-menus.php",
+    "line": 88,
+    "frames": [
+      {
+        "raw": "#0 /var/www/html/wp-admin/edit.php(112): WC_Admin_Menus->render()",
+        "file": "/var/www/html/wp-admin/edit.php",
+        "line": 112,
+        "function": "WC_Admin_Menus->render()"
+      },
+      {
+        "raw": "#1 {main}",
+        "function": "{main}"
+      }
+    ]
+  },
+  "warnings": []
+}

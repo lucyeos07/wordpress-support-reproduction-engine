@@ -1,0 +1,183 @@
+{
+  "plan": {
+    "verdict": {
+      "tier": "B",
+      "status": "reproducible"
+    },
+    "targets": [
+      {
+        "signatureIndex": 0,
+        "trigger": {
+          "kind": "admin_page_load",
+          "path": "/wp-admin/edit.php"
+        },
+        "attempted": true,
+        "verdict": {
+          "tier": "B",
+          "status": "reproducible"
+        },
+        "reasons": [
+          {
+            "code": "trigger_admin_page_load",
+            "detail": "a admin_page_load trigger can be executed for this signature",
+            "evidence": [
+              {
+                "artifactId": "log-08-admin-page-fatal",
+                "adapter": "debug-log",
+                "locator": {
+                  "line": 1
+                },
+                "excerpt": "[11-Sep-2026 14:22:09 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function wc_get_screen_ids() in /var/www/html/wp-content/plugins/woocommerce/includes/admin/class-wc-admin-menus.php:88"
+              }
+            ]
+          },
+          {
+            "code": "material_substitution",
+            "detail": "MySQL 8.0.35 → SQLite (SQLite Database Integration)"
+          },
+          {
+            "code": "material_substitution",
+            "detail": "the report's own WP_DEBUG setting → WP_DEBUG = true, WP_DEBUG_LOG = true"
+          },
+          {
+            "code": "unknown_relevance_omission",
+            "detail": "3 reported component(s) could not be reconstructed and their relevance to this failure could not be determined from the Environment and signatures"
+          }
+        ]
+      }
+    ],
+    "reasons": [
+      {
+        "code": "target_summary",
+        "detail": "1 reproduction target(s); tiers #0=B. The plan verdict reports the most reproducible target and does not override the others."
+      },
+      {
+        "code": "shared_environment_substitution",
+        "detail": "MySQL 8.0.35 → SQLite (SQLite Database Integration)"
+      },
+      {
+        "code": "shared_environment_substitution",
+        "detail": "the report's own WP_DEBUG setting → WP_DEBUG = true, WP_DEBUG_LOG = true"
+      }
+    ],
+    "substitutions": [
+      {
+        "requested": "PHP 8.1.27",
+        "substituted": "PHP 8.1 (patch release chosen by Playground)",
+        "why": "Playground pins PHP to major.minor only; a Blueprint cannot request a specific patch release."
+      },
+      {
+        "requested": "MySQL 8.0.35",
+        "substituted": "SQLite (SQLite Database Integration)",
+        "why": "Playground runs WordPress on SQLite via the SQLite Database Integration plugin, not MySQL or MariaDB. The CLI exposes --db-engine mysql, but that requires an external MySQL server, which is unavailable in the browser surface and in CI. Any reported MySQL/MariaDB site is therefore reconstructed on a different database engine."
+      },
+      {
+        "requested": "the report's own WP_DEBUG setting",
+        "substituted": "WP_DEBUG = true, WP_DEBUG_LOG = true",
+        "why": "debug logging is enabled so that /wordpress/wp-content/debug.log exists and can be diffed around the trigger. Phase 0 established this as the only authoritative runtime evidence; without it a fatal leaves no readable record."
+      }
+    ],
+    "omissions": [
+      {
+        "component": "theme Storefront 4.5.3",
+        "why": "The bundled catalog resolves plugins only, so no reported theme can be turned into an installable source. The schema supports activeTheme, but nothing in the IR yields a slug or URL to put there.",
+        "relevance": "unknown"
+      },
+      {
+        "component": "web server nginx/1.18.0",
+        "why": "Playground serves requests from its own PHP-wasm runtime. The reported web server (nginx, Apache, LiteSpeed, IIS) cannot be reproduced.",
+        "relevance": "unknown"
+      },
+      {
+        "component": "PHP memory limit 512 MB",
+        "why": "the reported memory limit is a server setting; a Blueprint cannot set the PHP memory_limit, so the reconstruction runs with Playground's own limit.",
+        "relevance": "unknown"
+      }
+    ],
+    "blueprint": {
+      "$schema": "https://playground.wordpress.net/blueprint-schema.json",
+      "version": 2,
+      "wordpressVersion": "6.4.3",
+      "phpVersion": "8.1",
+      "plugins": [
+        {
+          "source": "woocommerce@8.5.2",
+          "active": true
+        },
+        {
+          "source": "wordpress-seo@21.7",
+          "active": true
+        },
+        {
+          "source": "contact-form-7@5.8.6",
+          "active": true
+        },
+        {
+          "source": "wordfence@7.11.4",
+          "active": true
+        },
+        {
+          "source": "akismet@5.3",
+          "active": false
+        },
+        {
+          "source": "classic-editor@1.6.3",
+          "active": false
+        }
+      ],
+      "constants": {
+        "WP_DEBUG": true,
+        "WP_DEBUG_LOG": true
+      }
+    }
+  },
+  "verificationPlan": {
+    "environmentChecks": {
+      "expectedWordPressVersion": "6.4.3",
+      "expectedPhpVersion": "8.1",
+      "expectedInstalledComponents": [
+        "woocommerce@8.5.2",
+        "wordpress-seo@21.7",
+        "contact-form-7@5.8.6",
+        "wordfence@7.11.4",
+        "akismet@5.3",
+        "classic-editor@1.6.3"
+      ],
+      "expectedOmittedComponents": [
+        "theme Storefront 4.5.3",
+        "web server nginx/1.18.0",
+        "PHP memory limit 512 MB"
+      ],
+      "howToCheck": "Execute PHP inside the booted site and read get_plugins() and get_option('active_plugins'). Phase 0 established that run-blueprint reports nothing and that a zero exit code does not prove a plugin installed."
+    },
+    "logStrategy": {
+      "source": "debug.log",
+      "path": "/wordpress/wp-content/debug.log",
+      "steps": [
+        "1. Boot the environment from the Blueprint and let it settle.",
+        "2. Snapshot /wordpress/wp-content/debug.log in full. Entries present at this point are boot noise and are never evidence of reproduction.",
+        "3. Execute this target's trigger, and only this target's trigger.",
+        "4. Snapshot debug.log again.",
+        "5. Diff the two snapshots and keep only entries added by step 3.",
+        "6. Extract errorClass, message, file and line from the new entries with a fixed pattern, and record the pattern and whether extraction was deterministic.",
+        "7. Compare the extracted signature against this target's expectedSignature. observed = true only when the trigger ran in step 3 and a matching new entry appeared."
+      ]
+    },
+    "targets": [
+      {
+        "signatureIndex": 0,
+        "attempted": true,
+        "trigger": {
+          "kind": "admin_page_load",
+          "path": "/wp-admin/edit.php"
+        },
+        "expectedSignature": {
+          "errorClass": "Error",
+          "message": "Call to undefined function wc_get_screen_ids()",
+          "file": "/var/www/html/wp-content/plugins/woocommerce/includes/admin/class-wc-admin-menus.php",
+          "line": 88
+        }
+      }
+    ]
+  }
+}

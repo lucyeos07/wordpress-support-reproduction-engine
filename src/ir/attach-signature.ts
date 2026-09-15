@@ -21,6 +21,11 @@ export function attachSignature(
       artifacts: [...environment.provenance.artifacts, { artifactId, adapter: "debug-log" }],
       warnings: [...environment.provenance.warnings, ...result.warnings],
     },
-    ...(result.signature !== undefined ? { signature: result.signature } : {}),
+    // Appended, never replaced: §4.1 preserves extraction order, and every
+    // usable signature is an independent reproduction target (§8.1).
+    signatures:
+      result.signature !== undefined
+        ? [...environment.signatures, result.signature]
+        : environment.signatures,
   };
 }

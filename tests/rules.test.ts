@@ -200,8 +200,8 @@ describe("FATAL_PLUGIN_OWNER", () => {
     const { environment, result } = run("plugin-fatal-unmediated");
     const [finding] = findingsFor(result, "FATAL_PLUGIN_OWNER");
 
-    expect(environment.signature?.owner.type).toBe("plugin");
-    expect(environment.signature?.owner.slug).toBeUndefined();
+    expect(environment.signatures[0]?.owner.type).toBe("plugin");
+    expect(environment.signatures[0]?.owner.slug).toBeUndefined();
     // Severity is unchanged; only confidence reflects the weaker attribution.
     expect(finding?.severity).toBe("critical");
     expect(finding?.confidence).toBe("low");
@@ -224,7 +224,7 @@ describe("FATAL_PLUGIN_OWNER", () => {
 
   it("negative: a core-owned fatal stays core and triggers nothing", () => {
     const { environment, result } = run("core-fatal");
-    expect(environment.signature?.owner.type).toBe("core");
+    expect(environment.signatures[0]?.owner.type).toBe("core");
     expect(result.findings).toHaveLength(0);
   });
 
@@ -365,8 +365,7 @@ describe("insufficient evidence (docs/SPEC.md §10)", () => {
     expect(result.findings).toEqual([]);
     expect(result.informationRequest.missingFields).toEqual([
       "server.phpVersion",
-      "signature.evidence",
-      "signature.owner.type",
+      "signatures",
       "wooCommerce.templateOverrides",
     ]);
     expect(result.informationRequest.requestedBy.map((r) => r.ruleId)).toEqual([
@@ -388,9 +387,9 @@ describe("insufficient evidence (docs/SPEC.md §10)", () => {
     const { result } = run("insufficient-evidence");
     const unique = new Set(result.informationRequest.missingFields);
     expect(unique.size).toBe(result.informationRequest.missingFields.length);
-    // Both ownership rules want signature.owner.type.
+    // Both ownership rules want the signatures collection.
     const wanters = result.informationRequest.requestedBy.filter((r) =>
-      r.missing.includes("signature.owner.type"),
+      r.missing.includes("signatures"),
     );
     expect(wanters.length).toBe(2);
   });
@@ -409,7 +408,7 @@ describe("field availability", () => {
   it("treats a missing Field, an absent path and an empty array as unavailable", () => {
     const { environment } = run("insufficient-evidence");
     expect(isAvailable(environment, "server.phpVersion")).toBe(false);
-    expect(isAvailable(environment, "signature.owner.type")).toBe(false);
+    expect(isAvailable(environment, "signatures")).toBe(false);
     expect(isAvailable(environment, "nonsense.path.here")).toBe(false);
     expect(isAvailable(environment, "wordPress.version")).toBe(true);
   });

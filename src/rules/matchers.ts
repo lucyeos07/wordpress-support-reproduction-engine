@@ -38,8 +38,16 @@ export function compareVersions(a: string, b: string): number {
 
 /** Shared by the two ownership rules; `type` is read, never derived. */
 function fatalOwnedBy(environment: Environment, type: "plugin" | "theme"): MatchResult[] {
-  const signature = environment.signature;
-  if (!signature || signature.owner.type !== type) return [];
+  // Every signature is considered; none is designated primary and none is
+  // discarded (docs/SPEC.md §8.1).
+  return environment.signatures.flatMap((signature) => oneFatal(signature, type));
+}
+
+function oneFatal(
+  signature: Environment["signatures"][number],
+  type: "plugin" | "theme",
+): MatchResult[] {
+  if (signature.owner.type !== type) return [];
 
   const evidence = signature.evidence ?? [];
   // A Finding without evidence must not exist, so a signature we cannot cite

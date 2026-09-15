@@ -344,6 +344,10 @@ export function parseSystemStatusReport(input: SsrParseInput): Environment {
       warnings: ctx.warnings,
     },
 
+    // A System Status Report carries no error signatures; a debug log supplies
+    // them (docs/SPEC.md §2.2).
+    signatures: [],
+
     wordPress: {
       version: fieldFrom(artifactId, wpEnv, findRow(wpEnv, "WP Version")),
     },

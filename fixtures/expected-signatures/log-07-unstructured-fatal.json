@@ -1,0 +1,33 @@
+{
+  "signature": {
+    "owner": {
+      "type": "unknown",
+      "confidence": "low"
+    },
+    "evidence": [
+      {
+        "artifactId": "log-07-unstructured-fatal",
+        "adapter": "debug-log",
+        "locator": {
+          "line": 1
+        },
+        "excerpt": "[11-Sep-2026 13:04:55 UTC] PHP Fatal error:  Something went badly wrong during the request"
+      }
+    ],
+    "message": "Something went badly wrong during the request"
+  },
+  "warnings": [
+    {
+      "code": "malformed_plugin_row",
+      "evidence": {
+        "artifactId": "log-07-unstructured-fatal",
+        "adapter": "debug-log",
+        "locator": {
+          "line": 1
+        },
+        "excerpt": "[11-Sep-2026 13:04:55 UTC] PHP Fatal error:  Something went badly wrong during the request"
+      },
+      "detail": "fatal error line did not match a recognised PHP error shape"
+    }
+  ]
+}

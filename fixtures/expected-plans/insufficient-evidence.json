@@ -1,0 +1,89 @@
+{
+  "plan": {
+    "verdict": {
+      "tier": "E",
+      "status": "insufficient_evidence"
+    },
+    "targets": [],
+    "reasons": [
+      {
+        "code": "no_signatures",
+        "detail": "the Environment carries no ErrorSignature, so there is no reported failure to reproduce. The environment can still be reconstructed and booted."
+      },
+      {
+        "code": "shared_environment_substitution",
+        "detail": "PHP version (not reported) → Playground default"
+      },
+      {
+        "code": "shared_environment_substitution",
+        "detail": "the report's own WP_DEBUG setting → WP_DEBUG = true, WP_DEBUG_LOG = true"
+      }
+    ],
+    "substitutions": [
+      {
+        "requested": "PHP version (not reported)",
+        "substituted": "Playground default",
+        "why": "the artifact did not state a PHP version, so none is pinned and the runtime default applies. The reconstruction may therefore run a different PHP version from the reported site."
+      },
+      {
+        "requested": "the report's own WP_DEBUG setting",
+        "substituted": "WP_DEBUG = true, WP_DEBUG_LOG = true",
+        "why": "debug logging is enabled so that /wordpress/wp-content/debug.log exists and can be diffed around the trigger. Phase 0 established this as the only authoritative runtime evidence; without it a fatal leaves no readable record."
+      }
+    ],
+    "omissions": [
+      {
+        "component": "plugin Some Internal Tooling 0.3.1",
+        "why": "slug could not be resolved through the bundled catalog, and a slug is never guessed from a display name. Without a resolved slug there is no installable source.",
+        "relevance": "unknown"
+      },
+      {
+        "component": "PHP memory limit 40 MB",
+        "why": "the reported memory limit is a server setting; a Blueprint cannot set the PHP memory_limit, so the reconstruction runs with Playground's own limit.",
+        "relevance": "unknown"
+      }
+    ],
+    "blueprint": {
+      "$schema": "https://playground.wordpress.net/blueprint-schema.json",
+      "version": 2,
+      "wordpressVersion": "5.9.3",
+      "plugins": [
+        {
+          "source": "woocommerce@6.4.1",
+          "active": true
+        }
+      ],
+      "constants": {
+        "WP_DEBUG": true,
+        "WP_DEBUG_LOG": true
+      }
+    }
+  },
+  "verificationPlan": {
+    "environmentChecks": {
+      "expectedWordPressVersion": "5.9.3",
+      "expectedInstalledComponents": [
+        "woocommerce@6.4.1"
+      ],
+      "expectedOmittedComponents": [
+        "plugin Some Internal Tooling 0.3.1",
+        "PHP memory limit 40 MB"
+      ],
+      "howToCheck": "Execute PHP inside the booted site and read get_plugins() and get_option('active_plugins'). Phase 0 established that run-blueprint reports nothing and that a zero exit code does not prove a plugin installed."
+    },
+    "logStrategy": {
+      "source": "debug.log",
+      "path": "/wordpress/wp-content/debug.log",
+      "steps": [
+        "1. Boot the environment from the Blueprint and let it settle.",
+        "2. Snapshot /wordpress/wp-content/debug.log in full. Entries present at this point are boot noise and are never evidence of reproduction.",
+        "3. Execute this target's trigger, and only this target's trigger.",
+        "4. Snapshot debug.log again.",
+        "5. Diff the two snapshots and keep only entries added by step 3.",
+        "6. Extract errorClass, message, file and line from the new entries with a fixed pattern, and record the pattern and whether extraction was deterministic.",
+        "7. Compare the extracted signature against this target's expectedSignature. observed = true only when the trigger ran in step 3 and a matching new entry appeared."
+      ]
+    },
+    "targets": []
+  }
+}

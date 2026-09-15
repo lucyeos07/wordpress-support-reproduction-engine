@@ -38,11 +38,30 @@ export interface Omission {
   relevance: Relevance;
 }
 
+/**
+ * One independent reproduction target per ErrorSignature (docs/SPEC.md §8.1).
+ *
+ * `verdict` and `reasons` extend the conceptual model in §8.1, which defines
+ * only signatureIndex/trigger/attempted/reason. Phase 4 requires each target to
+ * carry its own reproducibility assessment, and a plan-level tier alone cannot
+ * express that one target is reproducible while another is blocked.
+ */
+export interface ReproTarget {
+  signatureIndex: number;
+  trigger?: ReproductionTrigger;
+  attempted: boolean;
+  reason?: string;
+  verdict: { tier: Tier; status: ReproStatus };
+  reasons: Reason[];
+}
+
 export interface ReproPlan {
   verdict: {
     tier: Tier;
     status: ReproStatus;
   };
+  /** One target per ErrorSignature in Environment.signatures, in that order. */
+  targets: ReproTarget[];
   reasons: Reason[];
   substitutions: Substitution[];
   omissions: Omission[];

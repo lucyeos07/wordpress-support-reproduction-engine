@@ -1,0 +1,106 @@
+{
+  "$comment": "Explicitly documented WordPress Playground capabilities. Every entry was established by running Playground in Phase 0, or read from the installed CLI's own published option list, and each records how it was verified. The planner reads ONLY this file for capability facts — it never assumes a capability and never probes the network at plan time. Re-verify when the pinned Playground version changes.",
+  "playgroundVersion": "3.1.53",
+  "verifiedOn": "2026-09-15",
+  "phpVersions": {
+    "supported": [
+      "5.2",
+      "7.4",
+      "8.0",
+      "8.1",
+      "8.2",
+      "8.3",
+      "8.4",
+      "8.5"
+    ],
+    "granularity": "major.minor",
+    "note": "Read from `wp-playground-cli run-blueprint --help` on 2026-09-15. Playground selects the patch release; a Blueprint cannot pin one. Notably 7.0-7.3 are NOT offered.",
+    "verifiedOn": [
+      "cli"
+    ],
+    "browserCaveat": "docs/SPEC.md §12 forbids assuming one surface from the other. Phase 0 booted the browser runtime at 8.2 only; the remaining versions are unverified there."
+  },
+  "wordPressVersions": {
+    "note": "Any release slug accepted by the Blueprint schema pattern. Phase 0 booted 6.8.2 on both surfaces. Availability of a specific release is NOT checked at plan time, because that would require a network lookup the privacy model forbids (docs/SPEC.md §3).",
+    "verifiedOn": [
+      "cli",
+      "browser"
+    ]
+  },
+  "database": {
+    "engine": "SQLite",
+    "note": "Playground runs WordPress on SQLite via the SQLite Database Integration plugin, not MySQL or MariaDB. The CLI exposes --db-engine mysql, but that requires an external MySQL server, which is unavailable in the browser surface and in CI. Any reported MySQL/MariaDB site is therefore reconstructed on a different database engine.",
+    "verifiedOn": [
+      "cli",
+      "browser"
+    ]
+  },
+  "webServer": {
+    "note": "Playground serves requests from its own PHP-wasm runtime. The reported web server (nginx, Apache, LiteSpeed, IIS) cannot be reproduced.",
+    "verifiedOn": [
+      "cli",
+      "browser"
+    ]
+  },
+  "blueprint": {
+    "format": "v2",
+    "schemaUrl": "https://playground.wordpress.net/blueprint-schema.json",
+    "note": "The published schema is a oneOf over BlueprintV1Declaration and BlueprintV2Declaration. v2 is the current format and expresses wordpressVersion, phpVersion and plugins directly. Phase 0 installed and activated a WordPress.org plugin from a v2 Blueprint on both surfaces, verified by introspecting the booted site rather than by exit code.",
+    "verifiedOn": [
+      "cli",
+      "browser"
+    ],
+    "schemaChecksumPhase0": "60df08a9ffb7fd4e",
+    "schemaRecheckedOn": "2026-09-15"
+  },
+  "pluginInstallation": {
+    "fromRepositorySlug": true,
+    "versionPinnedSlug": "slug@version, e.g. akismet@6.4.3, per DataSources.PluginDirectoryReference in the published schema",
+    "note": "Only plugins in the WordPress.org repository can be installed by slug. Premium plugins, plugins whose slug could not be resolved through the bundled catalog, must-use plugins and drop-ins have no supported installation mechanism here.",
+    "verifiedOn": [
+      "cli",
+      "browser"
+    ],
+    "versionPinnedVerified": false,
+    "versionPinnedNote": "Phase 0 installed PLAIN slugs only. The slug@version form is documented in the published schema but has not been executed on either surface. The planner emits it so the reported version is reconstructed faithfully; Phase 5 execution is what will confirm it resolves."
+  },
+  "mustUsePlugins": {
+    "installable": false,
+    "note": "The v2 schema has a muPlugins property, but a report gives only a must-use plugin's display name, author and version — never an obtainable source. Installing it as an ordinary plugin would change load order and load conditions, so it is omitted instead.",
+    "verifiedOn": []
+  },
+  "dropins": {
+    "installable": false,
+    "note": "A drop-in is a single file in wp-content (object-cache.php, advanced-cache.php, db.php), not a repository plugin. The report gives its filename and WordPress's description, never its contents.",
+    "verifiedOn": []
+  },
+  "themes": {
+    "installable": false,
+    "note": "The bundled catalog resolves plugins only, so no reported theme can be turned into an installable source. The schema supports activeTheme, but nothing in the IR yields a slug or URL to put there.",
+    "verifiedOn": []
+  },
+  "runtimeEvidence": {
+    "authoritativeSource": "debug.log",
+    "requiredConstants": [
+      "WP_DEBUG",
+      "WP_DEBUG_LOG"
+    ],
+    "note": "Phase 0 established that no Playground surface exposes structured PHP error data. originalErrorClassName is the JS wrapper name, and HTTP status is 200 on a CLI fatal. /wordpress/wp-content/debug.log is plain text, unescaped, with full stack traces, and is readable from both surfaces.",
+    "verifiedOn": [
+      "cli",
+      "browser"
+    ]
+  },
+  "triggers": {
+    "supported": [
+      "boot",
+      "plugin_activation",
+      "admin_page_load"
+    ],
+    "note": "docs/SPEC.md §8.1. Phase 0 executed boot and plugin activation directly, and issued an admin request via client.request(). Checkout, webhooks, payment callbacks and other interactive flows have no executable trigger and are never attempted.",
+    "verifiedOn": [
+      "cli",
+      "browser"
+    ]
+  }
+}

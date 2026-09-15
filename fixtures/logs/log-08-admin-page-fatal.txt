@@ -1,0 +1,5 @@
+[11-Sep-2026 14:22:09 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function wc_get_screen_ids() in /var/www/html/wp-content/plugins/woocommerce/includes/admin/class-wc-admin-menus.php:88
+Stack trace:
+#0 /var/www/html/wp-admin/edit.php(112): WC_Admin_Menus->render()
+#1 {main}
+  thrown in /var/www/html/wp-content/plugins/woocommerce/includes/admin/class-wc-admin-menus.php on line 88

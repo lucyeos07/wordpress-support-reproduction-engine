@@ -111,5 +111,10 @@ export interface Environment {
   theme: ThemeInfo;
   plugins: Plugin[];
   wooCommerce: WooCommerceInfo;
-  signature?: ErrorSignature;
+  /**
+   * Zero or more signatures, preserved in the order they were extracted from
+   * the source artifact (docs/SPEC.md §4.1). Each usable signature is an
+   * independent reproduction target (§8.1).
+   */
+  signatures: ErrorSignature[];
 }

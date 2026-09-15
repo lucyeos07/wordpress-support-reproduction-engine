@@ -108,8 +108,7 @@
       "ruleId": "FATAL_PLUGIN_OWNER",
       "outcome": "insufficient_evidence",
       "missingFields": [
-        "signature.owner.type",
-        "signature.evidence"
+        "signatures"
       ],
       "findingCount": 0
     },
@@ -117,8 +116,7 @@
       "ruleId": "FATAL_THEME_OWNER",
       "outcome": "insufficient_evidence",
       "missingFields": [
-        "signature.owner.type",
-        "signature.evidence"
+        "signatures"
       ],
       "findingCount": 0
     },
@@ -135,22 +133,19 @@
   ],
   "informationRequest": {
     "missingFields": [
-      "signature.evidence",
-      "signature.owner.type"
+      "signatures"
     ],
     "requestedBy": [
       {
         "ruleId": "FATAL_PLUGIN_OWNER",
         "missing": [
-          "signature.owner.type",
-          "signature.evidence"
+          "signatures"
         ]
       },
       {
         "ruleId": "FATAL_THEME_OWNER",
         "missing": [
-          "signature.owner.type",
-          "signature.evidence"
+          "signatures"
         ]
       }
     ]

@@ -13,6 +13,7 @@
       }
     ]
   },
+  "signatures": [],
   "wordPress": {
     "version": {
       "status": "missing"
