@@ -33,6 +33,20 @@ jobs:
       - run: npm ci
       - run: npm run spike:cli
 
+  execute-spike:
+    # Phase 5: boots a real Playground instance, executes a reproduction
+    # trigger, and diffs debug.log around it. Needs network, like cli-spike.
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - run: npm run spike:execute
+
   v2-plugins-probe:
     # Measurement, not a gate. On macOS, `run-blueprint` with a Blueprint v2
     # top-level `plugins` array fails with "Error connecting to the SQLite

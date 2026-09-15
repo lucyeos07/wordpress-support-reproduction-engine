@@ -5,11 +5,10 @@ import type { ReproductionTrigger } from "./repro.js";
 /**
  * Where a PHP error was read from, and whether reading it was deterministic.
  *
- * Required by docs/SPEC.md §9: "the extraction method — along with whether it
- * was deterministic — must be representable in the model". Phase 0 established
- * that neither Playground surface exposes a structured PHP error object, so
- * `errorClass` and `message` below are always extraction results, never
- * runtime-provided fields. See docs/phase-0-findings.md.
+ * Phase 0 established that neither Playground surface exposes a structured PHP
+ * error object, so `errorClass` and `message` are always extraction results,
+ * never runtime-provided fields. §9 requires that the extraction method and its
+ * determinism be representable, per target.
  */
 export interface LogExtraction {
   source: "debug.log" | "thrown-error-message" | "response-stderr";
@@ -19,7 +18,29 @@ export interface LogExtraction {
   pattern?: string;
 }
 
+/**
+ * One per `ReproTarget`, matched by `signatureIndex`.
+ *
+ * `observed` is true only when this target's trigger actually ran and a
+ * matching entry appeared in the log written during that run — never inferred
+ * from a successful boot, from the environment matching, or from another
+ * target's outcome (§9.1).
+ */
+export interface TargetVerification {
+  signatureIndex: number;
+  attempted: boolean;
+  trigger?: ReproductionTrigger;
+  observed: boolean;
+  errorClass?: string;
+  message?: string;
+  /** Entries the trigger newly produced, not the whole log. */
+  logs?: string[];
+  extraction?: LogExtraction;
+  reason?: string;
+}
+
 export interface Verification {
+  /** Built once; every target is exercised against it. */
   environment: {
     bootSucceeded: boolean;
     installedComponents: string[];
@@ -27,13 +48,6 @@ export interface Verification {
   };
 
   failureReproduction: {
-    attempted: boolean;
-    trigger?: ReproductionTrigger;
-    /** True only if the trigger ran and the result was observed (§9.1). */
-    observed: boolean;
-    errorClass?: string;
-    message?: string;
-    logs?: string[];
-    extraction?: LogExtraction;
+    targets: TargetVerification[];
   };
 }

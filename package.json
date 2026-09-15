@@ -13,7 +13,8 @@
     "dev": "vite",
     "build": "vite build",
     "spike:cli": "tsx spike/cli/run.ts",
-    "spike:browser": "vite --config vite.config.ts"
+    "spike:browser": "vite --config vite.config.ts",
+    "spike:execute": "tsx spike/execute/run.ts"
   },
   "devDependencies": {
     "@types/node": "^22.10.2",
