@@ -1,0 +1,16 @@
+{
+  "$schema": "https://playground.wordpress.net/blueprint-schema.json",
+  "version": 2,
+  "wordpressVersion": "6.8.2",
+  "phpVersion": "8.2",
+  "plugins": [
+    {
+      "source": "classic-editor@99.9.9",
+      "active": true
+    }
+  ],
+  "constants": {
+    "WP_DEBUG": true,
+    "WP_DEBUG_LOG": true
+  }
+}

@@ -61,8 +61,8 @@
       "cli",
       "browser"
     ],
-    "versionPinnedVerified": false,
-    "versionPinnedNote": "Phase 0 installed PLAIN slugs only. The slug@version form is documented in the published schema but has not been executed on either surface. The planner emits it so the reported version is reconstructed faithfully; Phase 5 execution is what will confirm it resolves."
+    "versionPinnedVerified": true,
+    "versionPinnedNote": "Verified 2026-09-15 on BOTH surfaces (docs/phase-4.5-findings.md). classic-editor@1.6.3 installed exactly 1.6.3 while an unpinned control installed 1.7.0. The reference resolves to https://downloads.wordpress.org/plugin/<slug>.<version>.zip; a version with no such zip fails the boot loudly on both surfaces rather than falling back to latest."
   },
   "mustUsePlugins": {
     "installable": false,
