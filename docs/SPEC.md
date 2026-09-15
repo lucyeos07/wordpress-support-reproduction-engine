@@ -96,7 +96,11 @@ in the privacy documentation (§16), but it never transmits the user's artifact.
 - theme
 - plugins
 - WooCommerce
-- signature
+- signatures
+
+`Environment` may contain zero or more `ErrorSignature` objects. When multiple
+signatures are present, they are preserved in the order in which they were
+extracted from the source artifact.
 
 ### 4.2 Known / missing / inferred
 
@@ -183,6 +187,8 @@ interface ErrorSignature {
     slug?: string;
     confidence: "high" | "medium" | "low";
   };
+
+  evidence?: Evidence[];
 }
 
 interface StackFrame {
@@ -250,7 +256,7 @@ Approximately 5–8 deterministic rules. Candidates:
 | PHP version incompatibility | PHP version, component requirement |
 | WordPress/plugin version incompatibility | WP version, plugin `testedUpTo`/requirement |
 | WooCommerce version mismatch | WooCommerce version, related component requirement |
-| Fatal error with identifiable plugin ownership | signature with `owner.type === "plugin"` |
+| Fatal error with identifiable plugin ownership | an ErrorSignature with `owner.type === "plugin"` |
 | Missing/inactive dependency, objectively detectable | plugin list, declared dependency |
 | Outdated WooCommerce template override | SSR template override section |
 | Memory-limit issue with explicit supporting evidence | memory limit value and a memory-exhaustion signature |
@@ -286,12 +292,50 @@ Tier assignment does not simply take the worst tier across all environment
 components. A limitation only affects the tier if it is relevant to the
 **reported failure**.
 
-Deterministic relevance rules:
+#### Usable `ErrorSignature`
 
-- A plugin explicitly named in the error signature is `relevant`.
-- An inactive plugin not named in the signature may be treated as `irrelevant`
-  to an activation or runtime reproduction, because it is not loaded.
-- Otherwise the relevance is `unknown`.
+An `ErrorSignature` is usable for reproduction planning when it contains enough
+structured information to identify a concrete reported failure target. A
+signature is usable when it contains at least one of:
+
+- a parsed `file` path,
+- a non-empty `frames` collection containing a parsed file path,
+- or an identified `owner`.
+
+A signature containing only an empty or unstructured message, with no file,
+frame, or owner information, is not usable for deterministic reproduction
+planning.
+
+Usability is never derived from Findings or diagnostic rules.
+
+#### Explicitly implicated
+
+A component is explicitly implicated by an `ErrorSignature` when either:
+
+1. the signature's `owner.slug` identifies that component; or
+2. the signature's `file` or a stack-frame file path clearly lies within that
+   component's known plugin or theme path.
+
+Path-based implication uses deterministic path matching only. It must not use
+diagnostic rules, semantic interpretation, or function-name inference.
+
+For a plugin, its known path is its WordPress plugin directory when a slug is
+known. For a theme, its known path is its theme directory when the theme
+path/slug is known. When no deterministic association can be established,
+relevance remains `unknown`.
+
+#### Deterministic relevance rules
+
+Using the two definitions above:
+
+- `relevant` — explicitly implicated by **any** usable `ErrorSignature`.
+- `irrelevant` — an inactive plugin not implicated by **any** usable
+  `ErrorSignature`, because it is not loaded.
+- `unknown` — anything else that cannot be deterministically classified.
+
+Relevance is derived only from the `Environment` and the `ErrorSignature`s.
+Findings, diagnostic rules, severity, confidence, remediation, and any other
+diagnostic or AI conclusion must never influence relevance.
 
 `unknown` relevance is never silently resolved in either direction. It is
 surfaced, and it constrains the achievable tier.
@@ -305,7 +349,10 @@ A hard architectural boundary, enforced by module structure and by test.
 `ReproPlan` may read:
 
 - `Environment`
-- `Signature`
+- `ErrorSignatures`
+
+That is, the reproduction planner may read the `Environment` and the whole
+collection of `ErrorSignature`s it carries, and nothing else.
 
 `ReproPlan` must never read:
 
@@ -326,7 +373,8 @@ A test asserts the absence of that dependency edge.
 
 ### 8.1 Trigger model
 
-Triggers derive only from `Environment` and `Signature`. Never from a `Finding`.
+Triggers derive only from `Environment` and the `ErrorSignature`s. Never from a
+`Finding`.
 
 ```ts
 type ReproductionTrigger =
@@ -335,12 +383,30 @@ type ReproductionTrigger =
   | { kind: "admin_page_load"; path: string };
 ```
 
-Initial deterministic mapping:
+Each `ErrorSignature` is an independent reproduction target. A single
+`ReproPlan` carries one `ReproTarget` per signature; there is no plan-per-
+signature, and no signature is designated primary.
 
-- identifiable plugin owner in the signature → plugin activation, or another
-  trigger the signature actually supports
-- stack information clearly indicating a wp-admin page → admin page load
-- no usable signature → boot, or unsupported
+```ts
+interface ReproTarget {
+  signatureIndex: number;
+  trigger?: ReproductionTrigger;
+  attempted: boolean;
+  reason?: string;
+}
+```
+
+`signatureIndex` refers to the position of the signature in
+`Environment.signatures`, which preserves the order the signatures were
+extracted from the source artifact (§4.1).
+
+Initial deterministic mapping, applied to each signature independently:
+
+- identifiable plugin owner in that signature → plugin activation, or another
+  trigger that signature actually supports
+- stack information in that signature clearly indicating a wp-admin page →
+  admin page load
+- that signature unusable, or no signature at all → boot, or unsupported
 - unsupported workflow → `attempted: false` with an explicit reason
 
 The MVP supports failures surfacing through **boot**, **plugin activation**, and
@@ -348,7 +414,9 @@ The MVP supports failures surfacing through **boot**, **plugin activation**, and
 
 Flows such as checkout, external callbacks, webhooks, and other interactive
 workflows are not pretended. If the required trigger cannot actually be
-executed, the plan records `attempted: false` and states why.
+executed, that target records `attempted: false` and states why. Targets are
+independent: one target being unattemptable does not prevent another from being
+attempted.
 
 ### 8.2 ReproPlan
 
@@ -362,6 +430,9 @@ interface ReproPlan {
       | "blocked"
       | "insufficient_evidence";
   };
+
+  /** One target per ErrorSignature in Environment.signatures, in that order. */
+  targets: ReproTarget[];
 
   reasons: Reason[];
 
@@ -409,22 +480,43 @@ interface Verification {
   };
 
   failureReproduction: {
-    attempted: boolean;
-    trigger?: ReproductionTrigger;
-    observed: boolean;
-    errorClass?: string;
-    message?: string;
-    logs?: string[];
+    targets: TargetVerification[];
   };
+}
+
+interface TargetVerification {
+  signatureIndex: number;
+  attempted: boolean;
+  trigger?: ReproductionTrigger;
+  observed: boolean;
+  errorClass?: string;
+  message?: string;
+  logs?: string[];
+
+  extraction?: {
+    source:
+      | "debug.log"
+      | "thrown-error-message"
+      | "response-stderr";
+    deterministic: boolean;
+    pattern?: string;
+  };
+
+  reason?: string;
 }
 ```
 
+Environment reconstruction is a single shared result: the environment is built
+once, and every target is exercised against it. Failure reproduction is
+per-target, one `TargetVerification` per `ReproTarget`, matched by
+`signatureIndex` (§8.1).
+
 The final implementation must reflect what current Playground APIs actually
 expose `[UNVERIFIED]`. If only raw logs are available, the runtime must not be
-presented as providing structured error classes. In that case `errorClass` and
-`message` are populated only when they can be extracted deterministically from
-raw log text, and the extraction method — along with whether it was
-deterministic — must be representable in the model.
+presented as providing structured error classes. In that case a target's
+`errorClass` and `message` are populated only when they can be extracted
+deterministically from raw log text, and the extraction method — along with
+whether it was deterministic — must be representable in the model, per target.
 
 Phase 0 determines whether this shape survives contact with the runtime. It is
 expected to change. A weaker but honest verification model is preferable to
@@ -438,15 +530,15 @@ The system distinguishes these states. They are not merged:
 2. Environment booted.
 3. Components installed.
 4. Components failed to install or activate.
-5. Reproduction trigger was actually attempted.
-6. Reported failure was observed.
+5. Each target's reproduction trigger was actually attempted.
+6. Each target's reported failure was observed.
 
 > "Playground booted successfully" is not equivalent to "bug reproduced
 > successfully."
 
-`observed: true` requires that the trigger was executed and the result was
-seen. It is never inferred from a successful boot, from a matching environment,
-or from the diagnosis.
+`observed: true` requires that the target's trigger was actually executed and
+the result was seen. It is never inferred from a successful boot, from a
+matching environment, from the diagnosis, or from another target's outcome.
 
 ---
 
