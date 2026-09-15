@@ -14,7 +14,8 @@
     "build": "vite build",
     "spike:cli": "tsx spike/cli/run.ts",
     "spike:browser": "vite --config vite.config.ts",
-    "spike:execute": "tsx spike/execute/run.ts"
+    "spike:execute": "tsx spike/execute/run.ts",
+    "spike:parity": "tsx spike/execute/parity.ts"
   },
   "devDependencies": {
     "@types/node": "^22.10.2",
@@ -24,7 +25,8 @@
     "tsx": "^4.19.2",
     "typescript": "^5.7.2",
     "vite": "^6.0.5",
-    "vitest": "^2.1.8"
+    "vitest": "^2.1.8",
+    "wait-on": "^9.1.0"
   },
   "dependencies": {
     "@wp-playground/cli": "3.1.53",

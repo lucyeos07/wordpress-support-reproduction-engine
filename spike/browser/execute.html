@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Phase 5 browser execution spike</title>
+    <style>
+      body { font: 13px ui-monospace, monospace; margin: 0; display: flex; height: 100vh; }
+      #log { width: 50%; overflow: auto; padding: 8px; white-space: pre-wrap; border-right: 1px solid #ccc; }
+      #wp { width: 50%; height: 100%; border: 0; }
+    </style>
+  </head>
+  <body>
+    <pre id="log">booting…</pre>
+    <iframe id="wp"></iframe>
+    <script type="module" src="./execute.ts"></script>
+  </body>
+</html>

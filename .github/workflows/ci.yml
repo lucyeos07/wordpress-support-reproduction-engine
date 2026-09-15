@@ -47,6 +47,26 @@ jobs:
       - run: npm ci
       - run: npm run spike:execute
 
+  browser-parity-spike:
+    # Phase 5 browser surface: executes the SAME ReproPlan on the CLI and in a
+    # real browser and compares the two Verification results. docs/SPEC.md §12
+    # forbids assuming one surface from the other, so parity is measured.
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - name: Serve the spike page
+        run: npx vite --config vite.config.ts &
+      - name: Wait for the dev server
+        run: npx wait-on http://localhost:9500 --timeout 60000
+      - run: npm run spike:parity
+
   v2-plugins-probe:
     # Measurement, not a gate. On macOS, `run-blueprint` with a Blueprint v2
     # top-level `plugins` array fails with "Error connecting to the SQLite
