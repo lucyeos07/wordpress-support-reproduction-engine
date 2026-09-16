@@ -4,7 +4,7 @@
  *
  * docs/SPEC.md §12 forbids assuming one surface from the other, so parity is
  * measured here rather than asserted by construction. Requires
- * `npx vite --config vite.config.ts` serving spike/browser on :9500.
+ * `npx vite --config vite.spike.config.ts` serving spike/browser on :9500.
  */
 import { chromium } from "playwright";
 import { executePlan } from "../../src/execute/cli-runner.js";

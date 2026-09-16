@@ -1,0 +1,11 @@
+import { chromium } from "playwright";
+const b = await chromium.launch();
+const p = await b.newPage({ viewport: { width: 1280, height: 900 } });
+p.on("console", (m) => { if (m.text().startsWith("GOTO")) console.log("  ", m.text()); });
+const q = process.argv[2] ?? "";
+await p.goto(`http://localhost:9500/goto.html${q}`, { waitUntil: "domcontentloaded" });
+await p.waitForFunction(() => (window as any).__GOTO__?.done === true, undefined, { timeout: 240000 });
+await p.waitForTimeout(5000);
+console.log("frames:"); for (const f of p.frames()) console.log("   -", f.url().slice(0,110));
+await p.screenshot({ path: `/Users/lucy/Projects/wordpress-support-reproduction-engine/docs/screenshots/10-goto${q.includes("skiprequest") ? "-skiprequest" : q ? "-execute" : "-isolation"}.png` });
+await b.close();

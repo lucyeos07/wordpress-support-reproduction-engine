@@ -62,7 +62,7 @@ jobs:
       - run: npm ci
       - run: npx playwright install --with-deps chromium
       - name: Serve the spike page
-        run: npx vite --config vite.config.ts &
+        run: npx vite --config vite.spike.config.ts &
       - name: Wait for the dev server
         run: npx wait-on http://localhost:9500 --timeout 60000
       - run: npm run spike:parity

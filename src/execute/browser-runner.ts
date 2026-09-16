@@ -25,10 +25,24 @@ import {
 /** Verified in Phase 0 on both surfaces. */
 export const DEFAULT_REMOTE_URL = "https://playground.wordpress.net/remote.html";
 
+/** The part of the live client a caller needs to show the site on screen. */
+export interface PlaygroundInstance {
+  goTo(path: string): Promise<void>;
+}
+
 export interface BrowserExecuteOptions {
   iframe: HTMLIFrameElement;
   remoteUrl?: string;
   onProgress?: (message: string) => void;
+  /**
+   * Receives the live instance once it is ready.
+   *
+   * Added for the UI: after verification the reproduced site has to be
+   * navigated somewhere, or the embedded iframe shows only the blank remote
+   * shell. Execution semantics are unchanged — the callback is never used by
+   * the verification path.
+   */
+  onInstance?: (instance: PlaygroundInstance) => void;
 }
 
 export async function executePlanInBrowser(
@@ -53,6 +67,7 @@ export async function executePlanInBrowser(
     // not by itself proof the runtime is usable.
     await started.isReady();
     client = started as unknown as PlaygroundRunner;
+    options.onInstance?.(started as unknown as PlaygroundInstance);
     progress("ready");
   } catch (error) {
     // A Blueprint step failure (for example a plugin version no longer served)

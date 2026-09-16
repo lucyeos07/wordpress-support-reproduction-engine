@@ -1,12 +1,13 @@
 import { defineConfig } from "vite";
 
+/** The product application. Spike pages have their own config. */
 export default defineConfig({
-  root: "spike/browser",
+  root: "app",
   server: {
-    port: 9500,
-    // No COOP/COEP here on purpose. Playground's wasm runtime executes inside
-    // the playground.wordpress.net remote origin, which sets its own headers.
-    // Setting COEP on this embedder page blocks that cross-origin iframe and
-    // startPlaygroundWeb() then never resolves. See docs/phase-0-findings.md.
+    port: 5173,
+    // No COOP/COEP: Playground's runtime executes inside the
+    // playground.wordpress.net remote origin, and setting COEP here blocks that
+    // iframe (docs/phase-0-findings.md §3).
   },
+  build: { outDir: "../dist", emptyOutDir: true },
 });
