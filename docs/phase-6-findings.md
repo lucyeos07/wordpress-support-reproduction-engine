@@ -5,10 +5,11 @@ backend, no chatbot, no new dependencies beyond `jsdom` for tests.
 
 Date: 2026-09-16. 433 tests, typecheck clean.
 
-> **One known defect, unresolved:** the embedded Playground panel renders blank
-> after a run, even though the runtime demonstrably boots, installs and
-> verifies. Details and everything ruled out are in §8. Nothing else in the
-> pipeline is affected.
+> **CORRECTION (2026-09-16): the defect reported below does not exist.** Phase
+> 6.1 established that the Playground panel renders correctly and that the
+> "blank panel" was an artifact of the screenshot harness, not of the product.
+> §8 is retained as written, with a correction note, so the wrong claim stays
+> visible rather than being quietly deleted. See docs/phase-6.1-findings.md.
 
 ---
 
@@ -59,10 +60,11 @@ is injected into `mountApp`, so tests run without a real Playground while
 production lazily imports the very same module — there is no second
 implementation.
 
-One additive change to the Phase 5 module, for a concrete UI need: an optional
-`onInstance` callback that hands the live client to the caller. The UI needs it
-to navigate the reproduced site into view; execution semantics are untouched and
-the verification path never uses it.
+**Superseded by Phase 6.1:** an optional `onInstance` callback was added to the
+Phase 5 module here, to navigate the reproduced site into view. Phase 6.1 showed
+no navigation is needed — Playground navigates to the site itself after boot —
+so the callback was removed and `src/execute/browser-runner.ts` is back to its
+accepted Phase 5 shape.
 
 ---
 
@@ -150,7 +152,12 @@ in ~17 s, with the analysis still on screen.
 
 ---
 
-## 8. Known defect: the Playground panel renders blank
+## 8. Known defect: the Playground panel renders blank — **WITHDRAWN**
+
+> **This section was wrong.** The panel renders correctly. The evidence below
+> was produced by a screenshot harness that captured the iframe before Chromium
+> had painted it, and the conclusion drawn from it was unfounded. The original
+> text follows unchanged; the root cause is in docs/phase-6.1-findings.md.
 
 After a run the embedded panel shows an empty frame, although the same run
 reports `bootSucceeded: true`, installs `classic-editor@1.6.3` and returns a

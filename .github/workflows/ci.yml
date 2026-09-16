@@ -67,6 +67,26 @@ jobs:
         run: npx wait-on http://localhost:9500 --timeout 60000
       - run: npm run spike:parity
 
+  ui-e2e-spike:
+    # Phase 6.1 regression guard: drives the product UI against a real
+    # Playground and asserts the reproduced site actually rendered, read from
+    # the Playground frame's own document rather than from pixels.
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - name: Serve the application
+        run: npx vite --port 5173 --strictPort &
+      - name: Wait for the dev server
+        run: npx wait-on http://localhost:5173 --timeout 60000
+      - run: npm run spike:ui
+
   v2-plugins-probe:
     # Measurement, not a gate. On macOS, `run-blueprint` with a Blueprint v2
     # top-level `plugins` array fails with "Error connecting to the SQLite

@@ -52,7 +52,30 @@ console.log(`  playground iframe visible: ${String(await page.locator("#playgrou
 console.log(`  analysis still visible: ${String(await page.locator("#results .card").first().isVisible())}`);
 
 await page.screenshot({ path: resolve(out, "08-verification.png"), fullPage: true });
+
+// REGRESSION GUARD (docs/phase-6.1-findings.md): assert the reproduced site
+// actually rendered, by reading the Playground frame's own document rather
+// than by looking at pixels. A screenshot taken immediately after scrolling a
+// far-off-screen cross-origin iframe into view can be blank even when the site
+// is fine, which is exactly the false defect Phase 6 reported.
+const scope = page.frames().find((f) => f.url().includes("/scope:"));
+if (!scope) {
+  console.error("FAIL: no Playground scope frame was created");
+  process.exit(1);
+}
+const site = await scope.evaluate(() => ({
+  title: document.title,
+  bodyLen: document.body?.innerText?.trim().length ?? 0,
+}));
+console.log(`  site title: ${JSON.stringify(site.title)} bodyLen=${String(site.bodyLen)}`);
+if (site.bodyLen === 0) {
+  console.error("FAIL: the Playground frame rendered no content");
+  process.exit(1);
+}
+
 await page.locator("#playground-panel").scrollIntoViewIfNeeded();
+// Let Chromium paint the iframe at its new scroll position before capturing.
+await page.waitForTimeout(700);
 await page.screenshot({ path: resolve(out, "09-playground.png") });
 console.log("wrote 07/08/09 screenshots");
 

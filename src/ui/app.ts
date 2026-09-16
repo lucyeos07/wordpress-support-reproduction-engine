@@ -26,11 +26,7 @@ import type { VerificationPlan } from "../repro/verification-plan.js";
 export type BrowserExecutor = (
   plan: ReproPlan,
   verificationPlan: VerificationPlan,
-  options: {
-    iframe: HTMLIFrameElement;
-    onProgress?: (message: string) => void;
-    onInstance?: (instance: { goTo(path: string): Promise<void> }) => void;
-  },
+  options: { iframe: HTMLIFrameElement; onProgress?: (message: string) => void },
 ) => Promise<Verification>;
 
 export interface AppDeps {
@@ -86,10 +82,8 @@ export function mountApp(root: HTMLElement, deps: AppDeps = {}): { store: Store 
   );
 
   /**
-   * The iframe is created fresh at launch rather than kept hidden from page
-   * load. Playground's remote wrapper sizes its inner frame when it
-   * initialises, and an iframe that was display:none at that moment stays
-   * blank even though the runtime boots and verifies correctly.
+   * Created fresh per run so a second reproduction never reuses the iframe of
+   * a previous instance.
    */
   function freshPlaygroundFrame(): HTMLIFrameElement {
     const existing = playgroundPanel.querySelector("iframe");
@@ -177,20 +171,9 @@ export function mountApp(root: HTMLElement, deps: AppDeps = {}): { store: Store 
     const playgroundFrame = freshPlaygroundFrame();
     store.set({ kind: "reproducing", analysis: state.analysis, stage: "booting", progress: [] });
 
-    let instance: { goTo(path: string): Promise<void> } | undefined;
-
     try {
       const verification = await execute(state.analysis.plan, state.analysis.verificationPlan, {
         iframe: playgroundFrame,
-        onInstance: (live) => {
-          instance = live;
-          // Navigate as soon as the runtime is ready so the reproduced site is
-          // on screen while the triggers run, rather than leaving the blank
-          // remote shell visible for the whole run.
-          void live.goTo("/").catch(() => {
-            /* showing the site is a convenience, never fatal */
-          });
-        },
         onProgress: (message) => {
           const current = store.get();
           if (current.kind !== "reproducing") return;
@@ -210,14 +193,6 @@ export function mountApp(root: HTMLElement, deps: AppDeps = {}): { store: Store 
 
       // Without this the iframe shows the blank remote shell: verification
       // navigates nothing, so the reproduced site is never rendered.
-      // Re-navigate after the triggers have run, so the visible site reflects
-      // the final state rather than the state at boot.
-      try {
-        await instance?.goTo("/");
-      } catch {
-        /* showing the site is a convenience, never fatal */
-      }
-
       const current = store.get();
       const progress = current.kind === "reproducing" ? current.progress : [];
       store.set({ kind: "reproduced", analysis: state.analysis, verification, progress });

@@ -16,7 +16,8 @@
     "spike:browser": "vite --config vite.spike.config.ts",
     "spike:execute": "tsx spike/execute/run.ts",
     "spike:parity": "tsx spike/execute/parity.ts",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "spike:ui": "tsx spike/ui/reproduce.ts"
   },
   "devDependencies": {
     "@types/node": "^22.10.2",
