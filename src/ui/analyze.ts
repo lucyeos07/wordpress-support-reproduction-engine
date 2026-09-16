@@ -6,6 +6,7 @@
  * request of any kind.
  */
 import { parseSystemStatusReport } from "../parsers/woo-ssr/parse.js";
+import { emptyEnvironment } from "../ir/empty-environment.js";
 import { parseDebugLog } from "../parsers/debug-log/parse.js";
 import { attachSignature } from "../ir/attach-signature.js";
 import { diagnose } from "../rules/engine.js";
@@ -28,6 +29,25 @@ export function looksLikeSystemStatusReport(text: string): boolean {
 
 export function looksLikeDebugLog(text: string): boolean {
   return FATAL_LINE.test(text);
+}
+
+/**
+ * What the input demonstrably is, never what it might be.
+ *
+ * Evidence is deterministic and structural: a `### Section ###` heading is the
+ * System Status export's own format, and a `PHP Fatal error:` line is PHP's.
+ * Anything else is `unrecognised` — the format is not guessed from prose,
+ * length or field names.
+ */
+export type DetectedFormat = "ssr" | "log" | "both" | "unrecognised";
+
+export function detectFormat(text: string): DetectedFormat {
+  const ssr = looksLikeSystemStatusReport(text);
+  const log = looksLikeDebugLog(text);
+  if (ssr && log) return "both";
+  if (ssr) return "ssr";
+  if (log) return "log";
+  return "unrecognised";
 }
 
 /**
@@ -57,7 +77,9 @@ export function splitFatalBlocks(text: string): string[] {
 export interface Analysis {
   /** Verbatim text the user pasted; evidence line numbers refer to it. */
   source: string;
+  /** Adapters that actually ran. */
   format: Exclude<InputFormat, "auto">[];
+  detected: DetectedFormat;
   environment: Environment;
   diagnosis: DiagnosisResult;
   plan: ReproPlan;
@@ -77,22 +99,39 @@ export function analyze(source: string, format: InputFormat = "auto"): Analysis 
     throw new AnalysisError("Paste a WooCommerce System Status Report or a PHP fatal / debug log.");
   }
 
-  const useSsr = format === "ssr" || (format === "auto" && looksLikeSystemStatusReport(source));
-  const useLog = format === "log" || (format === "auto" && looksLikeDebugLog(source));
+  const detected = detectFormat(source);
 
-  if (!useSsr && !useLog) {
+  if (format === "auto" && detected === "unrecognised") {
     throw new AnalysisError(
       "This does not look like a WooCommerce System Status Report (no '### Section ###' headings) or a PHP fatal (no 'PHP Fatal error:' line). Choose a format explicitly if you know what it is.",
     );
   }
 
+  // An explicit choice is honoured, but not against the evidence: running an
+  // adapter over input that cannot match it yields an empty result that looks
+  // like a successful parse, which is worse than saying so.
+  if (format === "ssr" && !looksLikeSystemStatusReport(source)) {
+    throw new AnalysisError(
+      "No '### Section ###' headings were found, so this cannot be parsed as a WooCommerce System Status Report. Use Auto-detect, or paste the report from WooCommerce → Status → Get system report.",
+    );
+  }
+  if (format === "log" && !looksLikeDebugLog(source)) {
+    throw new AnalysisError(
+      "No 'PHP Fatal error:' line was found, so this cannot be parsed as a PHP fatal or debug log. Use Auto-detect, or paste the fatal from wp-content/debug.log.",
+    );
+  }
+
+  const useSsr = format === "ssr" || (format === "auto" && (detected === "ssr" || detected === "both"));
+  const useLog = format === "log" || (format === "auto" && (detected === "log" || detected === "both"));
+
   const applied: Exclude<InputFormat, "auto">[] = [];
 
-  // The System Status Report adapter is safe to run on any text: unrecognised
-  // input simply yields missing fields plus a parser warning.
+  // Only an adapter that actually ran contributes provenance. Previously the
+  // System Status adapter was run over empty text when it did not apply, which
+  // recorded a woo-ssr artifact for a report nobody supplied.
   let environment = useSsr
     ? parseSystemStatusReport({ artifactId: ARTIFACT_ID, text: source })
-    : parseSystemStatusReport({ artifactId: ARTIFACT_ID, text: "" });
+    : emptyEnvironment();
   if (useSsr) applied.push("ssr");
 
   if (useLog) {
@@ -106,5 +145,5 @@ export function analyze(source: string, format: InputFormat = "auto"): Analysis 
   const diagnosis = diagnose(environment);
   const { plan, verificationPlan } = planReproduction(environment);
 
-  return { source, format: applied, environment, diagnosis, plan, verificationPlan };
+  return { source, format: applied, detected, environment, diagnosis, plan, verificationPlan };
 }

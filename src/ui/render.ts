@@ -165,7 +165,21 @@ export function renderEnvironment(analysis: Analysis, onEvidence: EvidenceHandle
         )
       : undefined;
 
-  return section("Environment", list, el("h3", { text: "Components" }), pluginTable, warningBlock, missingBlock);
+  // A one-line legend for the provenance vocabulary the rest of the page uses.
+  const legend = el(
+    "p",
+    { class: "legend" },
+    badge("known"),
+    " read from the artifact ",
+    badge("inferred"),
+    " derived, with the basis recorded ",
+    badge("missing"),
+    " not reported ",
+    badge("warning"),
+    " the parser could not read something",
+  );
+
+  return section("Environment", legend, list, el("h3", { text: "Components" }), pluginTable, warningBlock, missingBlock);
 }
 
 function renderFinding(finding: Finding, onEvidence: EvidenceHandler): HTMLElement {

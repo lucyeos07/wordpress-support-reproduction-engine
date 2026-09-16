@@ -34,6 +34,14 @@ body {
   margin: 0; padding: 10px 12px; border: 1px solid var(--line); border-left: 3px solid var(--accent);
   border-radius: 6px; background: var(--panel); color: var(--muted); font-size: 0.87rem;
 }
+.workflow {
+  display: flex; flex-wrap: wrap; gap: 4px 6px; margin: 10px 0 0; padding: 0;
+  list-style: none; counter-reset: step; font-size: 0.82rem; color: var(--muted);
+}
+.workflow li { counter-increment: step; }
+.workflow li::before { content: counter(step) ". "; color: var(--accent); font-weight: 600; }
+.workflow li:not(:last-child)::after { content: " →"; opacity: 0.6; }
+.legend { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; font-size: 0.78rem; color: var(--muted); margin: 0 0 12px; }
 .card {
   background: var(--panel); border: 1px solid var(--line); border-radius: 8px;
   padding: 16px 18px; margin: 18px 0;

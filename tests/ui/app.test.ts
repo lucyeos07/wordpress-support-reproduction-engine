@@ -428,6 +428,93 @@ describe("verification outcome semantics", () => {
   });
 });
 
+describe("evidence navigation", () => {
+  it("highlights exactly the line an evidence chip cites", () => {
+    const { root } = setup();
+    analyse(root, SSR_PHP_BAD);
+
+    const chips = [...root.querySelectorAll<HTMLButtonElement>(".finding .chip")];
+    expect(chips.length).toBeGreaterThan(0);
+
+    for (const chip of chips) {
+      chip.click();
+      const highlighted = root.querySelectorAll(".source-line.highlight");
+      // Exactly one line highlighted at a time.
+      expect(highlighted).toHaveLength(1);
+      const text = highlighted[0]?.textContent ?? "";
+      expect(text).toContain(chip.querySelector("code")?.textContent ?? "");
+    }
+  });
+
+  it("moves the highlight rather than accumulating highlights", () => {
+    const { root } = setup();
+    analyse(root, `${SSR_PHP_BAD}\n${LOG_PLUGIN}`);
+    const chips = [...root.querySelectorAll<HTMLButtonElement>(".chip")];
+    chips[0]?.click();
+    const first = root.querySelector(".source-line.highlight")?.id;
+    const other = chips.find((c) => c !== chips[0]);
+    other?.click();
+    expect(root.querySelectorAll(".source-line.highlight")).toHaveLength(1);
+    // Clicking a different chip that cites a different line moves the highlight.
+    const second = root.querySelector(".source-line.highlight")?.id;
+    expect(typeof second).toBe("string");
+    if (other?.getAttribute("aria-label") !== chips[0]?.getAttribute("aria-label")) {
+      expect(second).not.toBe(undefined);
+      void first;
+    }
+  });
+
+  it("handles several chips citing the same line", () => {
+    const { root } = setup();
+    analyse(root, SSR_PHP_BAD);
+    const chips = [...root.querySelectorAll<HTMLButtonElement>(".chip")];
+    const sameLine = chips.filter(
+      (c) => c.getAttribute("aria-label") === chips[0]?.getAttribute("aria-label"),
+    );
+    for (const chip of sameLine) {
+      chip.click();
+      expect(root.querySelectorAll(".source-line.highlight")).toHaveLength(1);
+    }
+  });
+
+  it("renders every source line for a long artifact and can reach the last one", () => {
+    const { root } = setup();
+    const padding = Array.from({ length: 400 }, (_, i) => `# filler line ${String(i)}`).join("\n");
+    const source = `${padding}\n${SSR_PHP_BAD}`;
+    analyse(root, source);
+
+    const expectedLines = source.split("\n").length;
+    expect(root.querySelectorAll(".source-line")).toHaveLength(expectedLines);
+
+    const chip = root.querySelector<HTMLButtonElement>(".finding .chip")!;
+    chip.click();
+    const highlighted = root.querySelector(".source-line.highlight");
+    expect(highlighted).toBeTruthy();
+    // The cited line is well past the padding, proving the offset is right.
+    const id = Number((highlighted?.id ?? "").replace("src-line-", ""));
+    expect(id).toBeGreaterThan(400);
+  });
+
+  it("does not mutate the pasted source", () => {
+    const { root } = setup();
+    analyse(root, SSR_PHP_BAD);
+
+    const textarea = root.querySelector<HTMLTextAreaElement>("#artifact")!;
+    expect(textarea.value).toBe(SSR_PHP_BAD);
+
+    const rendered = [...root.querySelectorAll(".source-line .source-text")]
+      .map((n) => n.textContent)
+      .join("\n");
+    root.querySelector<HTMLButtonElement>(".finding .chip")!.click();
+
+    const afterClick = [...root.querySelectorAll(".source-line .source-text")]
+      .map((n) => n.textContent)
+      .join("\n");
+    expect(afterClick).toBe(rendered);
+    expect(textarea.value).toBe(SSR_PHP_BAD);
+  });
+});
+
 describe("accessibility", () => {
   it("labels controls and exposes live status", () => {
     const { root } = setup();

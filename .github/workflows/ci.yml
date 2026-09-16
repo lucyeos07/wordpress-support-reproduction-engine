@@ -87,6 +87,21 @@ jobs:
         run: npx wait-on http://localhost:5173 --timeout 60000
       - run: npm run spike:ui
 
+  demo-e2e:
+    # Phase 7: runs the demo corpus end to end and asserts the expected result
+    # for each, including one target reaching observed=true and one reaching
+    # observed=false without being conflated with an environment failure.
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - run: npm run demo
+
   v2-plugins-probe:
     # Measurement, not a gate. On macOS, `run-blueprint` with a Blueprint v2
     # top-level `plugins` array fails with "Error connecting to the SQLite

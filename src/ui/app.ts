@@ -126,6 +126,16 @@ export function mountApp(root: HTMLElement, deps: AppDeps = {}): { store: Store 
         class: "lede",
         text: "Turn a support artifact into a structured environment, evidence-backed findings, and a reproducible WordPress Playground instance.",
       }),
+      el(
+        "ol",
+        { class: "workflow", "aria-label": "Workflow" },
+        el("li", { text: "Paste artifact" }),
+        el("li", { text: "Analyze" }),
+        el("li", { text: "Review findings" }),
+        el("li", { text: "Review reproducibility" }),
+        el("li", { text: "Reproduce in Playground" }),
+        el("li", { text: "Review verification" }),
+      ),
       el("p", {
         class: "privacy",
         text:

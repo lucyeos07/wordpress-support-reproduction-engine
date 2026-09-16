@@ -17,7 +17,3 @@ export function missing<T>(): Field<T> {
 export function inferred<T>(value: T, evidence: Evidence[], inferenceBasis: string): Field<T> {
   return { status: "inferred", value, evidence, inferenceBasis };
 }
-
-export function isPresent<T>(field: Field<T>): boolean {
-  return field.status !== "missing";
-}

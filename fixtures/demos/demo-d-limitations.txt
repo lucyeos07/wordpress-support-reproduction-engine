@@ -1,0 +1,55 @@
+### WordPress Environment ###
+
+WC Version: 8.4.0
+WP Version: 6.4.2
+WP Multisite: –
+WP Memory Limit: 768 MB
+
+### Server Environment ###
+
+Server Info: Apache
+PHP Version: 8.0.30
+MySQL Version: 10.4.32-MariaDB
+Max Upload Size: 128 MB
+
+### Database ###
+
+WC Database Version: 8.4.0
+WC Database Prefix: wp_
+
+### Active Plugins (6) ###
+
+WooCommerce: by Automattic – 8.4.0
+WooCommerce Subscriptions: by WooCommerce – 5.9.0
+WooCommerce Memberships: by SkyVerge – 1.25.1
+Custom Shipping Calculator: by Nordvik Digital – 2.1.0
+Warehouse Sync Bridge: by Interlink Systems – 4.0.7
+Gravity Forms: by Gravity Forms – 2.8.2
+
+### Inactive Plugins (2) ###
+
+WooCommerce Stripe Gateway: by WooCommerce – 7.8.1
+Legacy Import Helper: by Unknown – 0.9.0
+
+### Theme ###
+
+Name: Flatsome
+Version: 3.18.5
+Author URL: https://uxthemes.com
+Child theme: –
+WooCommerce support: ✔
+
+### Templates ###
+
+Overrides: –
+[11-Sep-2026 09:02:51 UTC] PHP Fatal error:  Uncaught TypeError: storefront_post_meta(): Argument #1 ($post) must be of type WP_Post, null given in /var/www/html/wp-content/themes/storefront/inc/storefront-template-functions.php:288
+Stack trace:
+#0 /var/www/html/wp-includes/class-wp-hook.php(324): storefront_post_meta(NULL)
+#1 /var/www/html/wp-includes/class-wp-hook.php(348): WP_Hook->apply_filters('', Array)
+#2 {main}
+  thrown in /var/www/html/wp-content/themes/storefront/inc/storefront-template-functions.php on line 288
+[11-Sep-2026 11:19:36 UTC] PHP Fatal error:  Uncaught Error: Class "Acme\Warehouse\Client" not found in /var/www/html/wp-content/plugins/warehouse-sync-bridge/src/bootstrap.php:57
+Stack trace:
+#0 /var/www/html/wp-content/plugins/warehouse-sync-bridge/warehouse-sync-bridge.php(120): Acme\Warehouse\Bootstrap->init()
+#1 {main}
+  thrown in /var/www/html/wp-content/plugins/warehouse-sync-bridge/src/bootstrap.php on line 57

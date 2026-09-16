@@ -1,0 +1,39 @@
+### WordPress Environment ###
+
+WordPress address (URL): https://legacy.example.com
+Site address (URL): https://legacy.example.com
+WC Version: 9.1.2
+WP Version: 6.5.5
+WP Multisite: –
+WP Memory Limit: 256 MB
+WP Debug Mode: –
+
+### Server Environment ###
+
+Server Info: Apache/2.4.29 (Ubuntu)
+PHP Version: 7.3.33
+PHP Post Max Size: 32 MB
+PHP Time Limit: 60
+MySQL Version: 5.7.38
+Max Upload Size: 32 MB
+
+### Database ###
+
+WC Database Version: 9.1.2
+WC Database Prefix: wp_
+
+### Active Plugins (2) ###
+
+WooCommerce: by Automattic – 9.1.2
+Contact Form 7: by Takayuki Miyoshi – 5.9.3
+
+### Theme ###
+
+Name: Storefront
+Version: 4.6.0
+Child theme: –
+WooCommerce support: ✔
+
+### Templates ###
+
+Overrides: –
