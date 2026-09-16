@@ -6,7 +6,7 @@ import { parseDebugLog } from "../src/parsers/debug-log/parse.js";
 import { attachSignature } from "../src/ir/attach-signature.js";
 import { diagnose, rules, isAvailable } from "../src/rules/engine.js";
 import { matchers, compareVersions } from "../src/rules/matchers.js";
-import { DIAGNOSIS_CASES, type DiagnosisCase } from "../src/rules/cases.js";
+import { DIAGNOSIS_CASES, type DiagnosisCase } from "./cases/diagnosis-cases.js";
 import type { DiagnosisResult } from "../src/types/diagnosis.js";
 import type { Environment } from "../src/types/environment.js";
 import type { Finding } from "../src/types/finding.js";

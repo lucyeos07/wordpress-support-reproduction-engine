@@ -5,8 +5,10 @@
  */
 import { chromium, type Page } from "playwright";
 import { mkdirSync } from "node:fs";
+import { resolve, dirname } from "node:path";
+import { fileURLToPath } from "node:url";
 
-const out = "/Users/lucy/Projects/wordpress-support-reproduction-engine/docs/screenshots/bisect";
+const out = resolve(dirname(fileURLToPath(import.meta.url)), "../../docs/screenshots/bisect");
 mkdirSync(out, { recursive: true });
 
 const STEPS = (process.argv[2] ?? "").length > 0 ? [Number(process.argv[2])] : [1,2,3,4,5,6,7,8,9,10];

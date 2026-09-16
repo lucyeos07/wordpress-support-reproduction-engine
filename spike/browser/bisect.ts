@@ -59,10 +59,9 @@ if (step >= 2) {
 // ---- 3: product stylesheet -------------------------------------------
 if (step >= 3) {
   note("3 product stylesheet");
-  const link = document.createElement("link");
-  link.rel = "stylesheet";
-  link.href = "/app-styles.css";
-  document.head.append(link);
+  // The real product stylesheet, not a copy: a duplicate would silently drift
+  // and the step would stop testing what it claims to test.
+  await import("../../app/styles.css");
   body.classList.add("app");
 }
 

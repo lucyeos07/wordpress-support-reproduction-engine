@@ -1,5 +1,8 @@
 /** Measures the real product app with the same instrumentation as the bisect. */
 import { chromium } from "playwright";
+import { resolve, dirname } from "node:path";
+import { mkdirSync } from "node:fs";
+import { fileURLToPath } from "node:url";
 import { SAMPLE_SSR, SAMPLE_LOG } from "../execute/sample.js";
 
 const port = process.argv[2] ?? "5174";
@@ -37,5 +40,7 @@ console.log("scope :", JSON.stringify(inner));
 console.log("errors:", JSON.stringify(errs.slice(0, 5)));
 await p.locator("#playground-panel").scrollIntoViewIfNeeded();
 await p.waitForTimeout(500);
-await p.screenshot({ path: "/Users/lucy/Projects/wordpress-support-reproduction-engine/docs/screenshots/bisect/app-measured.png" });
+const out = resolve(dirname(fileURLToPath(import.meta.url)), "../../docs/screenshots/bisect");
+mkdirSync(out, { recursive: true });
+await p.screenshot({ path: resolve(out, "app-measured.png") });
 await b.close();

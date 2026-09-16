@@ -7,7 +7,7 @@ import { attachSignature } from "../src/ir/attach-signature.js";
 import { planReproduction, type PlanResult } from "../src/repro/plan.js";
 import { resolvePhpVersion } from "../src/repro/blueprint.js";
 import { isUsableSignature, isImplicatedBy, relevanceOf } from "../src/repro/relevance.js";
-import { PLAN_CASES, type PlanCase } from "../src/repro/cases.js";
+import { PLAN_CASES, type PlanCase } from "./cases/plan-cases.js";
 import { validateBlueprint } from "../spike/cli/validate-blueprint.js";
 import catalog from "../src/catalog/plugin-catalog.json" with { type: "json" };
 import type { Environment } from "../src/types/environment.js";

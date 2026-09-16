@@ -155,8 +155,9 @@ screenshot that lied, so screenshots are evidence for humans, never the test.
    environment — that is what the `Verification` already covers.
 3. The bisect harness is kept for future use but is not wired into CI; it is a
    debugging tool, not a test.
-4. `spike/browser/app-styles.css` is a copy of `app/styles.css` so the spike
-   root can load it at step 3. It will drift if the stylesheet changes; the
-   bisect result does not depend on it beyond layout.
+4. ~~`spike/browser/app-styles.css` is a copy of `app/styles.css` so the spike
+   root can load it at step 3.~~ **Resolved:** step 3 now imports
+   `app/styles.css` directly and the duplicate was removed, so the step
+   exercises the real product stylesheet.
 5. The screenshots committed under `docs/screenshots/` were regenerated after
    the harness fix. Earlier blank captures are not preserved.

@@ -4,7 +4,7 @@ Making the existing product reliable, understandable and demonstrable. No new
 subsystem, no backend, no redesign of the parser, rule engine, planner or
 execution architecture.
 
-Date: 2026-09-16. 454 tests, typecheck clean, CI green.
+Date: 2026-09-16. 453 tests, typecheck clean, CI green.
 
 ---
 
@@ -164,18 +164,22 @@ plugins from `wordpress.org` through an iframe served by
 
 Cleanup: removed two genuinely unused exports (`catalogSize`, `isPresent`) and
 the temporary probe scripts; added `test-results/` and `playwright-report/` to
-`.gitignore`. **Nothing historical was deleted** — every findings document and
+`.gitignore`. The final packaging pass additionally moved the two test-scenario
+modules out of `src/` into `tests/cases/`, removed the duplicate spike
+stylesheet, and replaced three hard-coded absolute paths in spike drivers. **Nothing historical was deleted** — every findings document and
 spike remains, including the Phase 6 defect report that Phase 6.1 withdrew,
 because the record of a wrong conclusion and its correction is evidence.
 
-`spike/browser/app-styles.css` is a copy of `app/styles.css` kept so the bisect
-harness can load it; it will drift if the stylesheet changes.
+~~`spike/browser/app-styles.css` is a copy of `app/styles.css` kept so the bisect
+harness can load it; it will drift if the stylesheet changes.~~ **Resolved in the
+final packaging pass:** the bisect harness now imports `app/styles.css`
+directly, so the duplicate was deleted and the step tests the real stylesheet.
 
 ---
 
 ## 8. Final state
 
-**454 tests**, typecheck clean under strict TypeScript
+**453 tests**, typecheck clean under strict TypeScript
 (`exactOptionalPropertyTypes`, `noUncheckedIndexedAccess`).
 
 | Suite | Tests |
@@ -188,7 +192,7 @@ harness can load it; it will drift if the stylesheet changes.
 | `log-evidence` | 23 |
 | `ui/analyze` | 16 |
 | `blueprint-schema` | 9 |
-| `repro-firewall` | 9 |
+| `repro-firewall` | 8 |
 
 CI on `ubuntu-latest`: `check`, `cli-spike`, `execute-spike`,
 `browser-parity-spike`, `ui-e2e-spike`, `demo-e2e`, `v2-plugins-probe`.

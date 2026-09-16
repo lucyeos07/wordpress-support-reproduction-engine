@@ -17,8 +17,8 @@ import { parseSystemStatusReport } from "../src/parsers/woo-ssr/parse.js";
 import { parseDebugLog } from "../src/parsers/debug-log/parse.js";
 import { attachSignature } from "../src/ir/attach-signature.js";
 import { diagnose } from "../src/rules/engine.js";
-import { DIAGNOSIS_CASES } from "../src/rules/cases.js";
-import { PLAN_CASES } from "../src/repro/cases.js";
+import { DIAGNOSIS_CASES } from "../tests/cases/diagnosis-cases.js";
+import { PLAN_CASES } from "../tests/cases/plan-cases.js";
 import { planReproduction } from "../src/repro/plan.js";
 
 const here = dirname(fileURLToPath(import.meta.url));

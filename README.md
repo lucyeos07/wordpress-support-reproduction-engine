@@ -128,7 +128,7 @@ Other commands:
 
 ```bash
 npm run typecheck    # strict TypeScript, no emit
-npm test             # 454 unit + UI tests, no network
+npm test             # 453 unit + UI tests, no network
 npm run demo         # 4 demos end to end against real Playground
 npm run spike:cli    # boot a Blueprint headlessly and introspect it
 npm run spike:ui     # drive the real UI in Chromium against real Playground
@@ -244,7 +244,7 @@ traffic, but the reproduction is not an offline operation.
 
 | Layer | What it covers |
 | --- | --- |
-| **Unit** (`npm test`) | 454 tests: parsers, rule engine, planner, log evidence, UI. No network. |
+| **Unit** (`npm test`) | 453 tests: parsers, rule engine, planner, log evidence, UI. No network. |
 | **Structural** | The reproduction firewall — `src/repro/` may not import the diagnostic layer, nor mention a diagnostic identifier. |
 | **Property** | Every evidence excerpt must appear verbatim at the line it cites, across every fixture. |
 | **CLI integration** | Boots a real Blueprint and introspects the running site rather than trusting an exit code. |

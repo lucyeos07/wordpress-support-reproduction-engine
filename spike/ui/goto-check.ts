@@ -1,4 +1,7 @@
 import { chromium } from "playwright";
+import { resolve, dirname } from "node:path";
+import { mkdirSync } from "node:fs";
+import { fileURLToPath } from "node:url";
 const b = await chromium.launch();
 const p = await b.newPage({ viewport: { width: 1280, height: 900 } });
 p.on("console", (m) => { if (m.text().startsWith("GOTO")) console.log("  ", m.text()); });
@@ -7,5 +10,8 @@ await p.goto(`http://localhost:9500/goto.html${q}`, { waitUntil: "domcontentload
 await p.waitForFunction(() => (window as any).__GOTO__?.done === true, undefined, { timeout: 240000 });
 await p.waitForTimeout(5000);
 console.log("frames:"); for (const f of p.frames()) console.log("   -", f.url().slice(0,110));
-await p.screenshot({ path: `/Users/lucy/Projects/wordpress-support-reproduction-engine/docs/screenshots/10-goto${q.includes("skiprequest") ? "-skiprequest" : q ? "-execute" : "-isolation"}.png` });
+const out = resolve(dirname(fileURLToPath(import.meta.url)), "../../docs/screenshots");
+mkdirSync(out, { recursive: true });
+const variant = q.includes("skiprequest") ? "-skiprequest" : q ? "-execute" : "-isolation";
+await p.screenshot({ path: resolve(out, `10-goto${variant}.png`) });
 await b.close();
