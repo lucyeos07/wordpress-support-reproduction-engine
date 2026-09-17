@@ -1,13 +1,37 @@
 # WordPress Support Reproduction Engine
 
-Turns a WooCommerce support artifact into a structured environment,
-evidence-backed findings, an explicit reproducibility assessment, and a real
-WordPress Playground instance that is actually executed and verified — in the
-browser, with no backend.
+**Browser-first.** Turns WooCommerce System Status Reports and PHP debug logs
+into evidence-backed diagnostics and reproducible WordPress Playground
+environments — then actually runs them and reports what was observed.
 
-> **Status:** working prototype. Every claim in this README is backed by a test
-> or a findings document in [`docs/`](docs/). Where something does not work,
+```
+Parse  →  Diagnose  →  Reproduce  →  Verify
+```
+
+No backend, no accounts, no AI. Everything runs in the page.
+
+> **Status:** working prototype. Every claim below is backed by a test or a
+> findings document in [`docs/`](docs/). Where something does not work,
 > [Limitations](#limitations) says so.
+
+---
+
+## Quick start
+
+```bash
+npm ci
+npm run dev        # http://localhost:5173
+```
+
+Paste [`fixtures/demos/demo-b-plugin-fatal.txt`](fixtures/demos/demo-b-plugin-fatal.txt)
+into the box, press **Analyze**, then **Reproduce in WordPress Playground**. A
+real WordPress boots inside the page in under 20 seconds.
+
+Requires Node.js 20+ (developed on 26, CI runs 22). Nothing else — no database,
+no server, no API keys.
+
+Want proof without the browser? `npm test` runs 453 tests in ~1.5 s with no
+network; `npm run demo` runs four demos end to end against a real Playground.
 
 ---
 
@@ -20,21 +44,8 @@ slow, and easy to get wrong — particularly the last part. "I couldn't reproduc
 it" is ambiguous: it can mean the bug is gone, or that you never built the right
 environment in the first place.
 
-## The solution
-
-```
-Support artifact → Parse → Diagnose → Reproduce
-```
-
-More precisely:
-
-```
-artifact → Environment + Signatures → Findings → ReproPlan → Blueprint
-        → Playground execution → Verification
-```
-
-The product refuses to collapse the last step into a single boolean. It reports
-four distinct outcomes, and never confuses them:
+So the last step is never collapsed into a single boolean. Four outcomes are
+reported, and never confused:
 
 | Outcome | Meaning |
 | --- | --- |
@@ -45,25 +56,48 @@ four distinct outcomes, and never confuses them:
 
 ---
 
-## Why this is built the way it is
+## What it does, in seven parts
 
-- **Evidence-backed deterministic diagnosis.** Every `Finding` carries evidence
-  quoting the customer's own text and at least one authoritative citation. No
-  evidence or no citation and the Finding is discarded by the engine, not by
-  the rule. No model is involved in any decision.
-- **Explicit reproducibility assessment.** An A–E tier per reproduction target,
-  with every substitution and omission surfaced. A component that cannot be
-  installed becomes a recorded omission with a reason, never a silent drop.
-- **Environment reconstruction, not diagnosis reconstruction.** The reproduction
-  planner may not read a `Finding`. A wrong diagnosis cannot steer the
-  reproduction toward confirming itself. This is enforced structurally and by
-  test.
-- **Actual execution, not just Blueprint generation.** The plan is booted in a
-  real Playground instance, and what installed is read back out of WordPress
-  rather than assumed from the Blueprint.
-- **Verification over assertion.** Reproduction is established by diffing
-  `debug.log` around the trigger, so a pre-existing boot error can never be
-  reported as a reproduction.
+Not claims of novelty — just what the pipeline is made of and why each piece
+earns its place.
+
+1. **A canonical Environment IR.** Both adapters — System Status Report and
+   debug log — produce one representation. Every scalar is `known`, `inferred`
+   or `missing`, and there is no fourth state: absent data never becomes a
+   default. Each value carries the verbatim line it came from.
+
+2. **Evidence-backed deterministic Findings.** Every `Finding` carries evidence
+   quoting the customer's own text plus at least one authoritative citation. No
+   evidence or no citation and the engine discards it — the rule cannot opt out.
+   Severity and confidence stay independent axes. No model is involved in any
+   decision.
+
+3. **A diagnosis/reproduction firewall.** The reproduction planner may not read
+   a `Finding`, a rule, a severity or a confidence, so a wrong diagnosis cannot
+   steer the reproduction toward confirming itself. Enforced three ways: no
+   import edge, no diagnostic identifier anywhere in the module, and nothing
+   diagnostic in the serialised plan.
+
+4. **Explicit reproducibility classification.** An A–E tier *per reproduction
+   target*, not one verdict for the whole report. Targets are independent: a
+   blocked theme target does not downgrade an unrelated plugin target.
+
+5. **Blueprint generation.** A schema-valid Playground v2 Blueprint pinning the
+   reported versions. Every difference Playground forces — SQLite for MySQL, a
+   coarser PHP version, debug logging enabled to capture evidence — is recorded
+   as an explicit substitution. Nothing is silently defaulted, and anything that
+   cannot be installed becomes a recorded omission with a reason.
+
+6. **Actual Playground execution.** The plan is booted for real, on the CLI and
+   in the browser, from one shared execution core. What installed is read back
+   out of WordPress with `get_plugins()` rather than assumed from the Blueprint,
+   because a zero exit code proves nothing.
+
+7. **Verification from newly produced debug-log evidence.** `debug.log` is
+   snapshotted, the trigger is executed, it is snapshotted again, and only the
+   *newly written* entries count. A pre-existing boot error can never be
+   reported as a reproduction, and `observed` is true only when the trigger ran
+   **and** what it produced matches what was reported.
 
 ---
 
@@ -109,30 +143,25 @@ from `src/rules/`, asserted by a structural test. Full detail in
 
 ---
 
-## Running it
-
-**Prerequisites:** Node.js 20 or newer (developed on 26, CI runs 22). A
-Chromium browser is downloaded automatically for browser tests. No database, no
-server, no API keys.
+## Commands
 
 ```bash
-npm ci
-npm run dev          # http://localhost:5173
-```
-
-Paste a demo artifact from [`fixtures/demos/`](fixtures/demos/) — for example
-`demo-b-plugin-fatal.txt` — press **Analyze**, then **Reproduce in WordPress
-Playground**.
-
-Other commands:
-
-```bash
+npm run dev          # the application on http://localhost:5173
 npm run typecheck    # strict TypeScript, no emit
 npm test             # 453 unit + UI tests, no network
+npm run build        # production build to dist/
 npm run demo         # 4 demos end to end against real Playground
 npm run spike:cli    # boot a Blueprint headlessly and introspect it
 npm run spike:ui     # drive the real UI in Chromium against real Playground
+npm run spike:parity # run one plan on both surfaces and compare
 ```
+
+A Chromium browser is downloaded automatically the first time a browser test
+runs. `npm run demo`, `spike:*` and the browser jobs need network access,
+because Playground downloads WordPress core and plugins at boot.
+
+The four demo artifacts live in [`fixtures/demos/`](fixtures/demos/), with a
+README explaining what each one demonstrates.
 
 ---
 
