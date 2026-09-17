@@ -105,41 +105,44 @@ earns its place.
 
 ```mermaid
 flowchart TD
-  A["Support artifact<br/>SSR and/or debug.log"] --> P1["WooCommerce SSR parser"]
-  A --> P2["Debug log parser"]
-  P1 --> IR["Environment IR<br/>known / inferred / missing<br/>+ provenance + warnings"]
-  P2 --> SIG["ErrorSignature[]<br/>owner attributed here"]
-  SIG --> IR
+  A["Support artifact<br/>System Status Report and/or debug.log"] --> B["Parsers<br/>woo-ssr · debug-log"]
+  B --> C["Environment + ErrorSignatures<br/>known / inferred / missing, with evidence"]
 
-  IR --> RULES["Diagnostic rule engine<br/>declarative rules + matchers"]
-  RULES --> F["Findings<br/>evidence + citations"]
-  RULES --> IREQ["Information request<br/>Tier E"]
+  C --> D["Findings<br/>evidence + citations, or an information request"]
+  C --> E["ReproPlan<br/>per-target tier, trigger, substitutions, omissions"]
 
-  IR --> PLAN["Reproducibility planner<br/>tiers, triggers, omissions"]
-  PLAN --> BP["Blueprint v2 generator"]
-  PLAN --> VP["Verification plan"]
+  E --> F["Blueprint v2"]
+  E --> VP["Verification plan<br/>expected components + expected signatures"]
 
-  BP --> EXEC["Execution core<br/>shared by both surfaces"]
-  EXEC --> CLI["CLI runner"]
-  EXEC --> BROWSER["Browser runner"]
-  CLI --> VER["Verification<br/>environment + per-target"]
-  BROWSER --> VER
+  F --> G["CLI / Browser executor<br/>one shared execution core"]
+  VP --> G
+  G --> H["Verification<br/>environment reconstruction + per-target outcome"]
 
-  F --> UI["Browser UI"]
-  IREQ --> UI
-  PLAN --> UI
-  VER --> UI
+  D --> UI["Browser UI"]
+  E --> UI
+  H --> UI
 
-  RULES -. "firewall: never read by" .-x PLAN
+  D -. "firewall: never read by" .-x E
 
-  style RULES fill:#fdf1dc,stroke:#7a4b00
-  style PLAN fill:#e6f4ec,stroke:#10653a
-  style VER fill:#e8eefc,stroke:#1b4fd8
+  style D fill:#fdf1dc,stroke:#7a4b00
+  style E fill:#e6f4ec,stroke:#10653a
+  style H fill:#e8eefc,stroke:#1b4fd8
 ```
 
-The dashed edge is the **reproduction firewall**: `src/repro/` imports nothing
-from `src/rules/`, asserted by a structural test. Full detail in
-[`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
+Two things the diagram is making explicit:
+
+- **The dashed edge is the reproduction firewall.** The planner never reads a
+  `Finding`, so a wrong diagnosis cannot steer the reproduction toward
+  confirming itself. `src/repro/` imports nothing from `src/rules/`, asserted by
+  a structural test.
+- **Both executors are one implementation.** `cli-runner.ts` and
+  `browser-runner.ts` each only boot an instance and hand it to the shared core
+  in `execute/core.ts`; the three-way separation, the `debug.log` diff and the
+  `observed` rule live there once. Sharing the code is not the same as assuming
+  the surfaces agree — parity is measured, and currently shows 0 divergences
+  across 9 compared fields.
+
+Full detail in [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
 
 ---
 
