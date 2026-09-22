@@ -448,6 +448,8 @@ Linux, the Blueprint v2 + plugins failure originally seen on macOS.
 
 ## Documentation
 
+- [`docs/FINAL-REVIEW.md`](docs/FINAL-REVIEW.md) — the reviewer's summary: verified
+  capabilities, test and CI status, limitations, technical debt
 - [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) — how the layers fit together
 - [`docs/SPEC.md`](docs/SPEC.md) — the authored specification
 - [`docs/rules.md`](docs/rules.md) — what each diagnostic rule detects
