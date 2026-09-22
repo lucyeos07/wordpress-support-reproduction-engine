@@ -30,6 +30,35 @@ app/              index.html, main.ts, styles.css
 
 ---
 
+## 0. Inputs
+
+Two kinds of support artifact, pasted as text. Nothing is uploaded and no file is
+read from disk by the application.
+
+| Input | What it is | Recognised by |
+| --- | --- | --- |
+| **WooCommerce System Status Report** | The plain-text "Copy for support" export from WooCommerce → Status | a `### Section ###` heading |
+| **PHP fatal / `debug.log`** | One or more fatals written to `wp-content/debug.log` | a `PHP Fatal error:`, `PHP Parse error:` or `PHP Recoverable fatal error:` line |
+
+A single paste may hold **either, both, or neither** — a support ticket routinely
+contains a report and a fatal together, which is why `auto` runs both adapters.
+
+Detection (`ui/analyze.ts`) is structural and deterministic: it uses each
+format's own syntax, never prose, length or field names. `PHP Version: 8.1.27`
+alone is `unrecognised`, and an unrecognised paste is refused with an explanation
+rather than parsed into an empty result. An explicit format choice is honoured
+**but not against the evidence**: choosing "System Status Report" for a log fails,
+because running that adapter anyway would produce an empty parse that looks like
+a successful one.
+
+Only an adapter that actually ran contributes provenance; the other side starts
+from `emptyEnvironment()`, which carries no artifacts and no values.
+
+A paste containing several fatals is split into one block per fatal, each padded
+with leading newlines so that every evidence line number still refers to the line
+in the text the user actually pasted. Each block becomes its own
+`ErrorSignature`, and therefore its own potential reproduction target.
+
 ## 1. Parser layer
 
 Two adapters, one canonical output (SPEC §2.2).
@@ -112,6 +141,15 @@ unmet requirements are unioned, deduplicated and returned as an
 
 ## 5. Reproducibility planner
 
+```text
+Environment + ErrorSignatures
+   → relevance   which reported components this signature implicates
+   → targets     one per usable signature, independent of each other
+   → triggers    the executable action, or none
+   → ReproPlan   tier, reasons, substitutions, omissions
+   → Blueprint   Playground v2, versions pinned
+```
+
 `repro/plan.ts` reads the `Environment`, its signatures, and
 `repro/capabilities.json` — a data file where every Playground capability
 records how it was verified. It reads nothing else.
@@ -181,10 +219,12 @@ extraction source and whether it was deterministic.
 
 ## 9. UI
 
-Vanilla TypeScript and DOM. `ui/analyze.ts` composes the pipeline and contains
-no business logic; `ui/state.ts` is an explicit state machine; `ui/render.ts` is
-presentation only; `ui/outcome.ts` holds the four mutually exclusive verification
-outcomes.
+Vanilla TypeScript and DOM. `ui/analyze.ts` composes the pipeline — the only
+logic of its own is the deterministic format detection and multi-fatal splitting
+described in §0, never parsing, diagnosis or planning. `ui/state.ts` is an
+explicit state machine; `ui/render.ts` is presentation only and adds labels, never
+conclusions; `ui/outcome.ts` holds the four mutually exclusive verification
+outcomes, with a failed boot outranking every other.
 
 The browser executor is injected into `mountApp`, so UI tests run without a real
 Playground while production imports the same module. There is no second
@@ -192,9 +232,22 @@ implementation of anything.
 
 ## 10. The firewall
 
+```text
+                 Environment + ErrorSignatures
+                   │                       │
+                   ▼                       ▼
+              Diagnostics              Reproduction
+            Findings, severity,       relevance, targets,
+            confidence, citations    triggers, Blueprint
+                   │                       ▲
+                   └──────── ✗ ────────────┘
+                        never read by
+```
+
 `ReproPlan` may read the `Environment` and its `ErrorSignature`s. It may never
 read a `Finding`, diagnostic rules, severity, confidence, remediation, or any
-AI-generated conclusion (SPEC §7).
+AI-generated conclusion (SPEC §7). Both layers hang off the same IR; neither is
+downstream of the other.
 
 Enforced three ways in `tests/repro-firewall.test.ts`:
 

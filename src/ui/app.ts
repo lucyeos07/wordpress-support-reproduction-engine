@@ -201,8 +201,6 @@ export function mountApp(root: HTMLElement, deps: AppDeps = {}): { store: Store 
         },
       });
 
-      // Without this the iframe shows the blank remote shell: verification
-      // navigates nothing, so the reproduced site is never rendered.
       const current = store.get();
       const progress = current.kind === "reproducing" ? current.progress : [];
       store.set({ kind: "reproduced", analysis: state.analysis, verification, progress });

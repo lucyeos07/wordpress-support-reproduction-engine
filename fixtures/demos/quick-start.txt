@@ -1,0 +1,24 @@
+### WordPress Environment ###
+
+WC Version: 8.5.2
+WP Version: 6.8.2
+WP Memory Limit: 256 MB
+
+### Server Environment ###
+
+Server Info: nginx/1.18.0
+PHP Version: 8.2.15
+MySQL Version: 8.0.35
+
+### Active Plugins (1) ###
+
+Classic Editor: by WordPress Contributors – 1.6.3
+
+### Templates ###
+
+Overrides: –
+
+[11-Sep-2026 08:14:22 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function classic_editor_missing() in /var/www/html/wp-content/plugins/classic-editor/classic-editor.php:212
+Stack trace:
+#0 {main}
+  thrown in /var/www/html/wp-content/plugins/classic-editor/classic-editor.php on line 212

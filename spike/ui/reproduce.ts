@@ -9,13 +9,16 @@
  */
 import { chromium } from "playwright";
 import { resolve, dirname } from "node:path";
-import { mkdirSync } from "node:fs";
+import { mkdirSync, readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
-import { SAMPLE_SSR, SAMPLE_LOG } from "../execute/sample.js";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const out = resolve(here, "../../docs/screenshots");
 mkdirSync(out, { recursive: true });
+
+// The committed artifact the README tells a reviewer to paste, so this job
+// proves the documented walkthrough rather than a private copy of it.
+const artifact = readFileSync(resolve(here, "../../fixtures/demos/quick-start.txt"), "utf8");
 
 const port = process.argv[2] ?? "5173";
 const browser = await chromium.launch();
@@ -25,7 +28,7 @@ page.on("console", (m) => {
 });
 
 await page.goto(`http://localhost:${port}/`, { waitUntil: "networkidle" });
-await page.fill("#artifact", `${SAMPLE_SSR}\n${SAMPLE_LOG}`);
+await page.fill("#artifact", artifact);
 await page.click("#analyse");
 await page.waitForSelector(".targets .target");
 console.log("analysis rendered");
