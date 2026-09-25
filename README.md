@@ -61,7 +61,7 @@ No model is involved in any decision, and nothing is persisted or uploaded.
 ## Architecture
 
 ```mermaid
-flowchart TD
+flowchart LR
     A[Support artifact] --> B[Parser]
     B --> C[Environment + ErrorSignatures]
 
