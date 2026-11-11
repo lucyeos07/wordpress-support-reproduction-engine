@@ -7,6 +7,7 @@
  */
 import type { Analysis } from "./analyze.js";
 import type { Verification } from "../types/verification.js";
+import type { IsolationResult } from "../execute/isolate.js";
 
 export type ReproStage =
   | "booting"
@@ -45,6 +46,29 @@ export type AppState =
       analysis: Analysis;
       error: string;
       progress: string[];
+    }
+  | {
+      /** Bisecting a failed boot: repeated boots of component subsets. */
+      kind: "isolating";
+      analysis: Analysis;
+      verification: Verification;
+      progress: string[];
+      isolationProgress: string[];
+    }
+  | {
+      kind: "isolated";
+      analysis: Analysis;
+      verification: Verification;
+      progress: string[];
+      isolation: IsolationResult;
+    }
+  | {
+      /** The bisection itself could not run. Says nothing about the boot. */
+      kind: "isolation_failed";
+      analysis: Analysis;
+      verification: Verification;
+      progress: string[];
+      error: string;
     };
 
 export type Listener = (state: AppState) => void;

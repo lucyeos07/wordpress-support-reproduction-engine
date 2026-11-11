@@ -199,6 +199,38 @@ compare against the reported signature. Entries present before the trigger ran
 are never evidence — which is what stops a boot-time error being sold as a
 reproduction.
 
+## 7a. Boot-failure isolation
+
+Installation is all-or-nothing, so when one component aborts the boot the
+Verification correctly reports *every* requested component as failed and none as
+responsible. That is honest but unhelpful, and the manual next step is always
+the same bisection.
+
+`execute/isolate.ts` performs it, and is surface-agnostic in the same way the
+execution core is: the caller injects a probe (`probeBoot` on the CLI,
+`probeBootInBrowser` in the page) that boots one subset and reads the result
+back out of WordPress with the core's own `readSiteState` / `reconcileComponents`.
+
+```
+control: boot with no components      -> if this fails, the environment is at fault, not a component
+narrow : binary search the failing set -> both halves boot alone? then it is a conflict, not a culprit
+confirm: boot everything except the candidate
+```
+
+Three rules it does not break:
+
+1. **Nothing is concluded without an attempt.** Every returned statement is
+   backed by boots recorded in `attempts`, with their error text.
+2. **A culprit is named only after "everything except it" has booted.**
+   Narrowing alone is a hypothesis; the confirming boot is the evidence.
+3. **The plan is never edited.** Removing a component is an experiment, not a
+   substitution (CLAUDE.md), so the `ReproPlan` the user saw is untouched and
+   the UI says so.
+
+The search is bounded by a boot budget. Running out is reported as
+`inconclusive`, never as a best guess, and a failure of the bisection itself is
+reported separately from any statement about components.
+
 ## 8. Verification model
 
 ```ts

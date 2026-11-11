@@ -150,6 +150,11 @@ table.plugins { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
 .playground-panel[hidden] { display: none; }
 .playground-frame { width: 100%; height: 70vh; min-height: 420px; border: 1px solid var(--line); border-radius: 6px; background: #fff; }
 details summary { cursor: pointer; font-size: 0.88rem; }
+.isolation h3 { margin: 0 0 4px; }
+.isolation .attempts ul { margin: 8px 0 0; padding-left: 18px; }
+.isolation .attempts li { margin: 6px 0; }
+.isolation .attempts .hint { margin: 2px 0 0; word-break: break-word; }
+
 @media (max-width: 720px) {
   .defs { grid-template-columns: 1fr; }
   dt { margin-top: 6px; }

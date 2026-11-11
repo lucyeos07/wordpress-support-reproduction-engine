@@ -203,6 +203,10 @@ the full list is in [`docs/FINAL-REVIEW.md`](docs/FINAL-REVIEW.md#known-limitati
   page must not be cross-origin isolated.
 - **Only English plain-text System Status exports are parsed**; a localised
   report is reported as unreadable rather than parsed as empty.
+- **Isolating a failed boot costs real boots.** Demo B's six components took
+  seven boots and about seven minutes; the search stops at its budget and
+  reports *inconclusive* rather than guessing, and it reports a conflict between
+  two components without resolving which pair is minimal.
 - **Network is required** for any reproduction, and boots fail transiently — one
   `npm run demo` run failed with *"Error connecting to the SQLite database"* and
   the next, unchanged, passed.
@@ -213,7 +217,7 @@ the full list is in [`docs/FINAL-REVIEW.md`](docs/FINAL-REVIEW.md#known-limitati
 
 ## Testing
 
-**453 tests across 9 suites, offline, in ~1.5 s.** No network, no database, no
+**475 tests across 11 suites, offline, in ~1.6 s.** No network, no database, no
 Playground — every fixture, schema and catalog entry they read is committed.
 
 | Suite | Tests | Covers |
@@ -227,6 +231,8 @@ Playground — every fixture, schema and catalog entry they read is committed.
 | `ui/analyze` | 16 | Format detection; a non-running adapter contributes no provenance |
 | `blueprint-schema` | 9 | Validation against the published v2 schema, plus negative cases |
 | `repro-firewall` | 8 | The diagnosis/reproduction boundary, three ways |
+| `boot-isolation` | 13 | Bisecting a failed boot: culprit confirmation, conflicts, budgets, recorded attempts |
+| `ui/isolation` | 9 | The isolation panel: when it is offered, what it reports, and that it never rewrites the plan |
 
 Two cross-cutting checks run inside those suites: a **property test** asserting
 every finding's evidence excerpt appears verbatim at the line it cites, and a
@@ -237,13 +243,14 @@ These need network, because Playground downloads WordPress core and plugins:
 | Command | Proves |
 | --- | --- |
 | `npm run spike:cli` · `npm run spike:execute` | CLI integration: a Blueprint boots and the running site is introspected |
+| `npm run spike:isolate` | Boot-failure isolation against a real Playground: bisects demo B and asserts it names `wordfence@7.11.4` |
 | `npm run spike:parity` | Browser integration: both surfaces compared — 0 divergences of 9 |
 | `npm run spike:ui` | UI end-to-end in Chromium, asserting the site rendered by reading the frame's document, not pixels |
 | `npm run demo` | Four demos, including one target reaching `observed = true` and one reaching `observed = false` |
 
-CI runs seven jobs on `ubuntu-latest` on every push: `check`, `cli-spike`,
-`execute-spike`, `browser-parity-spike`, `ui-e2e-spike`, `demo-e2e` and
-`v2-plugins-probe`.
+CI runs eight jobs on `ubuntu-latest` on every push: `check`, `cli-spike`,
+`execute-spike`, `isolate-spike`, `browser-parity-spike`, `ui-e2e-spike`,
+`demo-e2e` and `v2-plugins-probe`.
 
 ---
 
@@ -256,7 +263,7 @@ no API keys.
 npm ci
 npm run dev          # the application on http://localhost:5173
 npm run typecheck    # strict TypeScript, no emit
-npm test             # 453 tests, no network
+npm test             # 475 tests, no network
 npm run build        # production build to dist/
 npm run demo         # 4 demos end to end against real Playground
 ```
@@ -292,6 +299,8 @@ shared with third-party infrastructure, analyse it and stop before reproducing.
 
 - [`docs/FINAL-REVIEW.md`](docs/FINAL-REVIEW.md) — verified capabilities, test and
   CI status, limitations, technical debt
+- [`docs/boot-isolation.md`](docs/boot-isolation.md) — how a failed boot is
+  bisected, what it refuses to conclude, and the measured run
 - [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) — how the layers fit together
 - [`docs/SPEC.md`](docs/SPEC.md) — the authored specification
 - [`docs/rules.md`](docs/rules.md) — what each diagnostic rule detects

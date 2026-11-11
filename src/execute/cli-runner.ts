@@ -14,8 +14,11 @@ import type { VerificationPlan } from "../repro/verification-plan.js";
 import {
   bootFailureVerification,
   verifyAgainstRunner,
+  readSiteState,
+  reconcileComponents,
   type PlaygroundRunner,
 } from "./core.js";
+import type { BootAttempt } from "./isolate.js";
 
 export interface ExecuteOptions {
   port?: number;
@@ -60,5 +63,53 @@ export async function executePlan(
     return await verifyAgainstRunner(runCLIServer.playground, plan, verificationPlan, progress);
   } finally {
     await runCLIServer[Symbol.asyncDispose]();
+  }
+}
+
+/**
+ * Boots one subset of components and reports what WordPress installed.
+ *
+ * Used by boot-failure isolation (`isolate.ts`), which needs many cheap boots
+ * and no trigger execution. It shares `readSiteState`/`reconcileComponents`
+ * with the execution core, so "installed" means the same thing here as it does
+ * in a Verification: read out of WordPress, never taken from the Blueprint.
+ */
+export async function probeBoot(
+  plan: ReproPlan,
+  components: string[],
+  options: ExecuteOptions = {},
+): Promise<BootAttempt> {
+  const blueprint = plan.blueprint as { plugins?: Array<{ source: string }> };
+  const subset = (blueprint.plugins ?? []).filter((p) => components.includes(p.source));
+  const probeBlueprint = { ...blueprint, plugins: subset };
+
+  let server: Awaited<ReturnType<typeof runCLI>> | undefined;
+  try {
+    server = await runCLI({
+      command: "server",
+      blueprint: probeBlueprint as never,
+      port: options.port ?? 9500,
+      verbosity: "quiet",
+      skipBrowser: true,
+    });
+  } catch (error) {
+    return {
+      components,
+      bootSucceeded: false,
+      installedComponents: [],
+      error: String((error as Error).message).slice(0, 500),
+    };
+  }
+
+  const booted = server as unknown as {
+    playground: PlaygroundRunner;
+    [Symbol.asyncDispose]: () => Promise<void>;
+  };
+  try {
+    const state = await readSiteState(booted.playground);
+    const { installedComponents } = reconcileComponents(components, state);
+    return { components, bootSucceeded: true, installedComponents };
+  } finally {
+    await booted[Symbol.asyncDispose]();
   }
 }

@@ -7,7 +7,7 @@
  * `executePlanInBrowser` used by the Phase 5 parity spike. There is no second
  * implementation.
  */
-import { analyze, AnalysisError, type InputFormat } from "./analyze.js";
+import { analyze, AnalysisError, type Analysis, type InputFormat } from "./analyze.js";
 import { Store, type AppState } from "./state.js";
 import {
   renderEnvironment,
@@ -17,11 +17,13 @@ import {
   renderSource,
   renderProgress,
   renderVerification,
+  renderIsolationPanel,
 } from "./render.js";
 import { el, clear } from "./dom.js";
 import type { Verification } from "../types/verification.js";
 import type { ReproPlan } from "../types/repro.js";
 import type { VerificationPlan } from "../repro/verification-plan.js";
+import type { BootAttempt, IsolationResult } from "../execute/isolate.js";
 
 export type BrowserExecutor = (
   plan: ReproPlan,
@@ -29,8 +31,23 @@ export type BrowserExecutor = (
   options: { iframe: HTMLIFrameElement; onProgress?: (message: string) => void },
 ) => Promise<Verification>;
 
+/**
+ * Bisects a failed boot. Injected like the executor so UI tests can run it
+ * without a real Playground; production uses the same modules the CLI does.
+ */
+export type BrowserIsolator = (
+  plan: ReproPlan,
+  components: string[],
+  options: {
+    newFrame: () => HTMLIFrameElement;
+    observedFailure?: BootAttempt;
+    onProgress?: (message: string) => void;
+  },
+) => Promise<IsolationResult>;
+
 export interface AppDeps {
   execute?: BrowserExecutor;
+  isolate?: BrowserIsolator;
   copy?: (text: string) => Promise<void>;
 }
 
@@ -39,12 +56,24 @@ const defaultExecutor: BrowserExecutor = async (plan, verificationPlan, options)
   return executePlanInBrowser(plan, verificationPlan, options);
 };
 
+const defaultIsolator: BrowserIsolator = async (plan, components, options) => {
+  const [{ isolateBootFailure }, { probeBootInBrowser }] = await Promise.all([
+    import("../execute/isolate.js"),
+    import("../execute/browser-runner.js"),
+  ]);
+  return isolateBootFailure(components, (subset) => probeBootInBrowser(plan, subset, { iframe: options.newFrame() }), {
+    ...(options.observedFailure !== undefined ? { observedFailure: options.observedFailure } : {}),
+    ...(options.onProgress !== undefined ? { onProgress: options.onProgress } : {}),
+  });
+};
+
 const defaultCopy = async (text: string): Promise<void> => {
   await navigator.clipboard.writeText(text);
 };
 
 export function mountApp(root: HTMLElement, deps: AppDeps = {}): { store: Store } {
   const execute = deps.execute ?? defaultExecutor;
+  const isolate = deps.isolate ?? defaultIsolator;
   const copy = deps.copy ?? defaultCopy;
   const store = new Store();
 
@@ -71,14 +100,17 @@ export function mountApp(root: HTMLElement, deps: AppDeps = {}): { store: Store 
   const status = el("p", { id: "status", class: "status", role: "status", "aria-live": "polite" });
   const results = el("div", { id: "results" });
 
+  const PLAYGROUND_NOTE =
+    "An isolated WordPress built from the reported environment. Your own site is never touched.";
+  const PROBE_NOTE =
+    "Showing an isolation probe: a subset of the reported components, not the reported environment. Your own site is never touched.";
+
+  const playgroundNote = el("p", { id: "playground-note", class: "hint", text: PLAYGROUND_NOTE });
   const playgroundPanel = el(
     "section",
     { id: "playground-panel", class: "card playground-panel", hidden: true },
     el("h2", { text: "WordPress Playground" }),
-    el("p", {
-      class: "hint",
-      text: "An isolated WordPress built from the reported environment. Your own site is never touched.",
-    }),
+    playgroundNote,
   );
 
   /**
@@ -178,6 +210,7 @@ export function mountApp(root: HTMLElement, deps: AppDeps = {}): { store: Store 
 
   async function reproduce(state: Extract<AppState, { kind: "analysed" }>): Promise<void> {
     playgroundPanel.hidden = false;
+    playgroundNote.textContent = PLAYGROUND_NOTE;
     const playgroundFrame = freshPlaygroundFrame();
     store.set({ kind: "reproducing", analysis: state.analysis, stage: "booting", progress: [] });
 
@@ -218,7 +251,106 @@ export function mountApp(root: HTMLElement, deps: AppDeps = {}): { store: Store 
     }
   }
 
+  /**
+   * Bisects a boot that failed. Only reachable from a verification whose boot
+   * failed, and it never rewrites the plan: each probe boots a subset, and the
+   * plan the user saw is left as it is.
+   */
+  async function runIsolation(
+    analysis: Analysis,
+    verification: Verification,
+    progress: string[],
+  ): Promise<void> {
+    const blueprint = analysis.plan.blueprint as { plugins?: Array<{ source: string }> };
+    const components = (blueprint.plugins ?? []).map((p) => p.source);
+    store.set({ kind: "isolating", analysis, verification, progress, isolationProgress: [] });
+
+    // The boot that just failed is evidence the search would otherwise pay a
+    // whole boot to re-establish.
+    const observedFailure = {
+      components,
+      bootSucceeded: false,
+      installedComponents: verification.environment.installedComponents,
+      ...(verification.failureReproduction.targets[0]?.reason !== undefined
+        ? { error: verification.failureReproduction.targets[0].reason }
+        : {}),
+    };
+
+    try {
+      const isolation = await isolate(analysis.plan, components, {
+        observedFailure,
+        newFrame: () => {
+          playgroundPanel.hidden = false;
+          // The frame now shows a subset, so the panel must stop calling it
+          // the reported environment.
+          playgroundNote.textContent = PROBE_NOTE;
+          return freshPlaygroundFrame();
+        },
+        onProgress: (message) => {
+          const current = store.get();
+          if (current.kind !== "isolating") return;
+          store.set({ ...current, isolationProgress: [...current.isolationProgress, message] });
+        },
+      });
+      store.set({ kind: "isolated", analysis, verification, progress, isolation });
+    } catch (error) {
+      store.set({
+        kind: "isolation_failed",
+        analysis,
+        verification,
+        progress,
+        error: String((error as Error).message),
+      });
+    }
+  }
+
   // ---- rendering -------------------------------------------------------
+  /** The states that carry a completed verification. */
+  const verificationOf = (state: AppState): Verification | undefined =>
+    state.kind === "reproduced" ||
+    state.kind === "isolating" ||
+    state.kind === "isolated" ||
+    state.kind === "isolation_failed"
+      ? state.verification
+      : undefined;
+
+  /**
+   * The isolation offer, shown only when the boot actually failed and the plan
+   * requested at least one component — otherwise there is nothing to bisect.
+   */
+  function isolationSection(state: AppState): Node | false {
+    const verification = verificationOf(state);
+    if (verification === undefined || verification.environment.bootSucceeded) return false;
+    if (
+      state.kind !== "reproduced" &&
+      state.kind !== "isolating" &&
+      state.kind !== "isolated" &&
+      state.kind !== "isolation_failed"
+    ) {
+      return false;
+    }
+
+    const analysis = state.analysis;
+    const blueprint = analysis.plan.blueprint as { plugins?: Array<{ source: string }> };
+    const components = (blueprint.plugins ?? []).map((p) => p.source);
+    if (components.length === 0) return false;
+
+    return el(
+      "section",
+      { class: "card" },
+      renderIsolationPanel({
+        components,
+        busy: state.kind === "isolating",
+        onIsolate: () => {
+          void runIsolation(analysis, verification, state.progress);
+        },
+        ...(state.kind === "isolating" ? { progress: state.isolationProgress } : {}),
+        ...(state.kind === "isolated" ? { result: state.isolation } : {}),
+        ...(state.kind === "isolation_failed" ? { error: state.error } : {}),
+      }),
+    );
+  }
+
   store.subscribe((state) => {
     analyseButton.disabled = state.kind === "parsing" || state.kind === "planning";
 
@@ -231,6 +363,9 @@ export function mountApp(root: HTMLElement, deps: AppDeps = {}): { store: Store 
       reproducing: "Reproducing…",
       reproduced: "Reproduction run complete.",
       reproduction_failed: "",
+      isolating: "Isolating the failing component…",
+      isolated: "Isolation complete.",
+      isolation_failed: "",
     };
     status.textContent = statusText[state.kind];
     status.className = "status";
@@ -256,11 +391,12 @@ export function mountApp(root: HTMLElement, deps: AppDeps = {}): { store: Store 
       type: "button",
       text: "Reproduce in WordPress Playground",
     });
-    reproduceButton.disabled = state.kind === "reproducing";
+    reproduceButton.disabled = state.kind === "reproducing" || state.kind === "isolating";
     reproduceButton.addEventListener("click", () => {
       void reproduce({ kind: "analysed", analysis });
     });
 
+    const verification = verificationOf(state);
     const blocks: Array<Node | false> = [
       renderEnvironment(analysis, showEvidence),
       renderFindings(analysis, showEvidence),
@@ -291,7 +427,8 @@ export function mountApp(root: HTMLElement, deps: AppDeps = {}): { store: Store 
             )
           : false,
       ),
-      state.kind === "reproduced" ? renderVerification(state.verification) : false,
+      verification !== undefined ? renderVerification(verification) : false,
+      isolationSection(state),
       renderSource(analysis.source),
     ];
     for (const block of blocks) {

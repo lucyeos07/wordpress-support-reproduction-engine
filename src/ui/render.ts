@@ -9,6 +9,7 @@ import type { Analysis } from "./analyze.js";
 import type { Verification } from "../types/verification.js";
 import type { Evidence } from "../types/evidence.js";
 import type { Finding } from "../types/finding.js";
+import { summariseIsolation, type IsolationResult } from "../execute/isolate.js";
 import { targetOutcome, presentOutcome, summariseOutcomes } from "./outcome.js";
 import { REPRO_STAGE_LABELS, type ReproStage } from "./state.js";
 import {
@@ -490,5 +491,107 @@ export function renderVerification(verification: Verification): HTMLElement {
     el("p", { class: "hint", text: summariseOutcomes(outcomes) }),
     environmentBlock,
     el("div", { class: "panel" }, el("h3", { text: "Failure reproduction" }), ...targetBlocks),
+  );
+}
+
+export interface IsolationPanelOptions {
+  components: string[];
+  onIsolate: () => void;
+  busy: boolean;
+  progress?: string[];
+  result?: IsolationResult;
+  error?: string;
+}
+
+/**
+ * Offered only when the environment failed to boot.
+ *
+ * Installation is all-or-nothing, so a failed boot names every component as
+ * failed and none as responsible. This panel runs the bisection and reports
+ * which component the boots actually implicate — it does not modify the plan,
+ * and it never names a component the attempts do not support.
+ */
+export function renderIsolationPanel(options: IsolationPanelOptions): HTMLElement {
+  const button = el("button", {
+    id: "isolate",
+    class: "button",
+    type: "button",
+    text: options.busy ? "Isolating…" : "Isolate the failing component",
+  });
+  button.disabled = options.busy;
+  button.addEventListener("click", options.onIsolate);
+
+  const attemptsOf = (result: IsolationResult): HTMLElement =>
+    el(
+      "details",
+      { class: "attempts" },
+      el("summary", { text: `Boot attempts (${String(result.used)} of a ${String(result.budget)} budget)` }),
+      el(
+        "ul",
+        {},
+        ...result.attempts.map((attempt) =>
+          el(
+            "li",
+            {},
+            el("strong", { text: attempt.bootSucceeded ? "Booted" : "Failed" }),
+            ` — ${attempt.components.length === 0 ? "no components" : attempt.components.join(", ")}`,
+            attempt.error !== undefined
+              ? el("div", { class: "hint mono", text: attempt.error.split("\n")[0]?.slice(0, 200) ?? "" })
+              : false,
+          ),
+        ),
+      ),
+    );
+
+  const resultBlock = (result: IsolationResult): HTMLElement => {
+    const outcome = result.outcome;
+    const tone = outcome.kind === "component" || outcome.kind === "environment" ? "panel-ok" : "panel";
+    return el(
+      "div",
+      { class: `panel ${tone}` },
+      el("p", { class: "status-line" }, el("strong", { class: "outcome", text: summariseIsolation(result) })),
+      outcome.kind === "component"
+        ? el(
+            "div",
+            {},
+            el("h4", { text: "Reported failure" }),
+            el("p", { class: "prose mono", text: outcome.error.split("\n")[0]?.slice(0, 300) ?? "" }),
+            el("h4", { text: `Installed without it (${String(outcome.bootableWithout.length)})` }),
+            el("ul", {}, ...outcome.bootableWithout.map((c) => el("li", { text: c }))),
+          )
+        : false,
+      el("p", {
+        class: "hint",
+        text: "Each line above is a boot that actually ran. The plan itself is unchanged: removing a component here is an experiment, not a substitution.",
+      }),
+      attemptsOf(result),
+    );
+  };
+
+  return el(
+    "div",
+    { class: "isolation" },
+    el("h3", { text: "Why did the environment fail?" }),
+    el("p", {
+      class: "hint",
+      text: `Installation is all-or-nothing, so every one of the ${String(options.components.length)} requested component(s) is reported failed and none is identified. This boots subsets to find which one is responsible.`,
+    }),
+    el("div", { class: "actions" }, button),
+    options.busy && options.progress !== undefined && options.progress.length > 0
+      ? el("pre", { class: "log", role: "status", "aria-live": "polite", text: options.progress.join("\n") })
+      : false,
+    options.result !== undefined ? resultBlock(options.result) : false,
+    options.error !== undefined
+      ? el(
+          "div",
+          { class: "panel panel-fail", role: "alert" },
+          el("h4", { text: "Isolation could not run" }),
+          el("p", { class: "prose", text: options.error }),
+          el("p", {
+            class: "hint",
+            text: "This is an infrastructure failure in the bisection itself. It says nothing about which component is responsible.",
+          }),
+        )
+      : false,
   );
 }

@@ -5,8 +5,12 @@ clean under strict TypeScript, all seven CI jobs green, CLI/browser parity
 re-measured at 0 divergences of 9, and `npm run demo` green against a real
 WordPress Playground.
 
-Every number and quoted string below was read out of the running system on that
-date. Where something does not work, it is stated rather than omitted.
+**Updated 2026-10-21** with boot-failure isolation: 475 tests, an eighth CI job,
+and a measured run that bisects demo B's unbootable environment against a real
+Playground and names `wordfence@7.11.4` (see [boot-isolation.md](boot-isolation.md)).
+
+Every number and quoted string below was read out of the running system on one of
+those dates. Where something does not work, it is stated rather than omitted.
 
 ---
 
@@ -88,6 +92,7 @@ reproduces the environment a report describes, for the trigger kinds listed unde
 | Environment verification | Installed components are read back with `get_plugins()` / `get_option('active_plugins')`, never taken from the Blueprint: `classic-editor@1.6.3 (active)` on the quick-start artifact |
 | Per-target failure verification | `debug.log` snapshot → trigger → snapshot → diff; `observed = true` reached in demo C (error class `Error`, deterministic extraction), `observed = false` reached and *not* conflated with an environment failure in the executed demo B case |
 | CLI/browser parity | `npm run spike:parity` — the same plan on both surfaces, **0 divergences across 9 compared fields**, re-measured 2026-09-22 |
+| Boot-failure isolation | 22 offline tests plus `npm run spike:isolate`, which bisects demo B against a real Playground and names `wordfence@7.11.4`, confirmed by booting the other five components |
 
 ---
 
@@ -195,7 +200,7 @@ have destroyed the evidence.
 
 ## Test coverage
 
-**453 tests across 9 suites, running offline in ~1.5 s.** No network, no
+**475 tests across 11 suites, running offline in ~1.5 s.** No network, no
 database, no Playground: every fixture, schema and catalog entry they read is
 committed.
 
@@ -210,6 +215,8 @@ committed.
 | `ui/analyze` | 16 | UI |
 | `blueprint-schema` | 9 | Unit / schema |
 | `repro-firewall` | 8 | Unit / structural |
+| `boot-isolation` | 13 | Unit: the bisection — confirmation, conflicts, budget bounds, recorded attempts |
+| `ui/isolation` | 9 | UI: when isolation is offered, what it reports, and that it never rewrites the plan |
 
 Two cross-cutting checks run inside those suites: a **property test** asserting
 every `Finding`'s evidence excerpt appears verbatim at the line it cites, for
@@ -222,6 +229,7 @@ Everything below boots a real Playground and therefore needs network access:
 | --- | --- | --- |
 | `npm run spike:cli` | CLI integration | A Blueprint boots headlessly and the running site is introspected instead of trusting an exit code |
 | `npm run spike:execute` | CLI integration | The full execute-and-verify path on the CLI surface |
+| `npm run spike:isolate` | Isolation E2E | Bisects demo B's unbootable environment against a real Playground and asserts the component it names |
 | `npm run spike:parity` | Browser integration | The same plan on both surfaces, compared field by field — 0 divergences of 9 |
 | `npm run spike:ui` | UI E2E | The real application in Chromium against real Playground, asserting the site rendered by reading the frame's own document rather than pixels |
 | `npm run demo` | Demo E2E | Four demos, including one target reaching `observed = true` and one reaching `observed = false` without being conflated with an environment failure |
@@ -230,14 +238,16 @@ Everything below boots a real Playground and therefore needs network access:
 
 ## CI
 
-Seven jobs on `ubuntu-latest`, on every push. All seven green on the most recent
-run (2026-09-22).
+Eight jobs on `ubuntu-latest`, on every push. The seven that predate boot-failure
+isolation were all green on the most recent run before it (2026-09-22);
+`isolate-spike` is new in this change.
 
 | Job | Runs | Status |
 | --- | --- | --- |
 | `check` | `npm run typecheck` + `npm test` | ✅ |
 | `cli-spike` | `npm run spike:cli` | ✅ |
 | `execute-spike` | `npm run spike:execute` | ✅ |
+| `isolate-spike` | `npm run spike:isolate` | added 2026-10-21 |
 | `browser-parity-spike` | spike server + `npm run spike:parity` | ✅ |
 | `ui-e2e-spike` | dev server + `npm run spike:ui` | ✅ |
 | `demo-e2e` | `npm run demo` | ✅ |

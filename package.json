@@ -16,9 +16,11 @@
     "demo": "tsx spike/demos/run.ts",
     "spike:cli": "tsx spike/cli/run.ts",
     "spike:execute": "tsx spike/execute/run.ts",
+    "spike:isolate": "tsx spike/execute/isolate.ts",
     "spike:browser": "vite --config vite.spike.config.ts",
     "spike:parity": "tsx spike/execute/parity.ts",
     "spike:ui": "tsx spike/ui/reproduce.ts",
+    "spike:ui-isolate": "tsx spike/ui/isolate.ts",
     "spike:bisect": "tsx spike/ui/bisect.ts"
   },
   "devDependencies": {
